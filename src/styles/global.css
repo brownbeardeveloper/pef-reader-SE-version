@@ -1,0 +1,12 @@
+@import url('variables.css');
+@import url('navbar.css');
+@import url('footer.css');
+@import url('main.css');
+
+* {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+    background-color: var(--body-background-color);
+}
