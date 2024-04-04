@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <nav class="flex justify-between px-4 py-8 mx-auto bg-purple-100">
       <div>
-        <h3 class="text-2xl font-bold text-purple-500">PEF</h3>
+        <h3 class="text-2xl font-bold text-purple-500">Läs punktskrift direkt</h3>
       </div>
       <div class="hidden space-x-8 lg:flex">
         <a href="">Home</a>
