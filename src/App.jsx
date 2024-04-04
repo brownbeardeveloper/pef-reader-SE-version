@@ -1,8 +1,13 @@
+import Navbar from './components/navbar.jsx'
+import Footer from './components/footer.jsx'
+import PefReader from './components/pef-reader.jsx'
 
 export default function App() {
   return (
-    <div className="App">
-      <p>test</p>
-    </div>
+    <>
+      <Navbar />
+      <PefReader />
+      <Footer />
+    </>
   );
 }

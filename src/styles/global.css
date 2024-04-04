@@ -2,11 +2,13 @@
 @import url('navbar.css');
 @import url('footer.css');
 @import url('main.css');
+@import url(tailwind.css);
 
 * {
     font-family: 'Courier New', Courier, monospace;
 }
 
-body {
-    background-color: var(--body-background-color);
+body, html {
+    margin: 0;
+    padding: 0;
 }
