@@ -22,3 +22,6 @@ yarn-error.log*
 
 # pef-file
 /src/data/P33148.pef
+
+# not in use 
+/src/not-in-use

@@ -5,37 +5,52 @@ import fileReader from "../functions/fileReader"
 
 export default function Welcome() {
 
-    const noFileSelected = 'ingen fil vald'
-    const [fileName, setFileName] = useState(noFileSelected)
-    const [readingFile, setReadingFile] = useState(false)
+    const noFileSelectedTxt = 'ingen fil vald'
+    const [fileName, setFileName] = useState(noFileSelectedTxt);
+    const [isLoadingFile, setIsLoadingFile] = useState(false);
     const [howToRead, setHowToRead] = useState('BYPAGE');
-    const iconColor = "#d8bfd8"
-    var selectedFile
+    const iconColor = "#d8bfd8";
+    const [file, setFile] = useState(null)
 
-    const handleFileChange = (event) => {
+    function handleAddFile(event) {
 
-        selectedFile = event.target.files[0]
+        if (event.target.files[0]) {
+            if (checkIfPefFileType(event.target.files[0].type)) {
+                setFileName(event.target.files[0].name);
+                const reader = new FileReader() // new thread in client's web-browser background
 
-        if (selectedFile) {
+                reader.addEventListener("load", () => { // what to do when successfully loaded input
+                    setFile(reader.result)
+                    setIsLoadingFile(false)
+                });
 
-            if (checkIfPefFileType(selectedFile.type)) {
-                setFileName(selectedFile.name);
+                setIsLoadingFile(true)
+                reader.readAsText(event.target.files[0]) // run the reader
+
             } else {
-                alert(`Fel: Filtypen ${selectedFile.type} som du försöker ladda är inte en PEF-fil.`);
+                alert(`Fel: Filtypen ${event.target.files[0].type} som du försöker ladda är inte en PEF-fil.`);
             }
 
         } else {
-            setFileName(noFileSelected);
+            setFileName(noFileSelectedTxt);
         }
     }
 
-    function convertPefToBook() {
+    function convertInputToTxt() {
+        if (isLoadingFile) {
 
-        if (checkIfPefFileType(selectedFile.type)) {
-            setReadingFile(!readingFile)
-            console.log(selectedFile)
+            alert('Fel: Filen laddas fortfarande.')
+
+        } else if (file) {
+
+            fileReader(file)
+
+            // set HEAD METADATA in a class
+            // fix translator from braille to txt and save it in a class
+            // swap page
+
         } else {
-            alert('Fel: Lägg först till en PEF-fil innan du försöker konvertera boken.')
+            alert('Fel: Lägg först till en PEF-fil innan du försöker konvertera boken.');
         }
     }
 
@@ -47,10 +62,10 @@ export default function Welcome() {
                 <p className="text-4xl font-bold mb-10">Ladda upp filen</p>
 
                 {/* Disable the file-selector button while the file is being converted */}
-                <input id="file-selector" type="file" accept=".pef" className="hidden" onChange={handleFileChange} disabled={readingFile} />
-                <label htmlFor="file-selector" className={(readingFile ? "bg-purple-50 border-purple-100 cursor-not-allowed" 
-                : "bg-purple-300 border-purple-600 hover:bg-white hover:shadow-2xl cursor-pointer") + 
-                " border px-8 py-3 rounded-full uppercase font-bold shadow-xl transition duration-200"}>
+                <input id="file-selector" type="file" accept=".pef" className="hidden" onChange={handleAddFile} disabled={isLoadingFile} />
+                <label htmlFor="file-selector" className={(isLoadingFile ? "bg-purple-50 border-purple-100 cursor-not-allowed"
+                    : "bg-purple-300 border-purple-600 hover:bg-white hover:shadow-2xl cursor-pointer") +
+                    " border px-8 py-3 rounded-full uppercase font-bold shadow-xl transition duration-200"}>
                     Välj fil (.pef)
                 </label>
             </div>
@@ -103,8 +118,8 @@ export default function Welcome() {
 
             <div className="inline-block">
 
-                {!readingFile ?
-                    <button onClick={convertPefToBook} className="bg-purple-300 border border-purple-600 px-8 py-3 rounded-full uppercase font-bold shadow-xl 
+                {!isLoadingFile ?
+                    <button onClick={convertInputToTxt} className="bg-purple-300 border border-purple-600 px-8 py-3 rounded-full uppercase font-bold shadow-xl 
                     transition duration-200 hover:bg-white hover:shadow-2xl" >Läs boken</button>
                     :
                     <div className="flex flex-row items-center">
