@@ -16,15 +16,15 @@ export default function StartPage({setReadmode, setPefObject}) {
         if (event.target.files[0]) {
             if (checkIfPefFileType(event.target.files[0].type)) {
                 setFileName(event.target.files[0].name);
-                const reader = new FileReader() // new thread in client's web-browser background
+                const reader = new FileReader() // Launches a new thread in the client's web browser background
 
-                reader.addEventListener("load", () => { // what to do when successfully loaded input
+                reader.addEventListener("load", () => { // Actions to perform when the input is successfully loaded
                     setFile(reader.result)
                     setIsLoadingFile(false)
                 });
 
                 setIsLoadingFile(true)
-                reader.readAsText(event.target.files[0]) // run the reader
+                reader.readAsText(event.target.files[0]) // Start the reader
 
             } else {
                 alert(`Fel: Filtypen ${event.target.files[0].type} som du försöker ladda är inte en PEF-fil.`);
@@ -42,9 +42,9 @@ export default function StartPage({setReadmode, setPefObject}) {
 
         } else if (file) {
 
-            const pefObject = fileReader(file) // saves metadata there
+            const pefObject = fileReader(file) // Save metadata there
             setPefObject(pefObject)
-            setReadmode(true) // IMPORTANT- swapping this page to readmode
+            setReadmode(true) // IMPORTANT: Swapping this component to read mode
 
         } else {
             alert('Fel: Lägg först till en PEF-fil innan du försöker konvertera boken.');
