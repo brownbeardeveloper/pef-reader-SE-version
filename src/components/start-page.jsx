@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Bars } from 'react-loader-spinner'
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 
-export default function StartPage({setReadmode, setPefObject}) {
+export default function StartPage({setReadmode, pefObject, setPefObject}) {
 
     const noFileSelectedTxt = 'ingen fil vald'
     const [fileName, setFileName] = useState(noFileSelectedTxt);
@@ -42,8 +42,8 @@ export default function StartPage({setReadmode, setPefObject}) {
 
         } else if (file) {
 
-            const pefObject = fileReader(file) // Save metadata there
-            setPefObject(pefObject)
+            const fileObject = fileReader(file) // Save metadata there
+            setPefObject(fileObject)
             setReadmode(true) // IMPORTANT: Swapping this component to read mode
 
         } else {

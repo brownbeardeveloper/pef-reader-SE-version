@@ -37,7 +37,7 @@ export function getMetaData(xmlDoc) {
         const coverage = meta.querySelector("coverage")?.textContent || null;
         const rights = meta.querySelector("rights")?.textContent || null;
 
-        // Create a new MetaData class
+        // Create a new MetaData object
         const metaData = {
             format,
             identifier,
@@ -75,21 +75,18 @@ export function getBodyData(xmlDoc) {
         volumes.forEach((volume, volumeIndex) => {
             const sections = volume.querySelectorAll("section");
             const volumeObj = {
-                volume: volumeIndex + 1,
                 sections: []
             };
 
             sections.forEach((section, sectionIndex) => {
                 const pages = section.querySelectorAll("page");
                 const sectionObj = {
-                    section: sectionIndex + 1,
                     pages: []
                 };
 
                 pages.forEach((page, pageIndex) => {
                     const rows = page.querySelectorAll("row");
                     const pageObj = {
-                        page: pageIndex + 1,
                         rows: []
                     };
 
