@@ -1,4 +1,3 @@
-import { MetaData } from '../class/metadata.js'
 
 export function checkIfPefFileType(fileType) {
     return fileType === 'image/PEF'
@@ -10,8 +9,9 @@ export async function fileReader(file) {
     const xmlDoc = parser.parseFromString(file, "text/xml");
     const metaData = getMetaData(xmlDoc)
     const bodyData = getBodyData(xmlDoc)
+    const pefObject = {metaData, bodyData}
 
-    return bodyData
+    return pefObject
 }
 
 export function getMetaData(xmlDoc) {
@@ -38,7 +38,7 @@ export function getMetaData(xmlDoc) {
         const rights = meta.querySelector("rights")?.textContent || null;
 
         // Create a new MetaData class
-        const metaData = new MetaData(
+        const metaData = {
             format,
             identifier,
             title,
@@ -54,7 +54,7 @@ export function getMetaData(xmlDoc) {
             relation,
             coverage,
             rights
-        )
+        }
 
         return metaData
 
@@ -63,76 +63,58 @@ export function getMetaData(xmlDoc) {
     }
 }
 
-class Page {
-    constructor(pageIndex) {
-        this.page = pageIndex;
-        this.rows = [];
-    }
-
-    addRow(rowContent) {
-        const trimmedContent = rowContent.trim();
-        if (trimmedContent !== "") {
-            this.rows.push(trimmedContent);
-        }
-    }
-}
-
-class Section {
-    constructor(sectionIndex) {
-        this.section = sectionIndex;
-        this.pages = [];
-    }
-
-    addPage(pageIndex) {
-        const newPage = new Page(pageIndex);
-        this.pages.push(newPage);
-        return newPage;
-    }
-}
-
-class Volume {
-    constructor(volumeIndex) {
-        this.volume = volumeIndex;
-        this.sections = [];
-    }
-
-    addSection(sectionIndex) {
-        const newSection = new Section(sectionIndex);
-        this.sections.push(newSection);
-        return newSection;
-    }
-}
-
 export function getBodyData(xmlDoc) {
     const body = xmlDoc.querySelector("body");
 
-    if (!body) {
-        console.log("No body element found in the XML.");
-        return null;
-    }
+    if (body) {
+        const volumes = body.querySelectorAll("volume");
+        const bodyData = {
+            volumes: []
+        };
 
-    const volumes = body.querySelectorAll("volume");
-    const bodyData = { volumes: [] };
+        volumes.forEach((volume, volumeIndex) => {
+            const sections = volume.querySelectorAll("section");
+            const volumeObj = {
+                volume: volumeIndex + 1,
+                sections: []
+            };
 
-    volumes.forEach((volume, volumeIndex) => {
-        const newVolume = new Volume(volumeIndex + 1);
-        bodyData.volumes.push(newVolume);
+            sections.forEach((section, sectionIndex) => {
+                const pages = section.querySelectorAll("page");
+                const sectionObj = {
+                    section: sectionIndex + 1,
+                    pages: []
+                };
 
-        const sections = volume.querySelectorAll("section");
-        sections.forEach((section, sectionIndex) => {
-            const newSection = newVolume.addSection(sectionIndex + 1);
+                pages.forEach((page, pageIndex) => {
+                    const rows = page.querySelectorAll("row");
+                    const pageObj = {
+                        page: pageIndex + 1,
+                        rows: []
+                    };
 
-            const pages = section.querySelectorAll("page");
-            pages.forEach((page, pageIndex) => {
-                const newPage = newSection.addPage(pageIndex + 1);
+                    rows.forEach(row => {
+                        const trimmedContent = row.textContent.trim();
+                        if (trimmedContent !== "") {
+                            pageObj.rows.push(trimmedContent);
+                        }
+                    });
 
-                const rows = page.querySelectorAll("row");
-                rows.forEach(row => {
-                    newPage.addRow(row.textContent);
+                    if (pageObj.rows.length > 0) {
+                        sectionObj.pages.push(pageObj);
+                    }
                 });
-            });
-        });
-    });
 
-    return bodyData;
+                if (sectionObj.pages.length > 0) {
+                    volumeObj.sections.push(sectionObj);
+                }
+            });
+
+            bodyData.volumes.push(volumeObj);
+        });
+
+        return bodyData;
+    } else {
+        console.log("No body element found in the XML.");
+    }
 }
