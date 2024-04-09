@@ -1,9 +1,8 @@
 import { useState } from "react"
 import { Bars } from 'react-loader-spinner'
-import checkIfPefFileType from "../functions/fileHandler"
-import fileReader from "../functions/fileReader"
+import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 
-export default function Welcome() {
+export default function StartPage({setReadmode, setPefObject}) {
 
     const noFileSelectedTxt = 'ingen fil vald'
     const [fileName, setFileName] = useState(noFileSelectedTxt);
@@ -43,11 +42,9 @@ export default function Welcome() {
 
         } else if (file) {
 
-            fileReader(file)
-
-            // set HEAD METADATA in a class
-            // fix translator from braille to txt and save it in a class
-            // swap page
+            const pefObject = fileReader(file) // saves metadata there
+            setPefObject(pefObject)
+            setReadmode(true) // IMPORTANT- swapping this page to readmode
 
         } else {
             alert('Fel: Lägg först till en PEF-fil innan du försöker konvertera boken.');
