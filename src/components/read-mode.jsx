@@ -1,16 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function ReadMode({ setReadmode, pefObject }) {
+
+  const [currentPage, setCurrentPage] = useState(0)
+  const lastpage = 5
+
+  console.log(currentPage)
+
   function handleNextPage() {
-    // Handle next page logic
+    if(currentPage < lastpage) {
+      setCurrentPage(currentPage + 1)
+    } else {
+      alert('Fel: Det finns inga fler sidor i boken.')
+    }
   }
 
   function handlePreviousPage() {
-    // Handle previous page logic
+    if(currentPage > 0) {
+      setCurrentPage(currentPage - 1)
+    } else {
+      alert('Fel: Du kan inte gå längre bakåt i den här boken.')
+    }
   }
 
   function handleBackToStartPage() {
     setReadmode(false);
+  }
+
+  function handleReset() { /* If needed */
+    setCurrentPage(0)
   }
 
   return (
