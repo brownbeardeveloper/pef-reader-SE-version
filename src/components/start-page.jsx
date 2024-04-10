@@ -2,10 +2,8 @@ import { useState } from "react"
 import { Bars } from 'react-loader-spinner'
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 
-export default function StartPage({setReadmode, pefObject, setPefObject}) {
+export default function StartPage({ setReadmode, pefObject, setPefObject, fileName, setFileName }) {
 
-    const noFileSelectedTxt = 'ingen fil vald'
-    const [fileName, setFileName] = useState(noFileSelectedTxt);
     const [isLoadingFile, setIsLoadingFile] = useState(false);
     const [howToRead, setHowToRead] = useState('BYPAGE');
     const iconColor = "#d8bfd8";
@@ -31,7 +29,7 @@ export default function StartPage({setReadmode, pefObject, setPefObject}) {
             }
 
         } else {
-            setFileName(noFileSelectedTxt);
+            setFileName('ingen fil vald');
         }
     }
 
@@ -42,9 +40,25 @@ export default function StartPage({setReadmode, pefObject, setPefObject}) {
 
         } else if (file) {
 
-            const fileObject = fileReader(file) // Save metadata there
-            setPefObject(fileObject)
-            setReadmode(true) // IMPORTANT: Swapping this component to read mode
+            const fileObject = fileReader(file) // this obj contains both meta and body data
+
+            fileObject.then(resolvedObject => {
+
+                if (resolvedObject.metaData.språk == 'sv') {
+                    setPefObject(resolvedObject);
+                    setReadmode(true); // IMPORTANT: Swapping this component to read mode    
+                } else {
+                    alert('Tyvärr, den valda boken är inte på svenska. Just nu kan vi endast hantera svenska böcker. Meddela oss om du önskar en annan språkversion.');
+                }
+
+            }).catch(error => {
+                console.error("Error occurred while resolving the promise:", error);
+            });
+
+        } else if (pefObject) {
+
+            setReadmode(true); // IMPORTANT: Swapping this component to read mode
+
 
         } else {
             alert('Fel: Lägg först till en PEF-fil innan du försöker konvertera boken.');

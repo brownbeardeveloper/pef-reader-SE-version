@@ -1,7 +1,9 @@
+const KNOWN_PEF_FILE_TYPES = ['image/PEF', 'image/x-pentax-pef', 'application/x-pef+xml'];
 
 export function checkIfPefFileType(fileType) {
-    return fileType === 'image/PEF'
+    return KNOWN_PEF_FILE_TYPES.includes(fileType);
 }
+
 
 export async function fileReader(file) {
 
@@ -9,7 +11,7 @@ export async function fileReader(file) {
     const xmlDoc = parser.parseFromString(file, "text/xml");
     const metaData = getMetaData(xmlDoc)
     const bodyData = getBodyData(xmlDoc)
-    const pefObject = {metaData, bodyData}
+    const pefObject = { metaData, bodyData }
 
     return pefObject
 }
@@ -20,43 +22,45 @@ export function getMetaData(xmlDoc) {
 
     if (meta) {
 
+        /* Programmers, forgive me for those swedish variables */
+
         // Saves important information in meta otherwise returns null
         const identifier = meta.querySelector("identifier")?.textContent || null;
-        const title = meta.querySelector("title")?.textContent || null;
-        const date = meta.querySelector("date")?.textContent || null;
-        const language = meta.querySelector("language")?.textContent || null;
-        const publisher = meta.querySelector("publisher")?.textContent || null;
-        const creator = meta.querySelector("creator")?.textContent || null;
-        const description = meta.querySelector("description")?.textContent || null;
+        const titel = meta.querySelector("title")?.textContent || null;
+        const datum = meta.querySelector("date")?.textContent || null;
+        const språk = meta.querySelector("language")?.textContent || null;
+        const utgivare = meta.querySelector("publisher")?.textContent || null;
+        const skapare = meta.querySelector("creator")?.textContent || null;
+        const beskrivning = meta.querySelector("description")?.textContent || null;
         const format = meta.querySelector("format")?.textContent || null;
-        const contributor = meta.querySelector("contributor")?.textContent || null;
-        const source = meta.querySelector("source")?.textContent || null;
-        const subject = meta.querySelector("subject")?.textContent || null;
-        const type = meta.querySelector("type")?.textContent || null;
+        const bidragsgivare = meta.querySelector("contributor")?.textContent || null;
+        const källa = meta.querySelector("source")?.textContent || null;
+        const ämne = meta.querySelector("subject")?.textContent || null;
+        const typ = meta.querySelector("type")?.textContent || null;
         const relation = meta.querySelector("relation")?.textContent || null;
-        const coverage = meta.querySelector("coverage")?.textContent || null;
-        const rights = meta.querySelector("rights")?.textContent || null;
+        const täckning = meta.querySelector("coverage")?.textContent || null;
+        const rättigheter = meta.querySelector("rights")?.textContent || null;
 
-        // Create a new MetaData object
-        const metaData = {
+        // Create a new MetaData object (SE version)
+        const metaDataSE = {
             format,
             identifier,
-            title,
-            creator,
-            subject,
-            description,
-            publisher,
-            contributor,
-            date,
-            type,
-            source,
-            language,
+            titel,
+            skapare,
+            ämne,
+            beskrivning,
+            utgivare,
+            bidragsgivare,
+            datum,
+            typ,
+            källa,
+            språk,
             relation,
-            coverage,
-            rights
-        }
+            täckning,
+            rättigheter
+        };
 
-        return metaData
+        return metaDataSE
 
     } else {
         console.log("No meta element found in the XML.");
@@ -72,19 +76,19 @@ export function getBodyData(xmlDoc) {
             volumes: []
         };
 
-        volumes.forEach((volume, volumeIndex) => {
+        volumes.forEach((volume) => {
             const sections = volume.querySelectorAll("section");
             const volumeObj = {
                 sections: []
             };
 
-            sections.forEach((section, sectionIndex) => {
+            sections.forEach((section) => {
                 const pages = section.querySelectorAll("page");
                 const sectionObj = {
                     pages: []
                 };
 
-                pages.forEach((page, pageIndex) => {
+                pages.forEach((page) => {
                     const rows = page.querySelectorAll("row");
                     const pageObj = {
                         rows: []
