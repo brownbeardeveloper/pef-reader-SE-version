@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import useDocumentTitle from "../functions/useDocumentTile";
 
 export default function ReadMode({ setReadmode, pefObject }) {
 
   const [currentPage, setCurrentPage] = useState(0)
   const lastpage = 5
 
-  console.log(currentPage)
+  useDocumentTitle('👾 we aliens are taking over the planet')
 
   function handleNextPage() {
     if(currentPage < lastpage) {
@@ -31,7 +32,7 @@ export default function ReadMode({ setReadmode, pefObject }) {
     setCurrentPage(0)
   }
 
-  function setCurrentPage(index) {
+  function handleSetCurrentPage(index) {
     setCurrentPage(index)
   }
 
