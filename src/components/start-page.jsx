@@ -44,7 +44,7 @@ export default function StartPage({ setReadmode, pefObject, setPefObject, fileNa
 
             fileObject.then(resolvedObject => {
 
-                if (resolvedObject.metaData.språk == 'sv') {
+                if (resolvedObject.metaData.språk === 'sv') {
                     setPefObject(resolvedObject);
                     setReadmode(true); // IMPORTANT: Swapping this component to read mode    
                 } else {

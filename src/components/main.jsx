@@ -2,7 +2,7 @@ import { useState } from "react"
 import StartPage from "./start-page.jsx"
 import PrintOutBook from "./printout-book.jsx"
 
-export default function PefReader() {
+export default function Main() {
 
   const [pefObject, setPefObject] = useState(null)
   const [fileName, setFileName] = useState('ingen fil vald')
