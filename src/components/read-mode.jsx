@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function PrintOutBook({ setReadmode, pefObject }) {
+export default function ReadMode({ setReadmode, pefObject }) {
   function handleNextPage() {
     // Handle next page logic
   }

@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Bars } from 'react-loader-spinner'
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 
-export default function StartPage({ setReadmode, pefObject, setPefObject, fileName, setFileName }) {
+export default function UploadFile({ setReadmode, pefObject, setPefObject, fileName, setFileName }) {
 
     const [isLoadingFile, setIsLoadingFile] = useState(false);
     const [howToRead, setHowToRead] = useState('BYPAGE');
