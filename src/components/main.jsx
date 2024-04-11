@@ -6,15 +6,16 @@ export default function Main() {
 
   const [pefObject, setPefObject] = useState(null)
   const [fileName, setFileName] = useState('ingen fil vald')
-  const [readmode, setReadmode] = useState(false)
+  const [readmode, setReadmode] = useState(null)
+  const [howToRead, setHowToRead] =  useState("ONEFLOW")
   
   return (
     <main className="flex flex-col justify-start items-center h-screen pt-10 pl-20 pr-20 max-w-screen-lg mx-auto">
 
       {!readmode ?
-        <UploadFile setReadmode={setReadmode} pefObject={pefObject} setPefObject={setPefObject} fileName={fileName} setFileName={setFileName} />
+        <UploadFile setReadmode={setReadmode} pefObject={pefObject} setPefObject={setPefObject} fileName={fileName} setFileName={setFileName} howToRead={howToRead} setHowToRead={setHowToRead} />
         :
-        <ReadMode setReadmode={setReadmode} pefObject={pefObject} />
+        <ReadMode setReadmode={setReadmode} pefObject={pefObject} howToRead={howToRead} setHowToRead={setHowToRead} />
       }
       
     </main>

@@ -2,10 +2,9 @@ import { useState } from "react"
 import { Bars } from 'react-loader-spinner'
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 
-export default function UploadFile({ setReadmode, pefObject, setPefObject, fileName, setFileName }) {
+export default function UploadFile({ setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
 
     const [isLoadingFile, setIsLoadingFile] = useState(false);
-    const [howToRead, setHowToRead] = useState('BYPAGE');
     const iconColor = "#d8bfd8";
     const [file, setFile] = useState(null)
 
@@ -69,17 +68,18 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
         <div>
             <p className="text-xl">När du har laddat ner en punktskriftsbok från Legimus kan du läsa den här med din punktdisplay.</p>
 
-            <div className="mt-10 mb-10">
+            <div className="mt-10 mb-10 flex flex-col items-start">
                 <p className="text-4xl font-bold mb-10">Ladda upp filen</p>
 
                 {/* Disable the file-selector button while the file is being converted */}
                 <input id="file-selector" type="file" accept=".pef" className="hidden" onChange={handleAddFile} disabled={isLoadingFile} />
                 <label htmlFor="file-selector" className={(isLoadingFile ? "bg-purple-50 border-purple-100 cursor-not-allowed"
                     : "bg-purple-300 border-purple-600 hover:bg-white hover:shadow-2xl cursor-pointer") +
-                    " border px-8 py-3 rounded-full uppercase font-bold shadow-xl transition duration-200"}>
+                    " border px-8 py-3 rounded-full uppercase font-bold shadow-xl transition duration-200 w-max"}>
                     Välj fil (.pef)
                 </label>
             </div>
+
 
             <div className="flex flex-row items-center mt-6 mb-6">
                 <label className="mr-2 text-2xl font-bold">Vald fil: </label>
@@ -89,20 +89,7 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
 
             <div className="mt-10 mb-10">
                 <p className="text-2xl font-bold" >Hur vill du läsa boken?</p>
-
                 <div className="flex flex-row mb-2 mt-2">
-                    <input
-                        type="radio"
-                        id="byPage"
-                        name="howToRead"
-                        value="BYPAGE"
-                        className="m-1"
-                        checked={howToRead === 'BYPAGE'}
-                        onChange={() => setHowToRead('BYPAGE')}
-                    />
-                    <label htmlFor="byPage" className="ml-1 mr-10">
-                        Sida för sida
-                    </label>
                     <input
                         type="radio"
                         id="oneFlow"
@@ -112,8 +99,21 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
                         checked={howToRead === 'ONEFLOW'}
                         onChange={() => setHowToRead('ONEFLOW')}
                     />
-                    <label htmlFor="oneFlow" className="ml-1">
+                    <label htmlFor="oneFlow" className="ml-1 mr-10">
                         Löpande text
+                    </label>
+
+                    <input
+                        type="radio"
+                        id="byPage"
+                        name="howToRead"
+                        value="BYPAGE"
+                        className="m-1"
+                        checked={howToRead === 'BYPAGE'}
+                        onChange={() => setHowToRead('BYPAGE')}
+                    />
+                    <label htmlFor="byPage" className="ml-1">
+                        Sida för sida
                     </label>
                 </div>
 
