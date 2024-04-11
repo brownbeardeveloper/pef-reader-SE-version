@@ -1,23 +1,35 @@
 import { useState } from "react"
 import { Bars } from 'react-loader-spinner'
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
+import { getSessionStorageDataByFileId } from "../functions/sessionHandler";
 
 export default function UploadFile({ setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
 
     const [isLoadingFile, setIsLoadingFile] = useState(false);
     const iconColor = "#d8bfd8";
-    const [file, setFile] = useState(null)
 
     function handleAddFile(event) {
-
         if (event.target.files[0]) {
             if (checkIfPefFileType(event.target.files[0].type)) {
                 setFileName(event.target.files[0].name);
                 const reader = new FileReader() // Launches a new thread in the client's web browser background
 
                 reader.addEventListener("load", () => { // Actions to perform when the input is successfully loaded
-                    setFile(reader.result)
-                    setIsLoadingFile(false)
+
+                    const fileObject = fileReader(reader.result) // this obj contains both meta and body data
+
+                    fileObject.then(resolvedObject => {
+        
+                        if (resolvedObject.metaData.språk === 'sv') {
+                            setPefObject(resolvedObject);
+                            setIsLoadingFile(false)
+
+                        } else {
+                            alert('Tyvärr, den valda boken är inte på svenska. Just nu kan vi endast hantera svenska böcker. Meddela oss om du önskar en annan språkversion.');
+                        }
+                    }).catch(error => {
+                        console.error("Error occurred while resolving the promise:", error);
+                    });
                 });
 
                 setIsLoadingFile(true)
@@ -32,35 +44,21 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
         }
     }
 
-    function convertInputToTxt() {
-        if (isLoadingFile) {
+    function HandleSwapToReadMode() {
+        if (pefObject) {
+            setReadmode(true); // IMPORTANT: Swapping this component to read mode    
+        } else {
+            alert('Fel: Lägg först till en PEF-fil innan du försöker läsa boken.');
+        }
+    }
 
-            alert('Fel: Filen laddas fortfarande.')
+    function getSessionStorage() {
+        if (pefObject && pefObject.metaData && pefObject.metaData.identifier) {
 
-        } else if (file) {
-
-            const fileObject = fileReader(file) // this obj contains both meta and body data
-
-            fileObject.then(resolvedObject => {
-
-                if (resolvedObject.metaData.språk === 'sv') {
-                    setPefObject(resolvedObject);
-                    setReadmode(true); // IMPORTANT: Swapping this component to read mode    
-                } else {
-                    alert('Tyvärr, den valda boken är inte på svenska. Just nu kan vi endast hantera svenska böcker. Meddela oss om du önskar en annan språkversion.');
-                }
-
-            }).catch(error => {
-                console.error("Error occurred while resolving the promise:", error);
-            });
-
-        } else if (pefObject) {
-
-            setReadmode(true); // IMPORTANT: Swapping this component to read mode
-
+            getSessionStorageDataByFileId(pefObject.metaData.identifier)
 
         } else {
-            alert('Fel: Lägg först till en PEF-fil innan du försöker konvertera boken.');
+            console.error('pefObject.metaData.identifier is undefined.');
         }
     }
 
@@ -130,7 +128,7 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
             <div className="inline-block">
 
                 {!isLoadingFile ?
-                    <button onClick={convertInputToTxt} className="bg-purple-300 border border-purple-600 px-8 py-3 rounded-full uppercase font-bold shadow-xl 
+                    <button onClick={HandleSwapToReadMode} className="bg-purple-300 border border-purple-600 px-8 py-3 rounded-full uppercase font-bold shadow-xl 
                     transition duration-200 hover:bg-white hover:shadow-2xl" >Läs boken</button>
                     :
                     <div className="flex flex-row items-center">
@@ -143,10 +141,12 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
                             wrapperClass=""
                             visible={true}
                         />
-                        <p className="ml-4 text-xl font-semibold text-gray-600">Förbereder läsning...</p>
+                        <p className="ml-4 text-xl font-semibold text-gray-600">Laddar filen...</p>
                     </div>
                 }
             </div>
+
+            <button onClick={getSessionStorage} className="bg-green-500 border p-2 border-black">get session</button>
         </div>
     )
 }

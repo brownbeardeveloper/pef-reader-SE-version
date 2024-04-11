@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
+import { setSessionStorageDataByFileId } from "../functions/sessionHandler.js";
 
 export default function ReadMode({ setReadmode, pefObject, howToRead }) {
   const [currentPage, setCurrentPage] = useState(0);
@@ -48,6 +49,7 @@ export default function ReadMode({ setReadmode, pefObject, howToRead }) {
   }
 
   function handleClick(i, j, k, l) {
+    setSessionStorageDataByFileId(pefObject.metaData.identifier, i, j, k, l)
     const rowValue = pefObject.bodyData.volumes[i].sections[j].pages[k].rows[l];
     console.log("Clicked row value:", rowValue);
   }
