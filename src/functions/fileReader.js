@@ -4,7 +4,6 @@ export function checkIfPefFileType(fileType) {
     return KNOWN_PEF_FILE_TYPES.includes(fileType);
 }
 
-
 export async function fileReader(file) {
 
     const parser = new DOMParser();
@@ -40,6 +39,9 @@ export function getMetaData(xmlDoc) {
         const relation = meta.querySelector("relation")?.textContent || null;
         const täckning = meta.querySelector("coverage")?.textContent || null;
         const rättigheter = meta.querySelector("rights")?.textContent || null;
+        const ark = meta.querySelector("sheets")?.textContent || null;
+        const volymer = meta.querySelector("volumes")?.textContent || null;
+        const antalKiloTecken = meta.querySelector("kiloChars")?.textContent || null;
 
         // Create a new MetaData object (SE version)
         const metaDataSE = {
@@ -57,7 +59,10 @@ export function getMetaData(xmlDoc) {
             språk,
             relation,
             täckning,
-            rättigheter
+            rättigheter,
+            ark,
+            volymer,
+            "antal tecken i tusental": antalKiloTecken
         };
 
         return metaDataSE

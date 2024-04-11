@@ -119,8 +119,8 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
 
                 {howToRead === 'BYPAGE' && (
                     <form>
-                        <label htmlFor="page">Bokens sida:</label>
-                        <input type="number" id="page" name="sida" min="0" max="100000" className="border" />
+                        <label htmlFor="page">Hoppa till sida: </label>
+                        <input type="number" id="page" name="sida" min="0" max="100000" className="border" placeholder={0} />
                     </form>
                 )}
 

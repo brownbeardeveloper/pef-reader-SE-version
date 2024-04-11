@@ -1,6 +1,6 @@
 import brailleCharToLetter from "./brailleCharToLetter.js";
 import brailleCharToPunctuation from "./brailleCharToPunctuation.js"; 
-import { upperCaseSign, stopSign, blankSign } from "../data/MapBrailleToSwedishCharacters.js";
+import { upperCaseSign, stopSign, blankSign } from "../../data/MapBrailleToSwedishCharacters.js";
 
 /**
  * Converts a part of Braille text to uppercase.

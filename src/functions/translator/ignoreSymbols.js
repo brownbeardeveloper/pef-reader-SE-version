@@ -1,4 +1,4 @@
-import { ignoreBrailleCharacters } from "../data/MapBrailleToSwedishCharacters.js";
+import { ignoreBrailleCharacters } from "../../data/MapBrailleToSwedishCharacters.js";
 
 /**
  * Checks if a given braille character is an ignored symbol.

@@ -1,4 +1,4 @@
-import { mapBrailleToAlpha } from "../data/MapBrailleToSwedishCharacters.js";
+import { mapBrailleToAlpha } from "../../data/MapBrailleToSwedishCharacters.js";
 
 /**
  * Converts a braille character to a letter.

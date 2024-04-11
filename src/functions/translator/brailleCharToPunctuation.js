@@ -1,4 +1,4 @@
-import { mapBrailleToPunctuation } from "../data/MapBrailleToSwedishCharacters.js";
+import { mapBrailleToPunctuation } from "../../data/MapBrailleToSwedishCharacters.js";
 
 /**
  * Convert braille character to punctuation.

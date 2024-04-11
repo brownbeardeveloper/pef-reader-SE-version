@@ -3,7 +3,7 @@ import braillePhraseToNumber from "./braillePhraseToNumber.js"
 import isIgnoreSymbol from "./ignoreSymbols.js"
 import brailleCharToPunctuation from "./brailleCharToPunctuation.js"
 import braillePhraseToUpperCaseCharacters from "./braillePhraseToUpperCaseCharaters.js"
-import { blankSign } from "../data/MapBrailleToSwedishCharacters.js"
+import { blankSign } from "../../data/MapBrailleToSwedishCharacters.js"
 
 export default function brailleTranslator(braillePhrase) {
 

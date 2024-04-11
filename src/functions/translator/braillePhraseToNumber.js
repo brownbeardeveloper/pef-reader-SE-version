@@ -1,4 +1,4 @@
-import { mapBrailleToNumber, numberSign, stopSign } from "../data/MapBrailleToSwedishCharacters.js";
+import { mapBrailleToNumber, numberSign, stopSign } from "../../data/MapBrailleToSwedishCharacters.js";
 
 /**
  * Converts a part of Braille text to a number.
