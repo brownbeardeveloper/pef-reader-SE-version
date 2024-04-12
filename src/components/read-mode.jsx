@@ -3,13 +3,12 @@ import useDocumentTitle from "../functions/useDocumentTile.js";
 import { setSessionStorageDataByFileId } from "../functions/sessionHandler.js";
 import { ViewModeEnum } from "../data/enums.js"
 
-
-export default function ReadMode({ setReadmode, pefObject, howToRead }) {
+export default function ReadMode({ cookie, setCookie, setReadmode, pefObject, howToRead }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [readMetaData, setReadMetaData] = useState(true);
   const lastpage = 100;
 
-  useDocumentTitle(`Sida: ${currentPage} | ${pefObject.metaData.titel}`);
+  useDocumentTitle(pefObject.metaData.titel);
 
   function handleMetaData() {
     setReadMetaData(!readMetaData);
@@ -50,9 +49,24 @@ export default function ReadMode({ setReadmode, pefObject, howToRead }) {
     setCurrentPage(index);
   }
 
+  function handleReadCookie() {
+    if (cookie) {
+      const element = document.getElementById(cookie);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      } else {
+        console.error('Error: Unable to find the specified element.')
+      }
+
+    } else {
+      console.error('There is no cookie.')
+    }
+  }
+
   function handleClickRow(i, j, k, l) {
-    setSessionStorageDataByFileId(pefObject.metaData.identifier, i, j, k, l)
     const rowId = `row-${i}-${j}-${k}-${l}`;
+    setCookie(rowId)
+    setSessionStorageDataByFileId(pefObject.metaData.identifier, rowId)
     const element = document.getElementById(rowId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
@@ -89,7 +103,11 @@ export default function ReadMode({ setReadmode, pefObject, howToRead }) {
               const page = section.pages[k];
               const thisPageIndex = pageIndex
 
-              rows.push(<div key={`${i}-${j}-${k}`} onClick={() => handleClickPage(thisPageIndex)} >Sida {pageIndex++}</div>)
+              rows.push(
+                <div key={`${i}-${j}-${k}`} onClick={() => handleClickPage(thisPageIndex)}>
+                  Sida {pageIndex++}
+                </div>
+              )
 
               // Check if page has rows
               if (page.rows) {
@@ -116,16 +134,21 @@ export default function ReadMode({ setReadmode, pefObject, howToRead }) {
   return (
     <main className="flex flex-col justify-start items-center h-screen">
 
+      {cookie &&
+        <button onClick={handleReadCookie}
+          className="bg-purple-300 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl 
+              transition duration-200 hover:bg-white hover:shadow-2xl">
+          Återskapa den senast sparade positionen
+        </button>
+      }
+
       {howToRead === ViewModeEnum.ONE_FLOW ? (
-
-
 
         <div className="p-4 sm:p-8 border border-gray-500 rounded-md w-full">
           <div className="w-96 overflow-y-auto h-96">
             {renderRows()}
           </div>
         </div>
-
 
       ) : (
         <div className="flex flex-col items-center">
@@ -147,7 +170,7 @@ export default function ReadMode({ setReadmode, pefObject, howToRead }) {
 
       <div className="flex flex-row m-2">
         <button onClick={handleBackToStartPage} className="bg-purple-300 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
-          Till startsida
+          Till startsidan
         </button>
         <button onClick={handleMetaData} className="bg-purple-300 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Bokdetaljer

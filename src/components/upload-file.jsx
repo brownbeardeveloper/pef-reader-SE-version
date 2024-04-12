@@ -1,13 +1,17 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Bars } from 'react-loader-spinner'
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { getSessionStorageDataByFileIdAsOneFlow } from "../functions/sessionHandler";
 import { ViewModeEnum } from "../data/enums.js"
 
-export default function UploadFile({ setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
+export default function UploadFile({ setCookie, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
 
     const [isLoadingFile, setIsLoadingFile] = useState(false);
     const iconColor = "#d8bfd8";
+
+    useEffect(() => {
+        handleGetSessionStorage()
+      }, [pefObject]);
 
     function handleAddFile(event) {
         if (event.target.files[0]) {
@@ -17,17 +21,17 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
 
                 reader.addEventListener("load", () => { // Actions to perform when the input is successfully loaded
 
-                    const fileObject = fileReader(reader.result) // this obj contains both meta and body data
+                    const fileObject = fileReader(reader.result) // This obj contains both meta and body data
 
                     fileObject.then(resolvedObject => {
         
-                        if (resolvedObject.metaData.språk === 'sv') {
+                        if (resolvedObject.metaData.språk === 'sv') { // Move this function to "braille translator"-button later!
                             setPefObject(resolvedObject);
                             setIsLoadingFile(false)
-
                         } else {
                             alert('Tyvärr, den valda boken är inte på svenska. Just nu kan vi endast hantera svenska böcker. Meddela oss om du önskar en annan språkversion.');
                         }
+
                     }).catch(error => {
                         console.error("Error occurred while resolving the promise:", error);
                     });
@@ -53,22 +57,21 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
         }
     }
 
-    function getSessionStorage() {
-        if (pefObject && pefObject.metaData && pefObject.metaData.identifier) {
-            return getSessionStorageDataByFileIdAsOneFlow(pefObject.metaData.identifier)
-        } else {
-            console.error('pefObject.metaData.identifier is undefined.');
-        }
-    }
-
     function handleGetSessionStorage() {
-        const data = getSessionStorage()
+        if (pefObject && pefObject.metaData && pefObject.metaData.identifier && pefObject.metaData.titel) {
 
-        if (data) {
+          const data = getSessionStorageDataByFileIdAsOneFlow(pefObject.metaData.identifier);
 
+          if (data) {
+            setCookie(data);
+            alert(`Din senaste sparade position i boken '${pefObject.metaData.titel}' har hittats!`);
+          } else {
+            console.error('There is no cookie.');
+          }
+        } else {
+          console.error('pefObject.metaData.identifier is undefined.');
         }
-
-    }
+      }
 
     return (
         <div>
@@ -153,8 +156,6 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
                     </div>
                 }
             </div>
-
-            <button onClick={handleGetSessionStorage} className="bg-green-500 border p-2 border-black">get session</button>
         </div>
     )
 }
