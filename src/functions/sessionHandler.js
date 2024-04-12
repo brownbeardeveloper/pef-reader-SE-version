@@ -1,8 +1,9 @@
-export function getSessionStorageDataByFileId(fileId) {
+export function getSessionStorageDataByFileIdAsOneFlow(fileId) {
     if (fileId) {
         const sessionObjStr = sessionStorage.getItem(`mtm-pef-${fileId}-oneflow`);
         const sessionObj = JSON.parse(sessionObjStr)
         console.log(sessionObj);
+        return sessionObj
     } else {
         console.error('fileId is null or undefined.');
     }

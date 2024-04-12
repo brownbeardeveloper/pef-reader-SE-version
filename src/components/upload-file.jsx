@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { Bars } from 'react-loader-spinner'
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
-import { getSessionStorageDataByFileId } from "../functions/sessionHandler";
+import { getSessionStorageDataByFileIdAsOneFlow } from "../functions/sessionHandler";
+import { ViewModeEnum } from "../data/enums.js"
 
 export default function UploadFile({ setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
 
@@ -54,12 +55,19 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
 
     function getSessionStorage() {
         if (pefObject && pefObject.metaData && pefObject.metaData.identifier) {
-
-            getSessionStorageDataByFileId(pefObject.metaData.identifier)
-
+            return getSessionStorageDataByFileIdAsOneFlow(pefObject.metaData.identifier)
         } else {
             console.error('pefObject.metaData.identifier is undefined.');
         }
+    }
+
+    function handleGetSessionStorage() {
+        const data = getSessionStorage()
+
+        if (data) {
+
+        }
+
     }
 
     return (
@@ -94,8 +102,8 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
                         name="howToRead"
                         value="ONEFLOW"
                         className="m-1"
-                        checked={howToRead === 'ONEFLOW'}
-                        onChange={() => setHowToRead('ONEFLOW')}
+                        checked={howToRead === ViewModeEnum.ONE_FLOW}
+                        onChange={() => setHowToRead(ViewModeEnum.ONE_FLOW)}
                     />
                     <label htmlFor="oneFlow" className="ml-1 mr-10">
                         Löpande text
@@ -107,15 +115,15 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
                         name="howToRead"
                         value="BYPAGE"
                         className="m-1"
-                        checked={howToRead === 'BYPAGE'}
-                        onChange={() => setHowToRead('BYPAGE')}
+                        checked={howToRead === ViewModeEnum.PAGE_BY_PAGE}
+                        onChange={() => setHowToRead(ViewModeEnum.PAGE_BY_PAGE)}
                     />
                     <label htmlFor="byPage" className="ml-1">
                         Sida för sida
                     </label>
                 </div>
 
-                {howToRead === 'BYPAGE' && (
+                {howToRead === ViewModeEnum.PAGE_BY_PAGE && (
                     <form>
                         <label htmlFor="page">Hoppa till sida: </label>
                         <input type="number" id="page" name="sida" min="0" max="100000" className="border" placeholder={0} />
@@ -146,7 +154,7 @@ export default function UploadFile({ setReadmode, pefObject, setPefObject, fileN
                 }
             </div>
 
-            <button onClick={getSessionStorage} className="bg-green-500 border p-2 border-black">get session</button>
+            <button onClick={handleGetSessionStorage} className="bg-green-500 border p-2 border-black">get session</button>
         </div>
     )
 }

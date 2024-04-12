@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
 import { setSessionStorageDataByFileId } from "../functions/sessionHandler.js";
+import { ViewModeEnum } from "../data/enums.js"
+
 
 export default function ReadMode({ setReadmode, pefObject, howToRead }) {
   const [currentPage, setCurrentPage] = useState(0);
@@ -48,10 +50,20 @@ export default function ReadMode({ setReadmode, pefObject, howToRead }) {
     setCurrentPage(index);
   }
 
-  function handleClick(i, j, k, l) {
+  function handleClickRow(i, j, k, l) {
     setSessionStorageDataByFileId(pefObject.metaData.identifier, i, j, k, l)
-    const rowValue = pefObject.bodyData.volumes[i].sections[j].pages[k].rows[l];
-    console.log("Clicked row value:", rowValue);
+    const rowId = `row-${i}-${j}-${k}-${l}`;
+    const element = document.getElementById(rowId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    } else {
+      console.error('Error: Unable to find the specified element.')
+    }
+
+  }
+
+  function handleClickPage(pageIndex) {
+    console.log("Clicked page:", pageIndex);
   }
 
 
@@ -73,9 +85,11 @@ export default function ReadMode({ setReadmode, pefObject, howToRead }) {
           if (section.pages) {
             // Iterate over pages in the section
             for (let k = 0; k < section.pages.length; k++) {
-              const page = section.pages[k];
 
-              rows.push(<div>Sida {pageIndex++}</div>)
+              const page = section.pages[k];
+              const thisPageIndex = pageIndex
+
+              rows.push(<div key={`${i}-${j}-${k}`} onClick={() => handleClickPage(thisPageIndex)} >Sida {pageIndex++}</div>)
 
               // Check if page has rows
               if (page.rows) {
@@ -85,9 +99,8 @@ export default function ReadMode({ setReadmode, pefObject, howToRead }) {
 
                   // Push each row to the rows array
                   rows.push(
-                    <div key={`${i}-${j}-${k}-${l}`} onClick={() => handleClick(i, j, k, l)}>
-                      {/* Render your row content here */}
-                      <p>{row}</p>
+                    <div key={`${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}>
+                      <p id={`row-${i}-${j}-${k}-${l}`}>{row}</p>
                     </div>
                   );
                 }
@@ -103,12 +116,17 @@ export default function ReadMode({ setReadmode, pefObject, howToRead }) {
   return (
     <main className="flex flex-col justify-start items-center h-screen">
 
-      {howToRead === 'ONEFLOW' ? (
-        <div className="p-4 sm:p-8 border border-gray-500 rounded-md w-full max-w-lg">
-          <div className="w-full max-h-80 overflow-y-auto">
+      {howToRead === ViewModeEnum.ONE_FLOW ? (
+
+
+
+        <div className="p-4 sm:p-8 border border-gray-500 rounded-md w-full">
+          <div className="w-96 overflow-y-auto h-96">
             {renderRows()}
           </div>
         </div>
+
+
       ) : (
         <div className="flex flex-col items-center">
           <div className="p-4 sm:p-8 border border-gray-500 rounded-md w-full max-w-lg">

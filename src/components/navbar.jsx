@@ -3,13 +3,13 @@ import React from 'react';
 export default function Navbar() {
 
   return (
-    <head className="flex justify-between px-4 py-8 mx-auto bg-purple-100">
+    <nav className="flex justify-between px-4 py-8 mx-auto bg-purple-100">
 
       <div>
         <span className="text-2xl font-bold text-purple-500">Läs punktskrift direkt</span>
       </div>
 
-      <div class="hidden space-x-8 lg:flex">
+      <div className="hidden space-x-8 lg:flex">
         <a href="">Home</a>
         <a href="">About Us</a>
         <a href="">Our Team</a>
@@ -20,7 +20,7 @@ export default function Navbar() {
 
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="w-6 h-6"
+          className="w-6 h-6"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -34,7 +34,7 @@ export default function Navbar() {
 
         </svg>
       </div>
-    </head>
+    </nav>
 
 
   )
