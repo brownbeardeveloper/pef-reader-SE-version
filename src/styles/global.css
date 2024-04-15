@@ -11,4 +11,12 @@
 body, html {
     margin: 0;
     padding: 0;
+    background-image: url('../media/bg_body.jpg');
+    background-size: cover;
+    background-repeat: no-repeat; 
+    background-position: center; 
+}
+
+main {
+    background-color: #fff;
 }

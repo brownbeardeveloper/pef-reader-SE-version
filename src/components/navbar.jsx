@@ -1,19 +1,14 @@
-import React from 'react';
-
 export default function Navbar() {
 
   return (
-    <head className="flex justify-between px-4 py-8 mx-auto bg-purple-100">
+    <head className="flex justify-between px-4 py-1 mx-auto bg-gray-200">
 
       <div>
-        <span className="text-2xl font-bold text-purple-500">Läs punktskrift direkt</span>
+        <span className="text-lg font-bold">Digital punktläsare</span>
       </div>
 
       <div class="hidden space-x-8 lg:flex">
-        <a href="">Home</a>
-        <a href="">About Us</a>
-        <a href="">Our Team</a>
-        <a href="">Contact Us</a>
+        <a href="">English</a>
       </div>
 
       <div className="flex lg:hidden">

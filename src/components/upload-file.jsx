@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Bars } from 'react-loader-spinner'
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { getSessionStorageDataByFileId } from "../functions/sessionHandler";
+import Header from "./header";
 
 export default function UploadFile({ setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
 
