@@ -8,11 +8,12 @@ export default function Navbar() {
       </div>
 
       <div class="hidden space-x-8 lg:flex">
-        <a href="">English</a>
+        <a href="https://www.legimus.se/">Legimus</a>
+        <a href="https://mtm.se/om-oss/">Om oss</a>
+        <a href="#">In English</a>
       </div>
 
       <div className="flex lg:hidden">
-
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="w-6 h-6"
@@ -26,7 +27,6 @@ export default function Navbar() {
             stroke-width="2"
             d="M4 6h16M4 12h16M4 18h16"
           />
-
         </svg>
       </div>
     </head>

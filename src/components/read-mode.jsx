@@ -37,10 +37,6 @@ export default function ReadMode({ cookie, setCookie, setReadmode, pefObject, ho
     }
   }
 
-  function handleBackToStartPage() {
-    setReadmode(false);
-  }
-
   function handleReset() {
     setCurrentPage(0);
   }
@@ -53,7 +49,8 @@ export default function ReadMode({ cookie, setCookie, setReadmode, pefObject, ho
     if (cookie) {
       const element = document.getElementById(cookie);
       if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+        element.classList.toggle("bg-yellow-300")
+        element.scrollIntoView({ behavior: "smooth" })
       } else {
         console.error('Error: Unable to find the specified element.')
       }
@@ -69,11 +66,11 @@ export default function ReadMode({ cookie, setCookie, setReadmode, pefObject, ho
     setSessionStorageDataByFileId(pefObject.metaData.identifier, rowId)
     const element = document.getElementById(rowId);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      element.classList.toggle("bg-yellow-300")
+      element.scrollIntoView({ behavior: "smooth" })
     } else {
       console.error('Error: Unable to find the specified element.')
     }
-
   }
 
   function handleClickPage(pageIndex) {
@@ -136,7 +133,7 @@ export default function ReadMode({ cookie, setCookie, setReadmode, pefObject, ho
 
       {cookie &&
         <button onClick={handleReadCookie}
-          className="bg-purple-300 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl 
+          className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl 
               transition duration-200 hover:bg-white hover:shadow-2xl">
           Återskapa den senast sparade positionen
         </button>
@@ -169,10 +166,10 @@ export default function ReadMode({ cookie, setCookie, setReadmode, pefObject, ho
       )}
 
       <div className="flex flex-row m-2">
-        <button onClick={handleBackToStartPage} className="bg-purple-300 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+        <button onClick={()=> setReadmode(false)} className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Till startsidan
         </button>
-        <button onClick={handleMetaData} className="bg-purple-300 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+        <button onClick={handleMetaData} className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Bokdetaljer
         </button>
       </div>
