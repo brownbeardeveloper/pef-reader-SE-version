@@ -18,7 +18,7 @@ export default function Footer({ setOpenCookiePolicy }) {
         <div>
           <button
             onClick={() => setOpenCookiePolicy(true)}
-            className="bg-primary-500 text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline rounded-full hover:bg-primary-600 transition duration-300 ease-in-out"
+            className="bg-primary-500 text-neutral-700 dark:text-neutral-200 py-2 px-4 focus:outline-none focus:shadow-outline rounded-full hover:bg-primary-600 transition duration-300 ease-in-out"
           >
             Kakor och integritetspolicy
           </button>

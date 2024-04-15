@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 import { Bars } from 'react-loader-spinner'
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
-import { getSessionStorageDataByFileIdAsOneFlow } from "../functions/sessionHandler";
 import { ViewModeEnum } from "../data/enums.js"
 
 export default function UploadFile({ setCookie, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
@@ -9,16 +8,12 @@ export default function UploadFile({ setCookie, setReadmode, pefObject, setPefOb
     const [isLoadingFile, setIsLoadingFile] = useState(false);
     const iconColor = "#d8bfd8";
 
-    useEffect(() => {
-        handleGetSessionStorage()
-      }, [pefObject]);
-
     function handleAddFile(event) {
         if (event.target.files[0]) {
             if (checkIfPefFileType(event.target.files[0].type)) {
                 setFileName(event.target.files[0].name);
                 const reader = new FileReader() // Launches a new thread in the client's web browser background
-
+                
                 reader.addEventListener("load", () => { // Actions to perform when the input is successfully loaded
 
                     const fileObject = fileReader(reader.result) // This obj contains both meta and body data
@@ -57,22 +52,6 @@ export default function UploadFile({ setCookie, setReadmode, pefObject, setPefOb
         }
     }
 
-    function handleGetSessionStorage() {
-        if (pefObject && pefObject.metaData && pefObject.metaData.identifier && pefObject.metaData.titel) {
-
-          const data = getSessionStorageDataByFileIdAsOneFlow(pefObject.metaData.identifier);
-
-          if (data) {
-            setCookie(data);
-            alert(`Din senaste sparade position i boken '${pefObject.metaData.titel}' har hittats!`);
-          } else {
-            console.error('There is no cookie.');
-          }
-        } else {
-          console.error('pefObject.metaData.identifier is undefined.');
-        }
-      }
-
     return (
         <div>
             <p className="text-xl">När du har laddat ner en punktskriftsbok från Legimus kan du läsa den här med din punktdisplay.</p>
@@ -89,12 +68,10 @@ export default function UploadFile({ setCookie, setReadmode, pefObject, setPefOb
                 </label>
             </div>
 
-
             <div className="flex flex-row items-center mt-6 mb-6">
                 <label className="mr-2 text-2xl font-bold">Vald fil: </label>
                 <p>{fileName}</p>
             </div>
-
 
             <div className="mt-10 mb-10">
                 <p className="text-2xl font-bold" >Hur vill du läsa boken?</p>

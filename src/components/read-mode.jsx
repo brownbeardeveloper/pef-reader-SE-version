@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
-import { setSessionStorageDataByFileId } from "../functions/sessionHandler.js";
+import { setRowValueCookieByBookId } from "../functions/cookieManager.js";
 import { ViewModeEnum } from "../data/enums.js"
+import { getRowValueCookieByBookIdAsJson } from "../functions/cookieManager.js";
 
 export default function ReadMode({ cookie, setCookie, setReadmode, pefObject, howToRead }) {
   const [currentPage, setCurrentPage] = useState(0);
-  const [readMetaData, setReadMetaData] = useState(true);
+  const [readMetaData, setReadMetaData] = useState(false);
+  const [alertShown, setAlertShown] = useState(false); // Track if the alert message has been shown
   const lastpage = 100;
 
   useDocumentTitle(pefObject.metaData.titel);
+
+  if (!alertShown) {
+    handleGetCookie()
+    setAlertShown(true)
+  }
 
   function handleMetaData() {
     setReadMetaData(!readMetaData);
@@ -17,8 +24,7 @@ export default function ReadMode({ cookie, setCookie, setReadmode, pefObject, ho
         .map(([key, value]) => value && `${key}: ${value}`)
         .filter(Boolean)
         .join('\n')
-    );
-
+    )
   }
 
   function handleNextPage() {
@@ -63,7 +69,7 @@ export default function ReadMode({ cookie, setCookie, setReadmode, pefObject, ho
   function handleClickRow(i, j, k, l) {
     const rowId = `row-${i}-${j}-${k}-${l}`;
     setCookie(rowId)
-    setSessionStorageDataByFileId(pefObject.metaData.identifier, rowId)
+    setRowValueCookieByBookId(pefObject.metaData.identifier, rowId)
     const element = document.getElementById(rowId);
     if (element) {
       element.classList.toggle("bg-yellow-300")
@@ -76,6 +82,23 @@ export default function ReadMode({ cookie, setCookie, setReadmode, pefObject, ho
   function handleClickPage(pageIndex) {
     console.log("Clicked page:", pageIndex);
   }
+
+  function handleGetCookie() {
+    if (pefObject && pefObject.metaData && pefObject.metaData.identifier && pefObject.metaData.titel) {
+
+      const data = getRowValueCookieByBookIdAsJson(pefObject.metaData.identifier);
+
+      if (data) {
+        setCookie(data);
+        alert(`Din senaste sparade position i boken '${pefObject.metaData.titel}' har hittats!`);
+      } else {
+        console.error('There is no cookie.');
+      }
+    } else {
+      console.error('pefObject.metaData.identifier is undefined.');
+    }
+  }
+
 
 
   const renderRows = () => {
@@ -125,8 +148,8 @@ export default function ReadMode({ cookie, setCookie, setReadmode, pefObject, ho
         }
       }
     }
-    return rows;
-  };
+    return rows
+  }
 
   return (
     <main className="flex flex-col justify-start items-center h-screen">
@@ -166,7 +189,7 @@ export default function ReadMode({ cookie, setCookie, setReadmode, pefObject, ho
       )}
 
       <div className="flex flex-row m-2">
-        <button onClick={()=> setReadmode(false)} className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+        <button onClick={() => setReadmode(false)} className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Till startsidan
         </button>
         <button onClick={handleMetaData} className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
@@ -174,5 +197,5 @@ export default function ReadMode({ cookie, setCookie, setReadmode, pefObject, ho
         </button>
       </div>
     </main>
-  );
+  )
 }

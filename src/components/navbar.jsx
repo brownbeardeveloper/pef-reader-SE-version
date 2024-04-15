@@ -10,7 +10,7 @@ export default function Navbar() {
       <div class="hidden space-x-8 lg:flex">
         <a href="https://www.legimus.se/">Legimus</a>
         <a href="https://mtm.se/om-oss/">Om oss</a>
-        <a href="#">In English</a>
+        <a href="/">In English</a>
       </div>
 
       <div className="flex lg:hidden">
