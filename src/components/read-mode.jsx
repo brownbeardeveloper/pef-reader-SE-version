@@ -118,7 +118,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode,
 
       {howToRead === ViewModeEnum.ONE_FLOW ? (
 
-        <div className="p-4 sm:p-8 border border-gray-500 rounded-md w-full">
+        <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
           <div className="w-96 overflow-y-auto h-96">
             {renderRows()}
           </div>
