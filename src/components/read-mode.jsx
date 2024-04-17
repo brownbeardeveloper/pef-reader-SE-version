@@ -81,7 +81,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode,
 
               rows.push( // Push page's index into rows array
                 <div key={`${i}-${j}-${k}`} onClick={() => handleClickPage(thisPageIndex)}>
-                  Sida {pageIndex++}
+                  <h3 className="font-black">Sida {pageIndex++}</h3>
                 </div>
               )
 
@@ -143,11 +143,11 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode,
       )}
 
       <div className="flex flex-row m-2">
-      <button onClick={handleScrollToTop} className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
-          Scrolla till toppen
-        </button>
         <button onClick={handleShowBookDetailsBtn} className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Bokdetaljer
+        </button>
+        <button onClick={handleScrollToTop} className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+          Återvänd till bokens startpunkt
         </button>
         <button onClick={() => setReadmode(false)} className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Till startsidan
