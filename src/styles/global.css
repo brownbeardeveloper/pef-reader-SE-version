@@ -5,7 +5,8 @@
 @import url(tailwind.css);
 
 * {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Roboto";
+    font-style: normal;
 }
 
 body, html {
