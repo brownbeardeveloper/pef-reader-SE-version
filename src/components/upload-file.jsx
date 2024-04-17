@@ -2,8 +2,9 @@ import { useState, useEffect } from "react"
 import { Bars } from 'react-loader-spinner'
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { ViewModeEnum } from "../data/enums.js"
+import { getLatestRowPositionFromCookieJson } from "../functions/cookieManager.js"
 
-export default function UploadFile({ setCookie, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
+export default function UploadFile({ savedRowIndex, setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
 
     const [isLoadingFile, setIsLoadingFile] = useState(false);
     const iconColor = "#d8bfd8";
@@ -13,13 +14,13 @@ export default function UploadFile({ setCookie, setReadmode, pefObject, setPefOb
             if (checkIfPefFileType(event.target.files[0].type)) {
                 setFileName(event.target.files[0].name);
                 const reader = new FileReader() // Launches a new thread in the client's web browser background
-                
+
                 reader.addEventListener("load", () => { // Actions to perform when the input is successfully loaded
 
                     const fileObject = fileReader(reader.result) // This obj contains both meta and body data
 
                     fileObject.then(resolvedObject => {
-        
+
                         if (resolvedObject.metaData.språk === 'sv') { // Move this function to "braille translator"-button later!
                             setPefObject(resolvedObject);
                             setIsLoadingFile(false)
@@ -47,6 +48,24 @@ export default function UploadFile({ setCookie, setReadmode, pefObject, setPefOb
     function HandleSwapToReadMode() {
         if (pefObject) {
             setReadmode(true); // IMPORTANT: Swapping this component to read mode    
+
+            // if there's cookie then printout alert
+
+            if (pefObject && pefObject.metaData && pefObject.metaData.identifier && pefObject.metaData.titel) {
+
+                const data = getLatestRowPositionFromCookieJson(pefObject.metaData.identifier);
+
+                if (data) {
+                    setSavedRowIndex(data);
+                    alert(`Din senaste sparade position i boken '${pefObject.metaData.titel}' har hittats!`);
+                } else {
+                    console.error('There is no cookie.');
+                }
+            } else {
+                console.error('pefObject.metaData.identifier is undefined.');
+            }
+
+
         } else {
             alert('Fel: Lägg först till en PEF-fil innan du försöker läsa boken.');
         }

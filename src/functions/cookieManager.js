@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-export function setRowValueCookieByBookId(bookId, rowId) {
+export function setLatestRowPositionToCookie(bookId, rowId) {
     try {
         const cookieObj = JSON.stringify(rowId);
         Cookies.set(`${bookId}-latest-position`, cookieObj, { expires: 365 });
@@ -9,7 +9,7 @@ export function setRowValueCookieByBookId(bookId, rowId) {
     }
 }
 
-export function getRowValueCookieByBookIdAsJson(bookId) {
+export function getLatestRowPositionFromCookieJson(bookId) {
     try {
         const cookieObj = Cookies.get(`${bookId}-latest-position`);
         if (cookieObj) {
