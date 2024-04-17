@@ -57,7 +57,6 @@ export default function UploadFile({ savedRowIndex, setSavedRowIndex, setReadmod
 
                 if (data) {
                     setSavedRowIndex(data);
-                    alert(`Din senaste sparade position i boken '${pefObject.metaData.titel}' har hittats!`);
                 } else {
                     console.error('There is no cookie.');
                 }
@@ -81,8 +80,8 @@ export default function UploadFile({ savedRowIndex, setSavedRowIndex, setReadmod
                 {/* Disable the file-selector button while the file is being converted */}
                 <input id="file-selector" type="file" accept=".pef" className="hidden" onChange={handleAddFile} disabled={isLoadingFile} />
                 <label htmlFor="file-selector" className={(isLoadingFile ? "bg-purple-50 border-purple-100 cursor-not-allowed"
-                    : "bg-purple-200 border-purple-600 hover:bg-white hover:shadow-2xl cursor-pointer") +
-                    " border px-8 py-3 rounded-full uppercase font-bold shadow-xl transition duration-200 w-max"}>
+                    : "bg-purple-400 border-purple-600 hover:bg-white hover:shadow-2xl cursor-pointer") +
+                    " border px-8 py-3 rounded-md uppercase font-bold shadow-xl transition duration-200 w-max"}>
                     Välj fil (.pef)
                 </label>
             </div>
@@ -135,7 +134,7 @@ export default function UploadFile({ savedRowIndex, setSavedRowIndex, setReadmod
             <div className="inline-block">
 
                 {!isLoadingFile ?
-                    <button onClick={HandleSwapToReadMode} className="bg-purple-200 border border-purple-600 px-8 py-3 rounded-full uppercase font-bold shadow-xl 
+                    <button onClick={HandleSwapToReadMode} className="bg-purple-400 border border-purple-600 px-8 py-3 rounded-md uppercase font-bold shadow-xl 
                     transition duration-200 hover:bg-white hover:shadow-2xl" >Läs boken</button>
                     :
                     <div className="flex flex-row items-center">

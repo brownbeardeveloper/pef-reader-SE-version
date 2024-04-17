@@ -35,16 +35,28 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode,
 
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
+      if (document.activeElement !== element) {
+        element.focus();
+      }
     } else {
       console.error('Error: Unable to find the specified element.')
     }
   }
 
-  function handleScrollToTop() {
-    const rowId = `row-0-0-0-0`
-    const element = document.getElementById(rowId)
-    element.scrollIntoView({ behavior: "smooth" })
-    element.focus()
+  function handleScrollToPageIndex(index) {
+    const pageId = `page-${index}`
+    const element = document.getElementById(pageId)
+
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+
+      if (document.activeElement !== element) {
+        element.focus();
+      }
+
+    } else {
+      console.error(`Element with ID '${pageId}' not found.`);
+    }
   }
 
   function handleClickPage(pageIndex) {
@@ -81,7 +93,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode,
 
               rows.push( // Push page's index into rows array
                 <div key={`${i}-${j}-${k}`} onClick={() => handleClickPage(thisPageIndex)}>
-                  <h3 className="font-black">Sida {pageIndex++}</h3>
+                  <h3 id={`page-${thisPageIndex}`} className="font-black">Sida {pageIndex++}</h3>
                 </div>
               )
 
@@ -108,12 +120,16 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode,
   return (
     <main className="flex flex-col justify-start items-center h-screen">
 
-      {savedRowIndex &&
+      {savedRowIndex ?
         <button onClick={handleShowLatestSavedPositionBtn}
-          className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl 
+          className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl 
               transition duration-200 hover:bg-white hover:shadow-2xl">
           Visa den senast sparade positionen
         </button>
+        :
+        <p class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mb-1 rounded relative" role="alert">
+          <span class="block sm:inline">Man kan spara läspositionen genom att klicka på textraden, vilken sedan sparas i cookies.</span>
+        </p>
       }
 
       {howToRead === ViewModeEnum.ONE_FLOW ? (
@@ -132,10 +148,10 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode,
             </div>
           </div>
           <div className="flex flex-row m-2">
-            <button onClick={null} className="bg-purple-300 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+            <button onClick={null} className="bg-purple-300 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
               Nästa sida
             </button>
-            <button onClick={null} className="bg-purple-300 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+            <button onClick={null} className="bg-purple-300 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
               Föregående sida
             </button>
           </div>
@@ -143,13 +159,13 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode,
       )}
 
       <div className="flex flex-row m-2">
-        <button onClick={handleShowBookDetailsBtn} className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+        <button onClick={handleShowBookDetailsBtn} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Bokdetaljer
         </button>
-        <button onClick={handleScrollToTop} className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
-          Återvänd till bokens startpunkt
+        <button onClick={() => handleScrollToPageIndex(1)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+          Återvänd till första sidan
         </button>
-        <button onClick={() => setReadmode(false)} className="bg-purple-200 border border-purple-600 m-2 px-6 py-2 rounded-full uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+        <button onClick={() => setReadmode(false)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Till startsidan
         </button>
       </div>
