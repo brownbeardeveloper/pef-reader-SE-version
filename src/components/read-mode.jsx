@@ -6,6 +6,8 @@ import { ViewModeEnum } from "../data/enums.js"
 export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode, pefObject, howToRead }) {
 
   const [showDetails, setShowDetails] = useState(false);
+  let maxPageIndex = 0
+  let maxVolumeIndex = 0
 
   useDocumentTitle(pefObject.metaData.titel)
 
@@ -59,8 +61,29 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode,
     }
   }
 
-  function handleClickPage(pageIndex) {
-    console.log("Clicked page:", pageIndex);
+  function handleScrollToVolumeIndex(index) {
+    const volumeId = `volume-${index}`
+    const element = document.getElementById(volumeId)
+
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+
+      if (document.activeElement !== element) {
+        element.focus();
+      }
+
+    } else {
+      console.error(`Element with ID '${volumeId}' not found.`);
+    }
+  }
+
+
+  function handleClickPage(index) {
+    console.log("Clicked page:", index);
+  }
+
+  function handleClickVolym(index) {
+    console.log("Clicked volym:", index);
   }
 
   function handleShowBookDetailsBtn() {
@@ -79,19 +102,31 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode,
 
   const renderRows = () => {
     const rows = [];
+    let volumeIndex = 1
     let pageIndex = 1
 
     for (let i = 0; i < pefObject.bodyData.volumes.length; i++) {
       const volume = pefObject.bodyData.volumes[i];
+
+      const thisVolumeIndex = volumeIndex
+
+      rows.push(
+        <div key={`${i}`} onClick={() => handleClickVolym(thisVolumeIndex)}>
+          <h2 id={`volume-${thisVolumeIndex}`} className="font-black">Volym {volumeIndex++}</h2>
+        </div>
+      )
+
+
       if (volume.sections) {
         for (let j = 0; j < volume.sections.length; j++) {
           const section = volume.sections[j];
+
           if (section.pages) {
             for (let k = 0; k < section.pages.length; k++) {
               const page = section.pages[k];
               const thisPageIndex = pageIndex
 
-              rows.push( // Push page's index into rows array
+              rows.push(
                 <div key={`${i}-${j}-${k}`} onClick={() => handleClickPage(thisPageIndex)}>
                   <h3 id={`page-${thisPageIndex}`} className="font-black">Sida {pageIndex++}</h3>
                 </div>
@@ -114,6 +149,8 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode,
         }
       }
     }
+    maxVolumeIndex = volumeIndex
+    maxPageIndex = pageIndex
     return rows
   }
 
@@ -122,7 +159,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode,
 
       {savedRowIndex ?
         <button onClick={handleShowLatestSavedPositionBtn}
-          className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl 
+          className="w-full bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl 
               transition duration-200 hover:bg-white hover:shadow-2xl">
           Visa den senast sparade positionen
         </button>
@@ -163,11 +200,33 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, setReadmode,
           Bokdetaljer
         </button>
         <button onClick={() => handleScrollToPageIndex(1)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
-          Återvänd till första sidan
+          Återvänd till bokens första sidan
         </button>
         <button onClick={() => setReadmode(false)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Till startsidan
         </button>
+      </div>
+
+      <div>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          const pageNumber = parseInt(e.target.elements.goToPage.value, 10); // Parse the entered value as an integer
+          handleScrollToPageIndex(pageNumber);
+        }}>
+          <label htmlFor="goToPage">Hoppa till sida: </label>
+          <input id="goToPage" type="number" min="1" max={maxPageIndex-1} required />
+          <button type="submit" className="bg-yellow-400 border border-yellow-600 m-1 px-2 py-1 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-yellow-500 hover:shadow-2xl">ENTER</button>
+        </form>
+
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          const volumeNumber = parseInt(e.target.elements.goToVolume.value, 10); // Parse the entered value as an integer
+          handleScrollToVolumeIndex(volumeNumber);
+        }}>
+          <label htmlFor="goToVolume">Hoppa till volym: </label>
+          <input id="goToVolume" type="number" min="1" max={maxVolumeIndex-1} required />
+          <button type="submit" className="bg-yellow-400 border border-yellow-600 m-1 px-2 py-1 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-yellow-500 hover:shadow-2xl">ENTER</button>
+        </form>
       </div>
     </main>
   )

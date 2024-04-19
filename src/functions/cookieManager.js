@@ -22,3 +22,20 @@ export function getLatestRowPositionFromCookieJson(bookId) {
         return null;
     }
 }
+
+export function setAllowCookie(bool) {
+    try {
+        Cookies.set("allowCookie", bool, { expires: 365 });
+    } catch (error) {
+        console.error('Error setting cookie:', error);
+    }
+}
+
+export function getAllowCookie() {
+    try {
+        return Cookies.get("allowCookie");
+    } catch (error) {
+        console.error('Error getting cookie:', error);
+        return null;
+    }
+}
