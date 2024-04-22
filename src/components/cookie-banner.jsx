@@ -1,4 +1,4 @@
-export default function CookieBanner({ handleAllowCookies, handleDenyCookies, setOpenCookiePolicy }) {
+export default function CookieBanner({ setCookiePermission, setOpenCookiePolicy }) {
     return (
         <div className="flex flex-wrap items-center justify-between bg-yellow-200 p-4">
             <div className="w-full md:w-3/4">
@@ -10,10 +10,10 @@ export default function CookieBanner({ handleAllowCookies, handleDenyCookies, se
                 </p>
             </div>
             <div className="w-full md:w-1/4 mt-4 md:mt-0">
-                <button onClick={handleAllowCookies()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200 ease-in-out mr-2">
+                <button onClick={() => setCookiePermission("allowed")} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200 ease-in-out mr-2">
                     Godkänn alla cookies
                 </button>
-                <button onClick={handleDenyCookies} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-200 ease-in-out">
+                <button onClick={() => setCookiePermission("denied")} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-200 ease-in-out">
                     Nej tack
                 </button>
             </div>

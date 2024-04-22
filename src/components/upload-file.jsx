@@ -4,7 +4,7 @@ import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { ViewModeEnum } from "../data/enums.js"
 import { getLatestRowPositionFromCookieJson } from "../functions/cookieManager.js"
 
-export default function UploadFile({ savedRowIndex, setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
+export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
 
     const [isLoadingFile, setIsLoadingFile] = useState(false);
     const iconColor = "#d8bfd8";
