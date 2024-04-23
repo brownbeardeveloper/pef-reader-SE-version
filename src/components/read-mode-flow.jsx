@@ -169,8 +169,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
 
       {savedRowIndex ?
         <button onClick={handleShowLatestSavedPositionBtn}
-          className="w-full bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl 
-              transition duration-200 hover:bg-white hover:shadow-2xl">
+          className="button">
           Visa den senast sparade positionen
         </button>
         :
@@ -186,19 +185,19 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
       </div>
 
       <div className="flex flex-row m-2">
-        <button onClick={handleShowBookDetailsBtn} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+        <button onClick={handleShowBookDetailsBtn} className="button">
           Bokdetaljer
         </button>
         
-        <button onClick={() => handleScrollToPageIndex(1)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+        <button onClick={() => handleScrollToPageIndex(1)} className="button">
           Återvänd till bokens första sidan
         </button>
 
-        <button onClick={() => setTranslateText(!translateText)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+        <button onClick={() => setTranslateText(!translateText)} className="button">
           Översätta
         </button>
 
-        <button onClick={() => setReadmode(false)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+        <button onClick={() => setReadmode(false)} className="button">
           Till startsidan
         </button>
       </div>
@@ -206,22 +205,24 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
       <div>
         <form onSubmit={(e) => {
           e.preventDefault();
-          const pageNumber = parseInt(e.target.elements.goToPage.value, 10); // Parse the entered value as an integer
+          const pageNumber = parseInt(e.target.elements.goToPage.value, 10); 
           handleScrollToPageIndex(pageNumber);
         }}>
           <label htmlFor="goToPage">Hoppa till sida: </label>
-          <input id="goToPage" type="number" min="1" max={maxPageIndex - 1} required />
-          <button type="submit" className="bg-yellow-400 border border-yellow-600 m-1 px-2 py-1 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-yellow-500 hover:shadow-2xl">ENTER</button>
+          <input className="border border-black" id="goToPage" type="number" min="1" max={maxPageIndex - 1} required />
+          <button type="submit" className="button">ENTER</button>
         </form>
 
+
+        {/* I think we will delete this below later... */}
         <form onSubmit={(e) => {
           e.preventDefault();
-          const volumeNumber = parseInt(e.target.elements.goToVolume.value, 10); // Parse the entered value as an integer
+          const volumeNumber = parseInt(e.target.elements.goToVolume.value, 10); 
           handleScrollToVolumeIndex(volumeNumber);
         }}>
           <label htmlFor="goToVolume">Hoppa till volym: </label>
-          <input id="goToVolume" type="number" min="1" max={maxVolumeIndex - 1} required />
-          <button type="submit" className="bg-yellow-400 border border-yellow-600 m-1 px-2 py-1 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-yellow-500 hover:shadow-2xl">ENTER</button>
+          <input className="border border-black" id="goToVolume" type="number" min="1" max={maxVolumeIndex - 1} required />
+          <button type="submit" className="button">ENTER</button>
         </form>
       </div>
     </main>

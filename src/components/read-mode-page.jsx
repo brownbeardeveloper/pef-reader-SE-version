@@ -177,36 +177,38 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
           {showBookPage(jumpToPage)}
         </div>
 
-        <div className="flex flex-row m-2">
-          <button onClick={handleNextPage} className="bg-purple-300 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
-            Nästa sida
-          </button>
-          <button onClick={handlePreviousPage} className="bg-purple-300 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
-            Föregående sida
-          </button>
-        </div>
       </div>
 
       <div className="flex flex-row m-2">
-        <button onClick={handleShowBookDetailsBtn} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+
+      <div className="flex flex-col">
+          <button onClick={handleNextPage} className="button">
+            Nästa sida
+          </button>
+          <button onClick={handlePreviousPage} className="button">
+            Föregående sida
+          </button>
+        </div>
+
+
+        <button onClick={handleShowBookDetailsBtn} className="button">
           Bokdetaljer
         </button>
 
         <button onClick={() => setJumpToPage(findPageByRowId(savedRowIndex))}
-          className="w-full bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl 
-              transition duration-200 hover:bg-white hover:shadow-2xl">
+          className="button">
           Visa den senast sparade positionen
         </button>
 
-        <button onClick={() => handleSetCurrentPage(0)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+        <button onClick={() => handleSetCurrentPage(0)} className="button">
           Återvänd till bokens första sidan
         </button>
 
-        <button onClick={() => setTranslateText(!translateText)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+        <button onClick={() => setTranslateText(!translateText)} className="button">
           Översätta
         </button>
 
-        <button onClick={() => setReadmode(false)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+        <button onClick={() => setReadmode(false)} className="button">
           Till startsidan
         </button>
       </div>
@@ -219,7 +221,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
         }}>
           <label htmlFor="goToPage">Hoppa till sida: </label>
           <input id="goToPage" type="number" min="1" max={maxPageIndex + 1} required />
-          <button type="submit" className="bg-yellow-400 border border-yellow-600 m-1 px-2 py-1 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-yellow-500 hover:shadow-2xl">ENTER</button>
+          <button type="submit" className="button">ENTER</button>
         </form>
 
       </div>

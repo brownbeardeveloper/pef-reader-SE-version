@@ -8,9 +8,8 @@ export default function Navbar() {
       </div>
 
       <div class="hidden space-x-8 lg:flex">
-        <a href="https://www.legimus.se/" className="hover:text-purple-500 transition duration-200 ease-in-out">Legimus</a>
-        <a href="https://mtm.se/om-oss/" className="hover:text-purple-500 transition duration-200 ease-in-out">Om oss</a>
-        <a href="/" className="hover:text-purple-500 transition duration-200 ease-in-out">In English</a>
+        <a href="https://www.legimus.se/" title="Länk till Legimus" className="hover:text-purple-500 transition duration-200 ease-in-out">Legimus</a>
+        <a href="https://mtm.se/om-oss/" title="Länk till Myndigheten för tillgänliga medier" className="hover:text-purple-500 transition duration-200 ease-in-out">Om oss</a>
       </div>
 
       <div className="flex lg:hidden">

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { Bars } from 'react-loader-spinner'
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { ViewModeEnum } from "../data/enums.js"
 import { getLatestRowPositionFromCookieJson } from "../functions/cookieManager.js"
@@ -7,7 +6,6 @@ import { getLatestRowPositionFromCookieJson } from "../functions/cookieManager.j
 export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead, jumpToPage, setJumpToPage }) {
 
     const [isLoadingFile, setIsLoadingFile] = useState(false);
-    const iconColor = "#d8bfd8";
 
     function handleAddFile(event) {
         if (event.target.files[0]) {
@@ -79,9 +77,10 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
 
                 {/* Disable the file-selector button while the file is being converted */}
                 <input id="file-selector" type="file" accept=".pef" className="hidden" onChange={handleAddFile} disabled={isLoadingFile} />
-                <label htmlFor="file-selector" className={(isLoadingFile ? "bg-purple-50 border-purple-100 cursor-not-allowed"
-                    : "bg-purple-400 border-purple-600 hover:bg-white hover:shadow-2xl cursor-pointer") +
-                    " border px-8 py-3 rounded-md uppercase font-bold shadow-xl transition duration-200 w-max"}>
+                <label htmlFor="file-selector"
+                    className={(isLoadingFile ?
+                        "cursor-not-allowed button"
+                        : "button")}>
                     Välj fil (.pef)
                 </label>
             </div>
@@ -125,16 +124,16 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                     <form onSubmit={(e) => {
                         e.preventDefault();
                         const pageIndex = parseInt(e.target.elements.pageNumber.value, 10);
-                        if (!isNaN(pageIndex)) { 
+                        if (!isNaN(pageIndex)) {
                             setJumpToPage(pageIndex - 1);
                             HandleSwapToReadMode()
                         }
                     }}>
                         <label htmlFor="pageNumber">Hoppa till sida: </label>
                         <input type="number" id="pageNumber" name="pageNumber" min="1" max="100000" className="border" placeholder={jumpToPage + 1} />
-                        <button type="submit" className="bg-yellow-400 border border-yellow-600 m-1 px-2 py-1 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-yellow-500 hover:shadow-2xl">ENTER</button>
+                        <button type="submit" className="button">ENTER</button>
                     </form>
-                    
+
                 )}
 
 
@@ -143,19 +142,9 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
             <div className="inline-block">
 
                 {!isLoadingFile ?
-                    <button onClick={HandleSwapToReadMode} className="bg-purple-400 border border-purple-600 px-8 py-3 rounded-md uppercase font-bold shadow-xl 
-                    transition duration-200 hover:bg-white hover:shadow-2xl" >Läs boken</button>
+                    <button onClick={HandleSwapToReadMode} className="button" >Läs boken</button>
                     :
                     <div className="flex flex-row items-center">
-                        <Bars
-                            height="40"
-                            width="40"
-                            color={iconColor}
-                            ariaLabel="bars-loading"
-                            wrapperStyle={{}}
-                            wrapperClass=""
-                            visible={true}
-                        />
                         <p className="ml-4 text-xl font-semibold text-gray-600">Laddar filen...</p>
                     </div>
                 }

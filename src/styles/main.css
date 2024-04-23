@@ -1,1 +1,25 @@
 @import url('variables.css');
+
+main {
+    background-color: #fff;
+}
+
+main .button {
+    margin: 10px;
+    background: #A54399;
+    color: #fff;
+    cursor: pointer;
+    border: 1px solid #A54399;
+    padding: 8px 16px;
+    border-radius: 4px; 
+    text-transform: uppercase;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); 
+    transition: all 200ms ease; 
+    max-width: fit-content; 
+}
+
+main .button:hover {
+    background: #7a196f;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 1); 
+}
