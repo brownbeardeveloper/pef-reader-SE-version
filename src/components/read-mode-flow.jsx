@@ -6,6 +6,7 @@ import brailleTranslator from "../functions/translator/brailleTranslator.js";
 export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowIndex, setReadmode, pefObject }) {
 
   const [showDetails, setShowDetails] = useState(false);
+  const [translateText, setTranslateText] = useState(false)
   let maxPageIndex = 0
   let maxVolumeIndex = 0
 
@@ -143,12 +144,12 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
                   // Push each row to the rows array
                   rows.push(
                     <div key={`${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}>
-                      <p id={`row-${i}-${j}-${k}-${l}`} 
-                      className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
+                      <p id={`row-${i}-${j}-${k}-${l}`}
+                        className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
 
-                        {brailleTranslator(row)}
-                        
-                        </p>
+                        {translateText ? brailleTranslator(row) : row}
+
+                      </p>
                     </div>
                   );
                 }
@@ -178,19 +179,25 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
         </p>
       }
 
-        <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
-          <div className="w-96 overflow-y-auto h-96">
-            {renderRows()}
-          </div>
+      <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
+        <div className="w-96 overflow-y-auto h-96">
+          {renderRows()}
         </div>
+      </div>
 
       <div className="flex flex-row m-2">
         <button onClick={handleShowBookDetailsBtn} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Bokdetaljer
         </button>
+        
         <button onClick={() => handleScrollToPageIndex(1)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Återvänd till bokens första sidan
         </button>
+
+        <button onClick={() => setTranslateText(!translateText)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+          Översätta
+        </button>
+
         <button onClick={() => setReadmode(false)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Till startsidan
         </button>
@@ -203,7 +210,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
           handleScrollToPageIndex(pageNumber);
         }}>
           <label htmlFor="goToPage">Hoppa till sida: </label>
-          <input id="goToPage" type="number" min="1" max={maxPageIndex-1} required />
+          <input id="goToPage" type="number" min="1" max={maxPageIndex - 1} required />
           <button type="submit" className="bg-yellow-400 border border-yellow-600 m-1 px-2 py-1 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-yellow-500 hover:shadow-2xl">ENTER</button>
         </form>
 
@@ -213,7 +220,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
           handleScrollToVolumeIndex(volumeNumber);
         }}>
           <label htmlFor="goToVolume">Hoppa till volym: </label>
-          <input id="goToVolume" type="number" min="1" max={maxVolumeIndex-1} required />
+          <input id="goToVolume" type="number" min="1" max={maxVolumeIndex - 1} required />
           <button type="submit" className="bg-yellow-400 border border-yellow-600 m-1 px-2 py-1 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-yellow-500 hover:shadow-2xl">ENTER</button>
         </form>
       </div>
