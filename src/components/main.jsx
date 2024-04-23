@@ -11,6 +11,7 @@ export default function Main({ cookiePermission }) {
   const [viewMode, setViewMode] = useState(false);
   const [howToRead, setHowToRead] = useState(ViewModeEnum.ONE_FLOW);
   const [savedRowIndex, setSavedRowIndex] = useState(null);
+  const [jumpToPage, setJumpToPage] = useState(0)
 
   return (
     <main className="flex flex-col justify-start items-center h-screen pt-10 pl-20 pr-20 max-w-screen-lg mx-auto">
@@ -26,6 +27,8 @@ export default function Main({ cookiePermission }) {
             howToRead={howToRead}
             setHowToRead={setHowToRead}
             setSavedRowIndex={setSavedRowIndex}
+            jumpToPage={jumpToPage}
+            setJumpToPage={setJumpToPage}
           />
         </>
       ) : (
@@ -47,6 +50,8 @@ export default function Main({ cookiePermission }) {
               savedRowIndex={savedRowIndex}
               setSavedRowIndex={setSavedRowIndex}
               pefObject={pefObject}
+              jumpToPage={jumpToPage}
+              setJumpToPage={setJumpToPage}  
             />
           )}
         </>

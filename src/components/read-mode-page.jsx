@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
 import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
+import brailleTranslator from "../functions/translator/brailleTranslator.js";
 
-export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermission, setReadmode, pefObject }) {
+export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermission, setReadmode, pefObject, jumpToPage, setJumpToPage }) {
 
   const [pages, setPages] = useState([]);
-  const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [maxPageIndex, setMaxPageIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
+  const [translateText, setTranslateText] = useState(false)
 
   useDocumentTitle(pefObject.metaData.titel);
 
@@ -15,37 +16,37 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
     const calculatedPages = renderPages();
     setPages(calculatedPages);
     setMaxPageIndex(calculatedPages.length - 1);
-  }, [pefObject, savedRowIndex]);
+  }, [pefObject, savedRowIndex, translateText]);
 
   function showBookPage(index) {
     return pages[index];
   }
 
   function handleNextPage() {
-    if (currentPageIndex < maxPageIndex) {
-      setCurrentPageIndex(currentPageIndex + 1);
+    if (jumpToPage < maxPageIndex) {
+      setJumpToPage(jumpToPage + 1);
     } else {
       alert("Fel: Det finns inga fler sidor i boken.");
     }
   }
 
   function handlePreviousPage() {
-    if (currentPageIndex > 0) {
-      setCurrentPageIndex(currentPageIndex - 1);
+    if (jumpToPage > 0) {
+      setJumpToPage(jumpToPage - 1);
     } else {
       alert("Fel: Du kan inte gå längre bakåt i den här boken.");
     }
   }
 
   function handleSetCurrentPage(index) {
-    if (currentPageIndex === index) {
+    if (jumpToPage === index) {
       if (index === 0) {
         alert('Du är redan på den första sidan.')
       } else {
         alert(`Du är redan på sidan nummer ${index}.`)
         }
     } else {
-      setCurrentPageIndex(index)
+      setJumpToPage(index)
     }
   }
 
@@ -76,7 +77,11 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
                     page.rows.map((row, l) => (
                       <div key={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}>
                         <p id={`row-${i}-${j}-${k}-${l}`}
-                        className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>{row}</p>
+                        className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
+
+                          {translateText ? brailleTranslator(row) : row}
+
+                          </p>
                       </div>
                     ))}
                 </div>
@@ -169,7 +174,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
       <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
         <div className="w-96 h-full">
-          {showBookPage(currentPageIndex)}
+          {showBookPage(jumpToPage)}
         </div>
 
         <div className="flex flex-row m-2">
@@ -187,7 +192,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
           Bokdetaljer
         </button>
 
-        <button onClick={() => setCurrentPageIndex(findPageByRowId(savedRowIndex))}
+        <button onClick={() => setJumpToPage(findPageByRowId(savedRowIndex))}
           className="w-full bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl 
               transition duration-200 hover:bg-white hover:shadow-2xl">
           Visa den senast sparade positionen
@@ -196,6 +201,11 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
         <button onClick={() => handleSetCurrentPage(0)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Återvänd till bokens första sidan
         </button>
+
+        <button onClick={() => setTranslateText(!translateText)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
+          Översätta
+        </button>
+
         <button onClick={() => setReadmode(false)} className="bg-purple-400 border border-purple-600 m-2 px-6 py-2 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-white hover:shadow-2xl">
           Till startsidan
         </button>
@@ -205,7 +215,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
         <form onSubmit={(e) => {
           e.preventDefault();
           const pageIndex = parseInt(e.target.elements.goToPage.value, 10);
-          setCurrentPageIndex(pageIndex - 1);
+          setJumpToPage(pageIndex - 1);
         }}>
           <label htmlFor="goToPage">Hoppa till sida: </label>
           <input id="goToPage" type="number" min="1" max={maxPageIndex + 1} required />

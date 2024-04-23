@@ -4,7 +4,7 @@ import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { ViewModeEnum } from "../data/enums.js"
 import { getLatestRowPositionFromCookieJson } from "../functions/cookieManager.js"
 
-export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
+export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead, jumpToPage, setJumpToPage }) {
 
     const [isLoadingFile, setIsLoadingFile] = useState(false);
     const iconColor = "#d8bfd8";
@@ -122,10 +122,19 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                 </div>
 
                 {howToRead === ViewModeEnum.PAGE_BY_PAGE && (
-                    <form>
-                        <label htmlFor="page">Hoppa till sida: </label>
-                        <input type="number" id="page" name="sida" min="0" max="100000" className="border" placeholder={0} />
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        const pageIndex = parseInt(e.target.elements.pageNumber.value, 10);
+                        if (!isNaN(pageIndex)) { 
+                            setJumpToPage(pageIndex - 1);
+                            HandleSwapToReadMode()
+                        }
+                    }}>
+                        <label htmlFor="pageNumber">Hoppa till sida: </label>
+                        <input type="number" id="pageNumber" name="pageNumber" min="1" max="100000" className="border" placeholder={jumpToPage + 1} />
+                        <button type="submit" className="bg-yellow-400 border border-yellow-600 m-1 px-2 py-1 rounded-md uppercase font-bold shadow-xl transition duration-200 hover:bg-yellow-500 hover:shadow-2xl">ENTER</button>
                     </form>
+                    
                 )}
 
 

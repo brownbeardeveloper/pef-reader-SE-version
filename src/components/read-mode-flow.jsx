@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
 import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
+import brailleTranslator from "../functions/translator/brailleTranslator.js";
 
 export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowIndex, setReadmode, pefObject }) {
 
@@ -143,7 +144,11 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
                   rows.push(
                     <div key={`${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}>
                       <p id={`row-${i}-${j}-${k}-${l}`} 
-                      className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>{row}</p>
+                      className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
+
+                        {brailleTranslator(row)}
+                        
+                        </p>
                     </div>
                   );
                 }
