@@ -132,6 +132,9 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                             pattern="[0-9]*"
                             className="border rounded"
                             placeholder={jumpToPage + 1}
+                            onChange={(e) => {
+                                setJumpToPage(parseInt(e.target.value, 10) - 1);
+                            }}
                             onKeyDown={(e) => {
                                 if (e.key === "Enter") {
                                     e.preventDefault();
@@ -143,6 +146,7 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                                 }
                             }}
                         />
+
                     </div>
                 )}
 
