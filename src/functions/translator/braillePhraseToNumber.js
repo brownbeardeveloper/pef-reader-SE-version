@@ -22,7 +22,7 @@ export default function braillePhraseToNumber(braillePhrase, currentIndex) {
 
             const number = brailleCharToNumber(currentChar)
 
-            if (number == undefined) break // End the number conversion
+            if (number === undefined) break // End the number conversion
 
             // TODO: OR check if . or ,
 

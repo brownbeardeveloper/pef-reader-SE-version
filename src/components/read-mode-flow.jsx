@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
 import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
@@ -209,7 +209,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
           handleScrollToPageIndex(pageNumber);
         }}>
           <label htmlFor="goToPage">Hoppa till sida: </label>
-          <input className="border border-black" id="goToPage" type="number" min="1" max={maxPageIndex - 1} required />
+          <input className="border rounded" id="goToPage" type="number" min="1" max={maxPageIndex - 1} required />
           <button type="submit" className="button">ENTER</button>
         </form>
 
@@ -221,7 +221,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
           handleScrollToVolumeIndex(volumeNumber);
         }}>
           <label htmlFor="goToVolume">Hoppa till volym: </label>
-          <input className="border border-black" id="goToVolume" type="number" min="1" max={maxVolumeIndex - 1} required />
+          <input className="border rounded" id="goToVolume" type="number" min="1" max={maxVolumeIndex - 1} required />
           <button type="submit" className="button">ENTER</button>
         </form>
       </div>

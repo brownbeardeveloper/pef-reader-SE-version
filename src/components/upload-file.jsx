@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { ViewModeEnum } from "../data/enums.js"
 import { getLatestRowPositionFromCookieJson } from "../functions/cookieManager.js"
@@ -121,21 +121,30 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                 </div>
 
                 {howToRead === ViewModeEnum.PAGE_BY_PAGE && (
-                    <form onSubmit={(e) => {
-                        e.preventDefault();
-                        const pageIndex = parseInt(e.target.elements.pageNumber.value, 10);
-                        if (!isNaN(pageIndex)) {
-                            setJumpToPage(pageIndex - 1);
-                            HandleSwapToReadMode()
-                        }
-                    }}>
+                    <div>
                         <label htmlFor="pageNumber">Hoppa till sida: </label>
-                        <input type="number" id="pageNumber" name="pageNumber" min="1" max="100000" className="border" placeholder={jumpToPage + 1} />
-                        <button type="submit" className="button">ENTER</button>
-                    </form>
-
+                        <input
+                            type="number"
+                            id="pageNumber"
+                            name="pageNumber"
+                            min="1"
+                            max="100000"
+                            pattern="[0-9]*"
+                            className="border rounded"
+                            placeholder={jumpToPage + 1}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    e.preventDefault();
+                                    const pageIndex = parseInt(e.target.value, 10);
+                                    if (!isNaN(pageIndex)) {
+                                        setJumpToPage(pageIndex - 1);
+                                        HandleSwapToReadMode();
+                                    }
+                                }
+                            }}
+                        />
+                    </div>
                 )}
-
 
             </div>
 

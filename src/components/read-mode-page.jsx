@@ -220,7 +220,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
           setJumpToPage(pageIndex - 1);
         }}>
           <label htmlFor="goToPage">Hoppa till sida: </label>
-          <input id="goToPage" type="number" min="1" max={maxPageIndex + 1} required />
+          <input id="goToPage" type="number" min="1" max={maxPageIndex + 1} required className="border rounded" />
           <button type="submit" className="button">ENTER</button>
         </form>
 
