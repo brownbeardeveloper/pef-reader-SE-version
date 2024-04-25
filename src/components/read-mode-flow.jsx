@@ -194,7 +194,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
         </button>
 
         <button onClick={() => setTranslateText(!translateText)} className="button">
-          Översätta
+        Växla vy
         </button>
 
         <button onClick={() => setReadmode(false)} className="button">

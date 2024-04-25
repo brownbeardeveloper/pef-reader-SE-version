@@ -7,6 +7,10 @@ import { blankSign } from "../../data/MapBrailleToSwedishCharacters.js"
 
 export default function brailleTranslator(braillePhrase) {
 
+    if (braillePhrase === null || (typeof braillePhrase !== 'string' && !Array.isArray(braillePhrase))) {
+        return null; 
+    }
+
     let newPhrase = ""
 
     for (let i = 0; i < braillePhrase.length; i++) {

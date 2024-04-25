@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
 import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
+import { filterUnnecessarySentence } from "../functions/skipPages.js";
 
 export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermission, setReadmode, pefObject, jumpToPage, setJumpToPage }) {
 
@@ -9,6 +10,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
   const [maxPageIndex, setMaxPageIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
   const [translateText, setTranslateText] = useState(false)
+  const [showOnlyNecessaryRows, setShowOnlyNecessaryRows] = useState(false)
 
   useDocumentTitle(pefObject.metaData.titel);
 
@@ -16,7 +18,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
     const calculatedPages = renderPages();
     setPages(calculatedPages);
     setMaxPageIndex(calculatedPages.length - 1);
-  }, [pefObject, savedRowIndex, translateText]);
+  }, [pefObject, savedRowIndex, translateText, showOnlyNecessaryRows]);
 
   function showBookPage(index) {
     return pages[index];
@@ -44,7 +46,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
         alert('Du är redan på den första sidan.')
       } else {
         alert(`Du är redan på sidan nummer ${index}.`)
-        }
+      }
     } else {
       setJumpToPage(index)
     }
@@ -77,11 +79,23 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
                     page.rows.map((row, l) => (
                       <div key={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}>
                         <p id={`row-${i}-${j}-${k}-${l}`}
-                        className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
+                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
 
-                          {translateText ? brailleTranslator(row) : row}
+                          {
+                            showOnlyNecessaryRows ? (
+                              translateText ?
+                                brailleTranslator(filterUnnecessarySentence(row))
+                                :
+                                filterUnnecessarySentence(row)
+                            ) : (
+                              translateText ?
+                                brailleTranslator(row)
+                                :
+                                row
+                            )
+                          }
 
-                          </p>
+                        </p>
                       </div>
                     ))}
                 </div>
@@ -137,7 +151,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
   function findPageByRowId(rowId) {
     const volumes = pefObject.bodyData.volumes;
     let pageIndex = 0
-  
+
     for (let i = 0; i < volumes.length; i++) {
       const volume = volumes[i];
 
@@ -145,17 +159,17 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
         const sections = volume.sections;
         for (let j = 0; j < sections.length; j++) {
           const section = sections[j];
-  
+
           if (section.pages) {
             const pagesInSection = section.pages;
             for (let k = 0; k < pagesInSection.length; k++) {
               const page = pagesInSection[k];
-  
+
               if (page.rows) {
                 const rows = page.rows;
                 for (let l = 0; l < rows.length; l++) {
                   const elementKey = `row-${i}-${j}-${k}-${l}`;
-  
+
                   if (elementKey === rowId) {
                     return pageIndex
                   }
@@ -167,6 +181,10 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
         }
       }
     }
+  }
+
+  function handleOnlyShowNotUnnecessaryRows() {
+    setShowOnlyNecessaryRows(!showOnlyNecessaryRows)
   }
 
   return (
@@ -181,7 +199,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
       <div className="flex flex-row m-2">
 
-      <div className="flex flex-col">
+        <div className="flex flex-col">
           <button onClick={handleNextPage} className="button">
             Nästa sida
           </button>
@@ -205,11 +223,15 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
         </button>
 
         <button onClick={() => setTranslateText(!translateText)} className="button">
-          Översätta
+          Växla vy
         </button>
 
         <button onClick={() => setReadmode(false)} className="button">
           Till startsidan
+        </button>
+
+        <button onClick={handleOnlyShowNotUnnecessaryRows} className="button">
+          Hoppa över onödiga rader
         </button>
       </div>
 
