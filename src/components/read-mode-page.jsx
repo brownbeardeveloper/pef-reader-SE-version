@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
 import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
-import { filterUnnecessarySentence } from "../functions/skipPages.js";
+import { filterUnnecessarySentence } from "../functions/filterSetences.js"
+import { filterUnnecessaryPage, checkIfNecessaryPage } from "../functions/filterPages.js";
 
 export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermission, setReadmode, pefObject, jumpToPage, setJumpToPage }) {
 
@@ -66,7 +67,16 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
           if (section.pages) {
             const pagesInSection = section.pages;
             for (let k = 0; k < pagesInSection.length; k++) {
-              const page = pagesInSection[k];
+
+              let nextPage = null
+
+              if(k+1 < pagesInSection.length) {
+                nextPage = pagesInSection[k+1]
+              }
+
+              checkIfNecessaryPage(pagesInSection[k])
+              
+              let page = filterUnnecessaryPage(pagesInSection[k], pageIndex, nextPage);
               const thisPageIndex = pageIndex;
               pageIndex++;
 
@@ -75,14 +85,14 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
                   <h3 id={`page-${thisPageIndex}`} className="font-black">
                     Sida {thisPageIndex}
                   </h3>
-                  {page.rows &&
+
+                  {page && page.rows &&
                     page.rows.map((row, l) => (
                       <div key={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}>
                         <p id={`row-${i}-${j}-${k}-${l}`}
                           className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
 
-                          {
-                            showOnlyNecessaryRows ? (
+                          {showOnlyNecessaryRows ? (
                               translateText ?
                                 brailleTranslator(filterUnnecessarySentence(row))
                                 :
@@ -98,6 +108,10 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
                         </p>
                       </div>
                     ))}
+
+
+
+
                 </div>
               );
               pages.push(pageElement);
