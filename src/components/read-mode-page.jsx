@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
 import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
@@ -23,6 +23,20 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
   function showBookPage(index) {
     return pages[index];
+  }
+
+  function handleShowBookDetailsBtn() {
+    setShowDetails(!showDetails);
+    if (pefObject.metaData) {
+      alert(
+        Object.entries(pefObject.metaData)
+          .map(([key, value]) => value && `${key}: ${value}`)
+          .filter(Boolean)
+          .join('\n')
+      );
+    } else {
+      alert("Bokens detaljer kunde inte hittas");
+    }
   }
 
   function handleNextPage() {
@@ -53,82 +67,6 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
     }
   }
 
-  const renderPages = () => {
-    const pages = [];
-    let pageIndex = 1;
-
-    const volumes = pefObject.bodyData.volumes;
-    for (let i = 0; i < volumes.length; i++) {
-      const volume = volumes[i];
-      if (volume.sections) {
-        const sections = volume.sections;
-        for (let j = 0; j < sections.length; j++) {
-          const section = sections[j];
-          if (section.pages) {
-            const pagesInSection = section.pages;
-            for (let k = 0; k < pagesInSection.length; k++) {
-
-              let nextPage = (k+1 < pagesInSection.length) ? pagesInSection[k+1] : null
-              const newIndex = manipulatePageIndexToRemoveUnnecessaryPages(pagesInSection[k], k, nextPage); // remove k params later
-              k += newIndex
-
-              const page = pagesInSection[k]
-              const thisPageIndex = pageIndex;
-              pageIndex++;
-
-              const pageElement = page && (
-                <div key={`page-${thisPageIndex}`} onClick={() => null}>
-                  <h3 id={`page-${thisPageIndex}`} className="font-black">
-                    Sida {thisPageIndex}
-                  </h3>
-
-                  {page && page.rows &&
-                    page.rows.map((row, l) => (
-                      <div key={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}>
-                        <p id={`row-${i}-${j}-${k}-${l}`}
-                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) && "bg-yellow-300"}>
-
-                          {showOnlyNecessaryRows ? (
-                              translateText ?
-                                brailleTranslator(filterUnnecessarySentence(row))
-                                :
-                                filterUnnecessarySentence(row)
-                            ) : (
-                              translateText ?
-                                brailleTranslator(row)
-                                :
-                                row
-                            )
-                          }
-                        </p>
-                      </div>
-                    ))}
-                </div>
-              );
-              if (pageElement )pages.push(pageElement);
-            }
-          }
-        }
-      }
-    }
-
-    return pages;
-  };
-
-  function handleShowBookDetailsBtn() {
-    setShowDetails(!showDetails);
-    if (pefObject.metaData) {
-      alert(
-        Object.entries(pefObject.metaData)
-          .map(([key, value]) => value && `${key}: ${value}`)
-          .filter(Boolean)
-          .join('\n')
-      );
-    } else {
-      alert("Bokens detaljer kunde inte hittas");
-    }
-  }
-
   function handleClickRow(i, j, k, l) {
 
     const rowId = `row-${i}-${j}-${k}-${l}`;
@@ -153,40 +91,93 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
   }
 
 
-  function findPageByRowId(rowId) {
-    const volumes = pefObject.bodyData.volumes;
-    let pageIndex = 0
+  const renderPages = () => {
+    const pages = [];
+    let pageIndex = 1;
 
+    const volumes = pefObject.bodyData.volumes;
     for (let i = 0; i < volumes.length; i++) {
       const volume = volumes[i];
-
       if (volume.sections) {
         const sections = volume.sections;
         for (let j = 0; j < sections.length; j++) {
           const section = sections[j];
-
           if (section.pages) {
             const pagesInSection = section.pages;
             for (let k = 0; k < pagesInSection.length; k++) {
-              const page = pagesInSection[k];
 
-              if (page.rows) {
-                const rows = page.rows;
-                for (let l = 0; l < rows.length; l++) {
-                  const elementKey = `row-${i}-${j}-${k}-${l}`;
+              let nextPage = (k + 1 < pagesInSection.length) ? pagesInSection[k + 1] : null
+              k = manipulatePageIndexToRemoveUnnecessaryPages(pagesInSection[k], k, nextPage);
 
-                  if (elementKey === rowId) {
-                    return pageIndex
-                  }
-                }
+              const page = pagesInSection[k]
+              const thisPageIndex = pageIndex;
+              pageIndex++;
+
+              const pageElement = page && (
+                <div key={`page-${thisPageIndex}`} onClick={() => null}>
+                  <h3 id={`page-${thisPageIndex}`} className="font-black">
+                    Sida {thisPageIndex}
+                  </h3>
+
+                  {page && page.rows &&
+                    page.rows.map((row, l) => (
+                      <div key={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}>
+                        <p id={`row-${i}-${j}-${k}-${l}`}
+                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) && "bg-yellow-300"}>
+
+                          {showOnlyNecessaryRows ? (
+                            translateText ?
+                              brailleTranslator(filterUnnecessarySentence(row))
+                              :
+                              filterUnnecessarySentence(row)
+                          ) : (
+                            translateText ?
+                              brailleTranslator(row)
+                              :
+                              row
+                          )
+                          }
+                        </p>
+                      </div>
+                    ))}
+                </div>
+              );
+              if (pageElement) {
+                pages.push(pageElement);
               }
-              pageIndex++
             }
           }
         }
       }
     }
+
+    return pages;
+  };
+
+  function findPageByRowId(rowId) {
+
+    let counter = 0
+
+    for (let [value, key] of pages.entries()) {
+      key.props.children.forEach(element => {
+
+        if (Array.isArray(element)) {
+          
+          element.forEach(row => {
+            console.log("row", row.key)
+            return counter
+          })
+
+        } else {
+          console.log("page", element.props.id);
+          counter = element.props.id
+        }
+
+      })
+    }
   }
+
+
 
   return (
     <main className="flex flex-col justify-start items-center h-screen">
@@ -214,7 +205,8 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
           Bokdetaljer
         </button>
 
-        <button onClick={() => setJumpToPage(findPageByRowId(savedRowIndex))}
+        <button onClick={() => {setJumpToPage(0); console.log("thank god if this is working....", findPageByRowId(savedRowIndex));}
+        }
           className="button">
           Visa den senast sparade positionen
         </button>
