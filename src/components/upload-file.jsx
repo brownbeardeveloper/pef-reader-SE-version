@@ -14,18 +14,14 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                 const reader = new FileReader() // Launches a new thread in the client's web browser background
 
                 reader.addEventListener("load", () => { // Actions to perform when the input is successfully loaded
-
                     const fileObject = fileReader(reader.result) // This obj contains both meta and body data
-
                     fileObject.then(resolvedObject => {
-
                         if (resolvedObject.metaData.språk === 'sv') { // Move this function to "braille translator"-button later!
                             setPefObject(resolvedObject);
                             setIsLoadingFile(false)
                         } else {
                             alert('Tyvärr, den valda boken är inte på svenska. Just nu kan vi endast hantera svenska böcker. Meddela oss om du önskar en annan språkversion.');
                         }
-
                     }).catch(error => {
                         console.error("Error occurred while resolving the promise:", error);
                     });
@@ -33,11 +29,9 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
 
                 setIsLoadingFile(true)
                 reader.readAsText(event.target.files[0]) // Start the reader
-
             } else {
                 alert(`Fel: Filtypen ${event.target.files[0].type} som du försöker ladda är inte en PEF-fil.`);
             }
-
         } else {
             setFileName('ingen fil vald');
         }
@@ -61,8 +55,6 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
             } else {
                 console.error('pefObject.metaData.identifier is undefined.');
             }
-
-
         } else {
             alert('Fel: Lägg först till en PEF-fil innan du försöker läsa boken.');
         }
@@ -153,7 +145,6 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
             </div>
 
             <div className="inline-block">
-
                 {!isLoadingFile ?
                     <button onClick={HandleSwapToReadMode} className="button" >Läs boken</button>
                     :

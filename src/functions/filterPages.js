@@ -1,75 +1,20 @@
-import { checkIfTagExistInTxt } from "./checkIfTagExistInTxt";
+export function manipulatePageIndexToRemoveUnnecessaryPages(page, index, nextPage) { // delete pageIndex later
 
-export function filterUnnecessaryPage(page, pageIndex, nextPage) {
-
+    const endOfPageToSkipRegEx = new RegExp("[⠀,⠒]+$")
     const textToSkip = ["⠞⠗⠽⠉⠅⠥⠏⠏⠛⠊⠋⠞⠑⠗", "⠃⠁⠅⠎⠊⠙⠑⠎⠞⠑⠭⠞"];
-    const tagOfTheEnd = ["⠀", "⠒"];
+    const isFirstRowSkippable = textToSkip.some(text => page.rows[0].includes(text));
 
-    if (page.rows[0].includes("⠞⠗⠽⠉⠅⠥⠏⠏⠛⠊⠋⠞⠑⠗") || page.rows[0].includes("⠃⠁⠅⠎⠊⠙⠑⠎⠞⠑⠭⠞")) {
+    if (isFirstRowSkippable) {
         
-        console.log("founded txt to skip.. page index and row length", pageIndex, page.rows.length)
+        console.log("founded txt to skip.. page index and row length", index, page.rows.length)
+        const lastRow = (page && page.rows) ? page.rows[page.rows.length-1] : null
+        const lastRowNextPage = (nextPage && nextPage.rows) ? nextPage.rows[nextPage.rows.length-1] : null
 
-        const lastRow = page.rows[page.rows.length-1]
-        for (let i = 0; i < lastRow.length; i++) {
-            if (!tagOfTheEnd.includes(lastRow[i])) {
-
-                if (nextPage && nextPage.rows) {
-
-                    const lastRowNextPage = nextPage.rows[nextPage.rows.length-1]
-                    console.log("check if the last row in next page is not undefined", lastRowNextPage)
-        
-                    for (let j = 0; j < lastRowNextPage.length; j++) {
-                        if (!"⠀" === lastRowNextPage[j] || !"⠒" === lastRowNextPage[j]) {
-                            console.log("last row in the next page doesn't contain tag of the end.. char:", lastRowNextPage[j])
-                            return page
-                        } 
-                    }
-                    return null
-                } 
-
-                console.log("last row in this page doesn't contain tag of the end.. char:", lastRow[i])
-                return page
-            } 
+        if (lastRow && endOfPageToSkipRegEx.test(lastRow)) {
+            return 1
+        } else if (lastRowNextPage && endOfPageToSkipRegEx.test(lastRowNextPage)) {
+            return 2
         }
-
-        return null
     }
-    return page
-}
-
-export function checkIfNecessaryPage(page) {
-
-    const firstRow = page.rows[0]
-    const tags = ["⠞⠗⠽⠉⠅⠥⠏⠏⠛⠊⠋⠞⠑⠗", "⠃⠁⠅⠎⠊⠙⠑⠎⠞⠑⠭⠞"]
-
-    if(checkIfTagExistInTxt(tags, firstRow)) {
-        
-        const lastRow = page.rows[page.rows.length-1]
-        const tagOfTheEnd = ["⠀", "⠒"];
-
-        for (let i = 0; i < lastRow.length; i++) {
-            if (!tagOfTheEnd.includes(lastRow[i])) {
-
-                if (nextPage && nextPage.rows) {
-
-                    const lastRowNextPage = nextPage.rows[nextPage.rows.length-1]
-                    console.log("check if the last row in next page is not undefined", lastRowNextPage)
-        
-                    for (let j = 0; j < lastRowNextPage.length; j++) {
-                        if (!"⠀" === lastRowNextPage[j] || !"⠒" === lastRowNextPage[j]) {
-                            console.log("last row in the next page doesn't contain tag of the end.. char:", lastRowNextPage[j])
-                            return page
-                        } 
-                    }
-                    return null
-                } 
-
-                console.log("last row in this page doesn't contain tag of the end.. char:", lastRow[i])
-                return page
-            } 
-        }
-
-        return null
-    }
-    return page
+    return 0
 }

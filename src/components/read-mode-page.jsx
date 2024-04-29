@@ -3,7 +3,7 @@ import useDocumentTitle from "../functions/useDocumentTile.js";
 import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
-import { filterUnnecessaryPage, checkIfNecessaryPage } from "../functions/filterPages.js";
+import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 
 export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermission, setReadmode, pefObject, jumpToPage, setJumpToPage }) {
 
@@ -68,19 +68,15 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
             const pagesInSection = section.pages;
             for (let k = 0; k < pagesInSection.length; k++) {
 
-              let nextPage = null
+              let nextPage = (k+1 < pagesInSection.length) ? pagesInSection[k+1] : null
+              const newIndex = manipulatePageIndexToRemoveUnnecessaryPages(pagesInSection[k], k, nextPage); // remove k params later
+              k += newIndex
 
-              if(k+1 < pagesInSection.length) {
-                nextPage = pagesInSection[k+1]
-              }
-
-              checkIfNecessaryPage(pagesInSection[k])
-              
-              let page = filterUnnecessaryPage(pagesInSection[k], pageIndex, nextPage);
+              const page = pagesInSection[k]
               const thisPageIndex = pageIndex;
               pageIndex++;
 
-              const pageElement = (
+              const pageElement = page && (
                 <div key={`page-${thisPageIndex}`} onClick={() => null}>
                   <h3 id={`page-${thisPageIndex}`} className="font-black">
                     Sida {thisPageIndex}
@@ -90,7 +86,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
                     page.rows.map((row, l) => (
                       <div key={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}>
                         <p id={`row-${i}-${j}-${k}-${l}`}
-                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
+                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) && "bg-yellow-300"}>
 
                           {showOnlyNecessaryRows ? (
                               translateText ?
@@ -104,17 +100,12 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
                                 row
                             )
                           }
-
                         </p>
                       </div>
                     ))}
-
-
-
-
                 </div>
               );
-              pages.push(pageElement);
+              if (pageElement )pages.push(pageElement);
             }
           }
         }
@@ -197,10 +188,6 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
     }
   }
 
-  function handleOnlyShowNotUnnecessaryRows() {
-    setShowOnlyNecessaryRows(!showOnlyNecessaryRows)
-  }
-
   return (
     <main className="flex flex-col justify-start items-center h-screen">
 
@@ -244,7 +231,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
           Till startsidan
         </button>
 
-        <button onClick={handleOnlyShowNotUnnecessaryRows} className="button">
+        <button onClick={() => setShowOnlyNecessaryRows(!showOnlyNecessaryRows)} className="button">
           Hoppa över onödiga rader
         </button>
       </div>
