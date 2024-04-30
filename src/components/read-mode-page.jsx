@@ -90,7 +90,6 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
     }
   }
 
-
   const renderPages = () => {
     const pages = [];
     let pageIndex = 1;
@@ -107,9 +106,8 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
             for (let k = 0; k < sectionPages.length; k++) {
 
               k = manipulatePageIndexToRemoveUnnecessaryPages(sectionPages, k);
-
               const page = sectionPages[k]
-              const thisPageIndex = pageIndex;
+              const thisPageIndex = pageIndex+1;
               pageIndex++;
 
               const pageElement = page && (
@@ -149,7 +147,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
         }
       }
     }
-
+    setMaxPageIndex(pageIndex)
     return pages;
   };
 
