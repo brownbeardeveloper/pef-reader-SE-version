@@ -103,13 +103,12 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
         for (let j = 0; j < sections.length; j++) {
           const section = sections[j];
           if (section.pages) {
-            const pagesInSection = section.pages;
-            for (let k = 0; k < pagesInSection.length; k++) {
+            const sectionPages = section.pages;
+            for (let k = 0; k < sectionPages.length; k++) {
 
-              let nextPage = (k + 1 < pagesInSection.length) ? pagesInSection[k + 1] : null
-              k = manipulatePageIndexToRemoveUnnecessaryPages(pagesInSection[k], k, nextPage);
+              k = manipulatePageIndexToRemoveUnnecessaryPages(sectionPages, k);
 
-              const page = pagesInSection[k]
+              const page = sectionPages[k]
               const thisPageIndex = pageIndex;
               pageIndex++;
 
