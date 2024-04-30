@@ -2,13 +2,14 @@ import { useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
 import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
+import { filterUnnecessarySentence } from "../functions/filterSetences.js"
+import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 
 export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowIndex, setReadmode, pefObject }) {
 
   const [showDetails, setShowDetails] = useState(false);
   const [translateText, setTranslateText] = useState(false)
-  let maxPageIndex = 0
-  let maxVolumeIndex = 0
+  let maxPageIndex
 
   useDocumentTitle(pefObject.metaData.titel)
 
@@ -68,30 +69,6 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
     }
   }
 
-  function handleScrollToVolumeIndex(index) {
-    const volumeId = `volume-${index}`
-    const element = document.getElementById(volumeId)
-
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-
-      if (document.activeElement !== element) {
-        element.focus();
-      }
-
-    } else {
-      console.error(`Element with ID '${volumeId}' not found.`);
-    }
-  }
-
-  function handleClickPage(index) {
-    console.log("Clicked page:", index);
-  }
-
-  function handleClickVolym(index) {
-    console.log("Clicked volym:", index);
-  }
-
   function handleShowBookDetailsBtn() {
     setShowDetails(!showDetails);
     if (pefObject.metaData) {
@@ -106,63 +83,61 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
     }
   }
 
-  const renderRows = () => {
-    const rows = [];
-    let volumeIndex = 1
-    let pageIndex = 1
+  const renderPages = () => {
+    const pages = [];
+    let pageIndex = 1;
 
-    for (let i = 0; i < pefObject.bodyData.volumes.length; i++) {
-      const volume = pefObject.bodyData.volumes[i];
-
-      const thisVolumeIndex = volumeIndex
-
-      rows.push(
-        <div key={`${i}`} onClick={() => handleClickVolym(thisVolumeIndex)}>
-          <h2 id={`volume-${thisVolumeIndex}`} className="font-black">Volym {volumeIndex++}</h2>
-        </div>
-      )
-
+    const volumes = pefObject.bodyData.volumes;
+    for (let i = 0; i < volumes.length; i++) {
+      const volume = volumes[i];
       if (volume.sections) {
-        for (let j = 0; j < volume.sections.length; j++) {
-          const section = volume.sections[j];
-
+        const sections = volume.sections;
+        for (let j = 0; j < sections.length; j++) {
+          const section = sections[j];
           if (section.pages) {
-            for (let k = 0; k < section.pages.length; k++) {
-              const page = section.pages[k];
-              const thisPageIndex = pageIndex
+            const sectionPages = section.pages;
+            for (let k = 0; k < sectionPages.length; k++) {
 
-              rows.push(
-                <div key={`${i}-${j}-${k}`} onClick={() => handleClickPage(thisPageIndex)}>
-                  <h3 id={`page-${thisPageIndex}`} className="font-black">Sida {pageIndex++}</h3>
-                </div>
-              )
+              k = manipulatePageIndexToRemoveUnnecessaryPages(sectionPages, k);
+              const page = sectionPages[k]
+              const thisPageIndex = pageIndex + 1;
+              pageIndex++;
 
-              if (page.rows) {
-                for (let l = 0; l < page.rows.length; l++) {
-                  const row = page.rows[l];
+              const pageElement = page && (
+                <div key={`page-${thisPageIndex}`} onClick={() => null}>
+                  <h3 id={`page-${thisPageIndex}`} className="font-black">
+                    Sida {thisPageIndex}
+                  </h3>
 
-                  // Push each row to the rows array
-                  rows.push(
-                    <div key={`${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}>
-                      <p id={`row-${i}-${j}-${k}-${l}`}
-                        className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
+                  {page && page.rows &&
+                    <div className="flex flex-wrap">
 
-                        {translateText ? brailleTranslator(row) : row}
-
+                      {page.rows.map((row, l) => (
+                      <p key={`row-${i}-${j}-${k}-${l}`} id={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}
+                        className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) && "bg-yellow-300"}>
+                        {translateText ?
+                          brailleTranslator(filterUnnecessarySentence(row))
+                          :
+                          filterUnnecessarySentence(row)
+                        }
+                        {<span>&nbsp;</span>}
                       </p>
+                      ))}
                     </div>
-                  );
-                }
+                  }
+                </div>
+              );
+              if (pageElement) {
+                pages.push(pageElement);
               }
             }
           }
         }
       }
     }
-    maxVolumeIndex = volumeIndex
     maxPageIndex = pageIndex
-    return rows
-  }
+    return pages;
+  };
 
   return (
     <main className="flex flex-col justify-start items-center h-screen">
@@ -179,8 +154,8 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
       }
 
       <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
-        <div className="w-96 overflow-y-auto h-96">
-          {renderRows()}
+        <div className="w-full overflow-y-auto h-96">
+          {renderPages()}
         </div>
       </div>
 
@@ -188,13 +163,13 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
         <button onClick={handleShowBookDetailsBtn} className="button">
           Bokdetaljer
         </button>
-        
+
         <button onClick={() => handleScrollToPageIndex(1)} className="button">
           Återvänd till bokens första sidan
         </button>
 
         <button onClick={() => setTranslateText(!translateText)} className="button">
-        Växla vy
+          Växla vy
         </button>
 
         <button onClick={() => setReadmode(false)} className="button">
@@ -205,23 +180,11 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
       <div>
         <form onSubmit={(e) => {
           e.preventDefault();
-          const pageNumber = parseInt(e.target.elements.goToPage.value, 10); 
+          const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
           handleScrollToPageIndex(pageNumber);
         }}>
           <label htmlFor="goToPage">Hoppa till sida: </label>
           <input className="border rounded" id="goToPage" type="number" min="1" max={maxPageIndex - 1} required />
-          <button type="submit" className="button">ENTER</button>
-        </form>
-
-
-        {/* I think we will delete this below later... */}
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          const volumeNumber = parseInt(e.target.elements.goToVolume.value, 10); 
-          handleScrollToVolumeIndex(volumeNumber);
-        }}>
-          <label htmlFor="goToVolume">Hoppa till volym: </label>
-          <input className="border rounded" id="goToVolume" type="number" min="1" max={maxVolumeIndex - 1} required />
           <button type="submit" className="button">ENTER</button>
         </form>
       </div>
