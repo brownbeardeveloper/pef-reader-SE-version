@@ -156,25 +156,28 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
   function findPageByRowId(rowId) {
 
-    let counter = 0
+    let pageIndex
+    let rowFound = false;
 
+    /* pages[] contain both page and rows data */
     for (let [value, key] of pages.entries()) {
       key.props.children.forEach(element => {
 
-        if (Array.isArray(element)) {
-          
+        if (!rowFound && Array.isArray(element)) { // Retrieve only the rows
           element.forEach(row => {
-            console.log("row", row.key)
-            return counter
-          })
+            if (!rowFound && String(row.key) === rowId) {
+              pageIndex = value;
+              rowFound = true;
+            }
+          });
+        } 
+      });
 
-        } else {
-          console.log("page", element.props.id);
-          counter = element.props.id
-        }
-
-      })
+      if (rowFound) { // break 
+        break;
+      }
     }
+    return pageIndex
   }
 
 
@@ -205,8 +208,10 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
           Bokdetaljer
         </button>
 
-        <button onClick={() => {setJumpToPage(0); console.log("thank god if this is working....", findPageByRowId(savedRowIndex));}
-        }
+        <button onClick={() => {
+          setJumpToPage(findPageByRowId(savedRowIndex))
+
+        }}
           className="button">
           Visa den senast sparade positionen
         </button>
