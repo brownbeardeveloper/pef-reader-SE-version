@@ -4,6 +4,10 @@ export default function Header() {
   return (
     <header className="flex items-center justify-center mb-10">
 
+      <div>
+        <a href="#MainContentArea" className=''>Till innehåll på sidan</a>
+      </div>
+
       <div className='h-20 w-20'>
         <img src={brailleIcon} className="w-full h-full" alt="Punktskriftsikon" />
       </div>

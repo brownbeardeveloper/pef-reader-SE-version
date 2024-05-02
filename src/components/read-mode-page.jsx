@@ -107,7 +107,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
               k = manipulatePageIndexToRemoveUnnecessaryPages(sectionPages, k);
               const page = sectionPages[k]
-              const thisPageIndex = pageIndex+1;
+              const thisPageIndex = pageIndex + 1;
               pageIndex++;
 
               const pageElement = page && (
@@ -119,7 +119,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
                   {page && page.rows &&
                     page.rows.map((row, l) => (
                       <div key={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}>
-                        <p id={`row-${i}-${j}-${k}-${l}`}
+                        <span id={`row-${i}-${j}-${k}-${l}`}
                           className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) && "bg-yellow-300"}>
 
                           {showOnlyNecessaryRows ? (
@@ -134,7 +134,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
                               row
                           )
                           }
-                        </p>
+                        </span>
                       </div>
                     ))}
                 </div>
@@ -167,7 +167,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
               rowFound = true;
             }
           });
-        } 
+        }
       });
 
       if (rowFound) { // break 
@@ -225,8 +225,9 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
           Till startsidan
         </button>
 
+        { /* remove this later  */}
         <button onClick={() => setShowOnlyNecessaryRows(!showOnlyNecessaryRows)} className="button">
-          Hoppa över onödiga rader
+          Hoppa över tomma rader
         </button>
       </div>
 
@@ -236,9 +237,10 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
           const pageIndex = parseInt(e.target.elements.goToPage.value, 10);
           setJumpToPage(pageIndex - 1);
         }}>
-          <label htmlFor="goToPage">Hoppa till sida: </label>
+          {/* # add <p>the current page number: {currentPageNumber}</p> */}
+          <label htmlFor="goToPage">Ange ett sidnummer: </label>
           <input id="goToPage" type="number" min="1" max={maxPageIndex + 1} required className="border rounded" />
-          <button type="submit" className="button">ENTER</button>
+          <button type="submit" className="button">Gå till</button>
         </form>
 
       </div>

@@ -113,7 +113,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
                     <div className="flex flex-wrap">
 
                       {page.rows.map((row, l) => (
-                      <p key={`row-${i}-${j}-${k}-${l}`} id={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}
+                      <span key={`row-${i}-${j}-${k}-${l}`} id={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}
                         className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) && "bg-yellow-300"}>
                         {translateText ?
                           brailleTranslator(filterUnnecessarySentence(row))
@@ -121,7 +121,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
                           filterUnnecessarySentence(row)
                         }
                         {<span>&nbsp;</span>}
-                      </p>
+                      </span>
                       ))}
                     </div>
                   }
@@ -183,9 +183,9 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
           const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
           handleScrollToPageIndex(pageNumber);
         }}>
-          <label htmlFor="goToPage">Hoppa till sida: </label>
+          <label htmlFor="goToPage">Ange ett sidnummer: </label>
           <input className="border rounded" id="goToPage" type="number" min="1" max={maxPageIndex - 1} required />
-          <button type="submit" className="button">ENTER</button>
+          <button type="submit" className="button">Gå till</button>
         </form>
       </div>
     </main>
