@@ -23,9 +23,13 @@ export function getLatestRowPositionFromCookieJson(bookId) {
     }
 }
 
-export function setAllowCookie(bool) {
+export function setAllowCookie(boolean) {
     try {
-        Cookies.set("allowCookie", bool, { expires: 365 });
+        if(boolean) {
+            Cookies.set("allowCookie", "allowed", { expires: 365 });
+        } else {
+            Cookies.set("allowCookie", "denied", { expires: 1 });
+        }
     } catch (error) {
         console.error('Error setting cookie:', error);
     }
@@ -33,7 +37,9 @@ export function setAllowCookie(bool) {
 
 export function getAllowCookie() {
     try {
-        return Cookies.get("allowCookie");
+        const cookiePermission = Cookies.get("allowCookie")
+        console.log("direct from cookie", cookiePermission)
+        return cookiePermission
     } catch (error) {
         console.error('Error getting cookie:', error);
         return null;

@@ -11,7 +11,7 @@ export default function CookieBanner({ setCookiePermission, setOpenCookiePolicy 
             </div>
             <div className="w-full md:w-1/4 mt-4 md:mt-0">
                 <button onClick={() => setCookiePermission("allowed")} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200 ease-in-out mr-2">
-                    Godkänn alla cookies
+                    Godkänna nödvändiga cookies
                 </button>
                 <button onClick={() => setCookiePermission("denied")} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-200 ease-in-out">
                     Nej tack
