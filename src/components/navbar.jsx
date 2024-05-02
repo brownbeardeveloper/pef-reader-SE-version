@@ -4,7 +4,7 @@ export default function Navbar() {
     <header className="flex justify-between items-center px-4 py-1 mx-auto bg-gray-200">
 
       <div>
-        <span className="text-lg font-bold">Digital punktläsare</span>
+        <h1 className="text-lg font-bold">Digital punktläsare</h1>
       </div>
 
       <div class="hidden space-x-8 lg:flex">
@@ -13,7 +13,7 @@ export default function Navbar() {
       </div>
 
       <button className="flex items-center lg:hidden">
-          <p className="m-2">Meny</p>
+          <span className="m-2">Meny</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-6 h-6"

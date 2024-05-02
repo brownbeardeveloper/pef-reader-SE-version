@@ -1,6 +1,6 @@
 import Navbar from './components/navbar.jsx'
 import Footer from './components/footer.jsx'
-import Main from './components/main.jsx'
+import Main from './pages/main.jsx'
 import CookieBanner from './components/cookie-banner.jsx';
 import CookiePolicy from './pages/cookie-policy.jsx';
 import { getAllowCookie, setAllowCookie } from './functions/cookieManager.js';
@@ -12,17 +12,12 @@ export default function App() {
     const [openCookiePolicy, setOpenCookiePolicy] = useState()
 
     useEffect(() => {
-
-      console.log("cookiePermission", cookiePermission)
-      console.log("showCookieBanner", showCookieBanner)
-
       if (cookiePermission === "allowed") {
         setAllowCookie(true)
         setShowCookieBanner(false);
-      } else if (cookiePermission == "denied") {
+      } else if (cookiePermission === "denied") {
         setAllowCookie(false)
         setShowCookieBanner(false);
-        console.log("setShowCookieBanner false")
       } else {
         setShowCookieBanner(true); // if there's no cookies
       }
@@ -31,10 +26,10 @@ export default function App() {
   return (
     <>
       {showCookieBanner && <CookieBanner setCookiePermission={setCookiePermission} setOpenCookiePolicy={setOpenCookiePolicy} />}
+      {openCookiePolicy && <CookiePolicy setOpenCookiePolicy={setOpenCookiePolicy} />}
       <Navbar />
       <Main cookiePermission={cookiePermission} />
       <Footer setOpenCookiePolicy={setOpenCookiePolicy} />
-      {openCookiePolicy && <CookiePolicy setOpenCookiePolicy={setOpenCookiePolicy} />}
     </>
   );
 }

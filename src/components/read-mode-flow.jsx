@@ -113,15 +113,15 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
                     <div className="flex flex-wrap">
 
                       {page.rows.map((row, l) => (
-                      <span key={`row-${i}-${j}-${k}-${l}`} id={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}
-                        className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) && "bg-yellow-300"}>
-                        {translateText ?
-                          brailleTranslator(filterUnnecessarySentence(row))
-                          :
-                          filterUnnecessarySentence(row)
-                        }
-                        {<span>&nbsp;</span>}
-                      </span>
+                        <span key={`row-${i}-${j}-${k}-${l}`} id={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}
+                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) && "bg-yellow-300"}>
+                          {translateText ?
+                            brailleTranslator(filterUnnecessarySentence(row))
+                            :
+                            filterUnnecessarySentence(row)
+                          }
+                          {<span>&nbsp;</span>}
+                        </span>
                       ))}
                     </div>
                   }
@@ -140,54 +140,57 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
   };
 
   return (
-    <main className="flex flex-col justify-start items-center h-screen">
+    <main className="">
 
-      {savedRowIndex ?
-        <button onClick={handleShowLatestSavedPositionBtn}
-          className="button">
-          Visa den senast sparade positionen
-        </button>
-        :
-        <p class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mb-1 rounded relative" role="alert">
-          <span class="block sm:inline">Man kan spara läspositionen genom att klicka på textraden, vilken sedan sparas i cookies.</span>
-        </p>
-      }
+      <button onClick={() => setReadmode(false)} className="button">
+        Tillbaka till startsida
+      </button>
 
-      <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
-        <div className="w-full overflow-y-auto h-96">
-          {renderPages()}
+      <div className="flex flex-col justify-start items-center h-screen">
+
+        <h2 className="ml-8 text-2xl font-bold">Bokens titel: example</h2>
+
+        {savedRowIndex ?
+          <button onClick={handleShowLatestSavedPositionBtn}
+            className="button">
+            Fortsätt läsa
+          </button>
+          :
+          <p class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mb-1 rounded relative" role="alert">
+            <span class="block sm:inline">Man kan spara läspositionen genom att klicka på textraden, vilken sedan sparas i cookies.</span>
+          </p>
+        }
+
+        <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
+          <div className="w-full overflow-y-auto h-96">
+            {renderPages()}
+          </div>
+        </div>
+
+        <div className="flex flex-row m-2">
+
+          <button onClick={() => handleScrollToPageIndex(1)} className="button">
+            Förstasidan
+          </button>
+
+          <button onClick={() => setTranslateText(!translateText)} className="button">
+            Växla vy
+          </button>
+        </div>
+
+        <div>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
+            handleScrollToPageIndex(pageNumber);
+          }}>
+            <label htmlFor="goToPage">Ange ett sidnummer: </label>
+            <input className="border rounded" id="goToPage" type="number" min="1" max={maxPageIndex - 1} required />
+            <button type="submit" className="button">Gå till</button>
+          </form>
         </div>
       </div>
 
-      <div className="flex flex-row m-2">
-        <button onClick={handleShowBookDetailsBtn} className="button">
-          Bokdetaljer
-        </button>
-
-        <button onClick={() => handleScrollToPageIndex(1)} className="button">
-          Återvänd till bokens första sidan
-        </button>
-
-        <button onClick={() => setTranslateText(!translateText)} className="button">
-          Växla vy
-        </button>
-
-        <button onClick={() => setReadmode(false)} className="button">
-          Till startsidan
-        </button>
-      </div>
-
-      <div>
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
-          handleScrollToPageIndex(pageNumber);
-        }}>
-          <label htmlFor="goToPage">Ange ett sidnummer: </label>
-          <input className="border rounded" id="goToPage" type="number" min="1" max={maxPageIndex - 1} required />
-          <button type="submit" className="button">Gå till</button>
-        </form>
-      </div>
     </main>
   )
 }

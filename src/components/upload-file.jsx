@@ -2,6 +2,7 @@ import { useState } from "react"
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { ViewModeEnum } from "../data/enums.js"
 import { getLatestRowPositionFromCookieJson } from "../functions/cookieManager.js"
+import brailleIcon from '../media/braille-icon.png';
 
 export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead, jumpToPage, setJumpToPage }) {
 
@@ -62,10 +63,19 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
 
     return (
         <div>
+            <div className="flex items-center justify-center mb-10">
+                <div className='h-20 w-20'>
+                    <img src={brailleIcon} className="w-full h-full" alt="Punktskriftsikon" />
+                </div>
+
+                <div>
+                    <h2 className="ml-8 text-2xl font-bold">Från punktskrift till svartskrift på några sekunder</h2>
+                </div>
+            </div>
             <p className="text-xl">När du har laddat ner en punktskriftsbok från Legimus kan du läsa den här med din punktdisplay.</p>
 
             <div className="mt-10 mb-10 flex flex-col items-start">
-                <p className="text-4xl font-bold mb-10">Ladda upp filen</p>
+                <h3 className="text-4xl font-bold mb-10">Ladda upp filen</h3>
 
                 {/* Disable the file-selector button while the file is being converted */}
                 <input id="file-selector" type="file" accept=".pef" className="hidden" onChange={handleAddFile} disabled={isLoadingFile} />
@@ -78,12 +88,12 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
             </div>
 
             <div className="flex flex-row items-center mt-6 mb-6">
-                <label className="mr-2 text-2xl font-bold">Vald fil: </label>
-                <p>{fileName}</p>
+                <label className="mr-2 text-xl font-bold">Vald fil: </label>
+                <span>{fileName}</span>
             </div>
 
-            <div className="mt-10 mb-10">
-                <p className="text-2xl font-bold" >Hur vill du läsa boken?</p>
+            <fieldset className="mt-10 mb-10">
+                <legend className="text-2xl font-bold" >Hur vill du läsa boken?</legend>
                 <div className="flex flex-row mb-2 mt-2">
                     <input
                         type="radio"
@@ -113,7 +123,7 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                 </div>
 
                 {howToRead === ViewModeEnum.PAGE_BY_PAGE && (
-                    <div>
+                    <div className="m-3">
                         <label htmlFor="pageNumber">Hoppa till sida: </label>
                         <input
                             type="number"
@@ -141,15 +151,14 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
 
                     </div>
                 )}
-
-            </div>
+            </fieldset>
 
             <div className="inline-block">
                 {!isLoadingFile ?
                     <button onClick={HandleSwapToReadMode} className="button" >Läs boken</button>
                     :
                     <div className="flex flex-row items-center">
-                        <p className="ml-4 text-xl font-semibold text-gray-600">Laddar filen...</p>
+                        <span className="ml-4 text-xl font-semibold text-gray-600">Laddar filen...</span>
                     </div>
                 }
             </div>

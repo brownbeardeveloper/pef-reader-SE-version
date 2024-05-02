@@ -1,16 +1,17 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
 import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
+import { ViewModeEnum } from '../data/enums.js'
 
 export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermission, setReadmode, pefObject, jumpToPage, setJumpToPage }) {
 
   const [pages, setPages] = useState([]);
   const [maxPageIndex, setMaxPageIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
-  const [translateText, setTranslateText] = useState(false)
+  const [bookView, setBookView] = useState(ViewModeEnum.BRAILLE_VIEW)
   const [showOnlyNecessaryRows, setShowOnlyNecessaryRows] = useState(false)
 
   useDocumentTitle(pefObject.metaData.titel);
@@ -19,7 +20,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
     const calculatedPages = renderPages();
     setPages(calculatedPages);
     setMaxPageIndex(calculatedPages.length - 1);
-  }, [pefObject, savedRowIndex, translateText, showOnlyNecessaryRows]);
+  }, [pefObject, savedRowIndex, bookView, showOnlyNecessaryRows]);
 
   function showBookPage(index) {
     return pages[index];
@@ -90,7 +91,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
     }
   }
 
-  const renderPages = () => {
+  function renderPages() {
     const pages = [];
     let pageIndex = 1;
 
@@ -118,17 +119,20 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
                   {page && page.rows &&
                     page.rows.map((row, l) => (
-                      <div key={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}>
-                        <span id={`row-${i}-${j}-${k}-${l}`}
+                      <div>
+                        <span
+                          id={`row-${i}-${j}-${k}-${l}`}
+                          // key={`row-${i}-${j}-${k}-${l}`} 
+                          onClick={() => handleClickRow(i, j, k, l)}
                           className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) && "bg-yellow-300"}>
 
                           {showOnlyNecessaryRows ? (
-                            translateText ?
+                            (bookView === ViewModeEnum.NORMAL_VIEW) ?
                               brailleTranslator(filterUnnecessarySentence(row))
                               :
                               filterUnnecessarySentence(row)
                           ) : (
-                            translateText ?
+                            (bookView === ViewModeEnum.NORMAL_VIEW) ?
                               brailleTranslator(row)
                               :
                               row
@@ -180,69 +184,83 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
 
   return (
-    <main className="flex flex-col justify-start items-center h-screen">
+    <main className="">
+      <button onClick={() => setReadmode(false)} className="button">
+        Tillbaka till startsida
+      </button>
 
-      <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
-        <div className="w-96 h-full">
-          {showBookPage(jumpToPage)}
-        </div>
-
-      </div>
-
-      <div className="flex flex-row m-2">
-
-        <div className="flex flex-col">
-          <button onClick={handleNextPage} className="button">
-            Nästa sida
-          </button>
-          <button onClick={handlePreviousPage} className="button">
-            Föregående sida
-          </button>
-        </div>
-
-
-        <button onClick={handleShowBookDetailsBtn} className="button">
-          Bokdetaljer
-        </button>
+      <div className="flex flex-col justify-start items-center h-screen">
+        <h2 className="ml-8 text-2xl font-bold">Bokens titel: example</h2>
 
         <button onClick={() => {
-          setJumpToPage(findPageByRowId(savedRowIndex))
+            setJumpToPage(findPageByRowId(savedRowIndex))
+          }}
+            className="button">
+            Fortsätt läsa
+          </button>
 
-        }}
-          className="button">
-          Visa den senast sparade positionen
-        </button>
+        <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
+          <div className="w-96 h-full">
+            {showBookPage(jumpToPage)}
+          </div>
+        </div>
 
-        <button onClick={() => handleSetCurrentPage(0)} className="button">
-          Återvänd till bokens första sidan
-        </button>
+        <div className="flex flex-row m-2">
+          <div className="flex flex-col">
+            <button onClick={handleNextPage} className="button">
+              Nästa sida
+            </button>
+            <button onClick={handlePreviousPage} className="button">
+              Föregående sida
+            </button>
+          </div>
 
-        <button onClick={() => setTranslateText(!translateText)} className="button">
-          Växla vy
-        </button>
+          <button onClick={() => handleSetCurrentPage(0)} className="button">
+            Förstasidan
+          </button>
 
-        <button onClick={() => setReadmode(false)} className="button">
-          Till startsidan
-        </button>
+          <fieldset>
+            <legend>Växla vy</legend>
+            <input type="radio" 
+            id="braille-view" 
+            name="view" 
+            className="m-1" 
+            value="BRAILLE"
+            checked={bookView === ViewModeEnum.BRAILLE_VIEW}
+            onChange={() => setBookView(ViewModeEnum.BRAILLE_VIEW)}
+            />
+            <label htmlFor="braille-vy">Punktskrift</label>
+            <input type="radio" 
+            id="braille-view" 
+            name="view" 
+            className="m-1" 
+            value="BRAILLE"
+            checked={bookView === ViewModeEnum.NORMAL_VIEW}
+            onChange={() => setBookView(ViewModeEnum.NORMAL_VIEW)}
+            />
+            <label htmlFor="braille-vy">Svartskrift</label>
 
-        { /* remove this later  */}
-        <button onClick={() => setShowOnlyNecessaryRows(!showOnlyNecessaryRows)} className="button">
-          Hoppa över tomma rader
-        </button>
-      </div>
+          </fieldset>
 
-      <div>
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          const pageIndex = parseInt(e.target.elements.goToPage.value, 10);
-          setJumpToPage(pageIndex - 1);
-        }}>
-          {/* # add <p>the current page number: {currentPageNumber}</p> */}
-          <label htmlFor="goToPage">Ange ett sidnummer: </label>
-          <input id="goToPage" type="number" min="1" max={maxPageIndex + 1} required className="border rounded" />
-          <button type="submit" className="button">Gå till</button>
-        </form>
+          { /* remove this later  */}
+          <button onClick={() => setShowOnlyNecessaryRows(!showOnlyNecessaryRows)} className="button">
+            Hoppa över tomma rader
+          </button>
+        </div>
 
+        <div>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            const pageIndex = parseInt(e.target.elements.goToPage.value, 10);
+            setJumpToPage(pageIndex - 1);
+          }}>
+            {/* # add <p>the current page number: {currentPageNumber}</p> */}
+            <label htmlFor="goToPage">Ange ett sidnummer: </label>
+            <input id="goToPage" type="number" min="1" max={maxPageIndex + 1} required className="border rounded" />
+            <button type="submit" className="button">Gå till</button>
+          </form>
+
+        </div>
       </div>
     </main>
   );
