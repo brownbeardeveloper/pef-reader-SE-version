@@ -2,7 +2,6 @@ import { useState } from "react";
 import UploadFile from "../components/upload-file.jsx";
 import ReadModeFlow from "../components/read-mode-flow.jsx";
 import ReadModePage from "../components/read-mode-page.jsx";
-// import Instruction from "./instructor.jsx";
 import { ViewModeEnum } from "../data/enums.js";
 
 export default function Main({ cookiePermission }) {
@@ -14,9 +13,8 @@ export default function Main({ cookiePermission }) {
   const [jumpToPage, setJumpToPage] = useState(0)
 
   return (
-    <main className="flex flex-col justify-start items-center h-screen pt-10 pl-20 pr-20 max-w-screen-lg mx-auto">
+    <main className="flex flex-col justify-start items-start max-w-screen-xl h-screen mx-auto">
       {!viewMode ? (
-        <>
           <UploadFile
             cookiePermission={cookiePermission}
             setReadmode={setViewMode}
@@ -30,7 +28,6 @@ export default function Main({ cookiePermission }) {
             jumpToPage={jumpToPage}
             setJumpToPage={setJumpToPage}
           />
-        </>
       ) : (
         <>
           {howToRead === ViewModeEnum.ONE_FLOW ? (

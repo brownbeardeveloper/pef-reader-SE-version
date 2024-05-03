@@ -26,20 +26,6 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
     return pages[index];
   }
 
-  function handleShowBookDetailsBtn() {
-    setShowDetails(!showDetails);
-    if (pefObject.metaData) {
-      alert(
-        Object.entries(pefObject.metaData)
-          .map(([key, value]) => value && `${key}: ${value}`)
-          .filter(Boolean)
-          .join('\n')
-      );
-    } else {
-      alert("Bokens detaljer kunde inte hittas");
-    }
-  }
-
   function handleNextPage() {
     if (jumpToPage < maxPageIndex) {
       setJumpToPage(jumpToPage + 1);
@@ -182,20 +168,20 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
   }
 
   return (
-    <div className="">
+    <div className="flex flex-col pt-5 px-10 w-full">
       <button onClick={() => setReadmode(false)} className="button">
         Tillbaka till startsida
       </button>
 
-      <div className="flex flex-col justify-start items-center h-screen">
-        <h2 className="ml-8 text-2xl font-bold">Bokens titel: example</h2>
+      <div className="flex flex-col justify-start items-center h-screen mt-20">
+        <h2 className="ml-8 text-2xl font-bold">Titel: {pefObject.metaData.titel}</h2>
+        <p>Författare: {pefObject.metaData.skapare}</p>
 
-        <button onClick={() => {
-          setJumpToPage(findPageByRowId(savedRowIndex))
-        }}
-          className="button">
-          Fortsätt läsa
-        </button>
+        {savedRowIndex &&
+          <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
+            <span class="block sm:inline">Man kan spara läspositionen genom att klicka på textraden, vilken sedan sparas i cookies.</span>
+          </div>
+        }
 
         <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
           <div className="w-96 h-full">
@@ -203,64 +189,61 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
           </div>
         </div>
 
-        <div className="flex flex-row m-2">
-          <div className="flex flex-col">
-            <button onClick={handleNextPage} className="button">
-              Nästa sida
-            </button>
-            <button onClick={handlePreviousPage} className="button">
-              Föregående sida
-            </button>
-          </div>
-
-          <button onClick={() => handleSetCurrentPage(0)} className="button">
-            Förstasidan
+        { /* nauigator buttons */}
+        <div className="flex flex-row align-center justify-around border mt-1 py-5 px-20 rounded-lg bg-slate-100 w-full">
+          <button onClick={handleNextPage} className="button">
+            Nästa sida
+          </button>
+          <button onClick={handlePreviousPage} className="button">
+            Föregående sida
           </button>
 
-          <div className="flex flex-col align-center justify-center">
-            <fieldset>
-              <legend>Växla vy</legend>
-              <div className="flex flex-row justify-center align-center">
-                <input type="radio"
-                  id="braille-view"
-                  name="view"
-                  className="m-1"
-                  value="BRAILLE"
-                  checked={bookView === ViewModeEnum.BRAILLE_VIEW}
-                  onChange={() => setBookView(ViewModeEnum.BRAILLE_VIEW)}
-                />
-                <label htmlFor="braille-vy">Punktskrift</label>
-
-              </div>
-
-              <div className="flex flex-row justify-center align-center">
-                <input type="radio"
-                  id="braille-view"
-                  name="view"
-                  className="m-1"
-                  value="BRAILLE"
-                  checked={bookView === ViewModeEnum.NORMAL_VIEW}
-                  onChange={() => setBookView(ViewModeEnum.NORMAL_VIEW)}
-                />
-                <label htmlFor="braille-vy">Svartskrift</label>
-              </div>
-
-            </fieldset>
-          </div>
-        </div>
-
-        <div>
+          <button onClick={() => {
+            const pageNumber = findPageByRowId(savedRowIndex)
+            handleSetCurrentPage(pageNumber)
+          }}
+            className="button">
+            Fortsätt läsa
+          </button>
+          <button onClick={() => {
+            handleSetCurrentPage(0)
+          }} className="button">
+            Förstasidan
+          </button>
           <form onSubmit={(e) => {
             e.preventDefault();
-            const pageIndex = parseInt(e.target.elements.goToPage.value, 10);
-            setJumpToPage(pageIndex - 1);
+            const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
+            handleSetCurrentPage(pageNumber);
           }}>
-            {/* # add <p>the current page number: {currentPageNumber}</p> */}
             <label htmlFor="goToPage">Ange ett sidnummer: </label>
-            <input id="goToPage" type="number" min="1" max={maxPageIndex + 1} required className="border rounded" />
+            <input className="border rounded" id="goToPage" type="number" min="1" max={maxPageIndex - 1} required />
             <button type="submit" className="button">Gå till</button>
           </form>
-
+          <fieldset>
+            <legend>Växla vy</legend>
+            <div className="flex flex-row justify-center align-center">
+              <input type="radio"
+                id="braille-view"
+                name="view"
+                className="m-1"
+                value="BRAILLE"
+                checked={bookView === ViewModeEnum.BRAILLE_VIEW}
+                onChange={() => setBookView(ViewModeEnum.BRAILLE_VIEW)}
+              />
+              <label htmlFor="braille-vy">Punktskrift</label>
+            </div>
+            <div className="flex flex-row justify-center align-center">
+              <input type="radio"
+                id="braille-view"
+                name="view"
+                className="m-1"
+                value="BRAILLE"
+                checked={bookView === ViewModeEnum.NORMAL_VIEW}
+                onChange={() => setBookView(ViewModeEnum.NORMAL_VIEW)}
+              />
+              <label htmlFor="braille-vy">Svartskrift</label>
+            </div>
+          </fieldset>
         </div>
       </div>
 

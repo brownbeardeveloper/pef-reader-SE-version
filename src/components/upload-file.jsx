@@ -63,23 +63,26 @@ export default function UploadFile({ cookiePermission, setSavedRowIndex, setRead
     }
 
     return (
-        <div>
-            <div className="flex items-center justify-center mb-10">
-                <div className='h-20 w-20'>
-                    <img src={brailleIcon} className="w-full h-full" alt="Punktskriftsikon" />
+        <div className="flex flex-col p-20 w-full">
+            <div className="flex flex-col justify-center items-center">
+                <div className="flex flex-row justify-center items-center">
+                    <div className='h-20 w-20'>
+                        <img src={brailleIcon} className="w-full h-full" alt="Punktskriftsikon" />
+                    </div>
+                    <div>
+                        <h2 className="ml-8 text-2xl font-bold">Från punktskrift till svartskrift på några sekunder</h2>
+                    </div>
                 </div>
-
-                <div>
-                    <h2 className="ml-8 text-2xl font-bold">Från punktskrift till svartskrift på några sekunder</h2>
+                <div className="m-5">
+                    <p className="text-xl">När du har laddat ner en punktskriftsbok från Legimus kan du läsa den här med din punktdisplay.</p>
                 </div>
             </div>
-            
-            <p className="text-xl">När du har laddat ner en punktskriftsbok från Legimus kan du läsa den här med din punktdisplay.</p>
 
             {cookiePermission && <InstructionPage /> /* check if this works when there's no cookie */}
 
-            <div className="mt-10 mb-10 flex flex-col items-start">
-                <h3 className="text-4xl font-bold mb-10">Ladda upp filen</h3>
+
+            <div className="flex flex-col items-start my-10">
+                <h3 className="text-4xl font-bold my-5">Ladda upp filen</h3>
 
                 {/* Disable the file-selector button while the file is being converted */}
                 <input id="file-selector" type="file" accept=".pef" className="hidden" onChange={handleAddFile} disabled={isLoadingFile} />
@@ -91,14 +94,14 @@ export default function UploadFile({ cookiePermission, setSavedRowIndex, setRead
                 </label>
             </div>
 
-            <div className="flex flex-row items-center mt-6 mb-6">
+            <div className="flex flex-row items-center">
                 <label className="mr-2 text-xl font-bold">Vald fil: </label>
                 <span>{fileName}</span>
             </div>
 
-            <fieldset className="mt-10 mb-10">
+            <fieldset className="my-10">
                 <legend className="text-2xl font-bold" >Hur vill du läsa boken?</legend>
-                <div className="flex flex-row mb-2 mt-2">
+                <div className="flex flex-row my-6">
                     <input
                         type="radio"
                         id="oneFlow"
@@ -127,7 +130,7 @@ export default function UploadFile({ cookiePermission, setSavedRowIndex, setRead
                 </div>
 
                 {howToRead === ViewModeEnum.PAGE_BY_PAGE && (
-                    <div className="m-3">
+                    <div className="">
                         <label htmlFor="pageNumber">Hoppa till sida: </label>
                         <input
                             type="number"
@@ -152,7 +155,6 @@ export default function UploadFile({ cookiePermission, setSavedRowIndex, setRead
                                 }
                             }}
                         />
-
                     </div>
                 )}
             </fieldset>
@@ -162,7 +164,7 @@ export default function UploadFile({ cookiePermission, setSavedRowIndex, setRead
                     <button onClick={HandleSwapToReadMode} className="button" >Läs boken</button>
                     :
                     <div className="flex flex-row items-center">
-                        <span className="ml-4 text-xl font-semibold text-gray-600">Laddar filen...</span>
+                        <span className="ml-2 text-xl font-semibold text-gray-600">Laddar filen...</span>
                     </div>
                 }
             </div>
