@@ -3,8 +3,9 @@ import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { ViewModeEnum } from "../data/enums.js"
 import { getLatestRowPositionFromCookieJson } from "../functions/cookieManager.js"
 import brailleIcon from '../media/braille-icon.png';
+import InstructionPage from "../pages/instruction.jsx";
 
-export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead, jumpToPage, setJumpToPage }) {
+export default function UploadFile({ cookiePermission, setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead, jumpToPage, setJumpToPage }) {
 
     const [isLoadingFile, setIsLoadingFile] = useState(false);
 
@@ -72,7 +73,10 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                     <h2 className="ml-8 text-2xl font-bold">Från punktskrift till svartskrift på några sekunder</h2>
                 </div>
             </div>
+            
             <p className="text-xl">När du har laddat ner en punktskriftsbok från Legimus kan du läsa den här med din punktdisplay.</p>
+
+            {cookiePermission && <InstructionPage /> /* check if this works when there's no cookie */}
 
             <div className="mt-10 mb-10 flex flex-col items-start">
                 <h3 className="text-4xl font-bold mb-10">Ladda upp filen</h3>

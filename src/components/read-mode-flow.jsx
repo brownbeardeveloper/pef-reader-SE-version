@@ -4,11 +4,12 @@ import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
+import { ViewModeEnum } from "../data/enums.js";
 
 export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowIndex, setReadmode, pefObject }) {
 
+  const [bookView, setBookView] = useState(ViewModeEnum.BRAILLE_VIEW)
   const [showDetails, setShowDetails] = useState(false);
-  const [translateText, setTranslateText] = useState(false)
   let maxPageIndex
 
   useDocumentTitle(pefObject.metaData.titel)
@@ -115,7 +116,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
                       {page.rows.map((row, l) => (
                         <span key={`row-${i}-${j}-${k}-${l}`} id={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}
                           className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) && "bg-yellow-300"}>
-                          {translateText ?
+                          {(bookView === ViewModeEnum.NORMAL_VIEW) ?
                             brailleTranslator(filterUnnecessarySentence(row))
                             :
                             filterUnnecessarySentence(row)
@@ -140,7 +141,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
   };
 
   return (
-    <main className="">
+    <div className="">
 
       <button onClick={() => setReadmode(false)} className="button">
         Tillbaka till startsida
@@ -167,14 +168,41 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
           </div>
         </div>
 
-        <div className="flex flex-row m-2">
+        <div className="flex flex-col align-center justify-center">
+          <fieldset>
+            <legend>Växla vy</legend>
+            <div className="flex flex-row justify-center align-center">
+              <input type="radio"
+                id="braille-view"
+                name="view"
+                className="m-1"
+                value="BRAILLE"
+                checked={bookView === ViewModeEnum.BRAILLE_VIEW}
+                onChange={() => setBookView(ViewModeEnum.BRAILLE_VIEW)}
+              />
+              <label htmlFor="braille-vy">Punktskrift</label>
 
+            </div>
+
+            <div className="flex flex-row justify-center align-center">
+              <input type="radio"
+                id="braille-view"
+                name="view"
+                className="m-1"
+                value="BRAILLE"
+                checked={bookView === ViewModeEnum.NORMAL_VIEW}
+                onChange={() => setBookView(ViewModeEnum.NORMAL_VIEW)}
+              />
+              <label htmlFor="braille-vy">Svartskrift</label>
+            </div>
+
+          </fieldset>
+        </div>
+
+
+        <div className="flex flex-row m-2">
           <button onClick={() => handleScrollToPageIndex(1)} className="button">
             Förstasidan
-          </button>
-
-          <button onClick={() => setTranslateText(!translateText)} className="button">
-            Växla vy
           </button>
         </div>
 
@@ -191,6 +219,6 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
         </div>
       </div>
 
-    </main>
+    </div>
   )
 }

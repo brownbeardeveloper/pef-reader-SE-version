@@ -18,6 +18,7 @@ export default function Main({ cookiePermission }) {
       {!viewMode ? (
         <>
           <UploadFile
+            cookiePermission={cookiePermission}
             setReadmode={setViewMode}
             pefObject={pefObject}
             setPefObject={setPefObject}
@@ -50,7 +51,7 @@ export default function Main({ cookiePermission }) {
               setSavedRowIndex={setSavedRowIndex}
               pefObject={pefObject}
               jumpToPage={jumpToPage}
-              setJumpToPage={setJumpToPage}  
+              setJumpToPage={setJumpToPage}
             />
           )}
         </>

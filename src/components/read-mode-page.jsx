@@ -181,10 +181,8 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
     return pageIndex
   }
 
-
-
   return (
-    <main className="">
+    <div className="">
       <button onClick={() => setReadmode(false)} className="button">
         Tillbaka till startsida
       </button>
@@ -193,11 +191,11 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
         <h2 className="ml-8 text-2xl font-bold">Bokens titel: example</h2>
 
         <button onClick={() => {
-            setJumpToPage(findPageByRowId(savedRowIndex))
-          }}
-            className="button">
-            Fortsätt läsa
-          </button>
+          setJumpToPage(findPageByRowId(savedRowIndex))
+        }}
+          className="button">
+          Fortsätt läsa
+        </button>
 
         <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
           <div className="w-96 h-full">
@@ -219,33 +217,36 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
             Förstasidan
           </button>
 
-          <fieldset>
-            <legend>Växla vy</legend>
-            <input type="radio" 
-            id="braille-view" 
-            name="view" 
-            className="m-1" 
-            value="BRAILLE"
-            checked={bookView === ViewModeEnum.BRAILLE_VIEW}
-            onChange={() => setBookView(ViewModeEnum.BRAILLE_VIEW)}
-            />
-            <label htmlFor="braille-vy">Punktskrift</label>
-            <input type="radio" 
-            id="braille-view" 
-            name="view" 
-            className="m-1" 
-            value="BRAILLE"
-            checked={bookView === ViewModeEnum.NORMAL_VIEW}
-            onChange={() => setBookView(ViewModeEnum.NORMAL_VIEW)}
-            />
-            <label htmlFor="braille-vy">Svartskrift</label>
+          <div className="flex flex-col align-center justify-center">
+            <fieldset>
+              <legend>Växla vy</legend>
+              <div className="flex flex-row justify-center align-center">
+                <input type="radio"
+                  id="braille-view"
+                  name="view"
+                  className="m-1"
+                  value="BRAILLE"
+                  checked={bookView === ViewModeEnum.BRAILLE_VIEW}
+                  onChange={() => setBookView(ViewModeEnum.BRAILLE_VIEW)}
+                />
+                <label htmlFor="braille-vy">Punktskrift</label>
 
-          </fieldset>
+              </div>
 
-          { /* remove this later  */}
-          <button onClick={() => setShowOnlyNecessaryRows(!showOnlyNecessaryRows)} className="button">
-            Hoppa över tomma rader
-          </button>
+              <div className="flex flex-row justify-center align-center">
+                <input type="radio"
+                  id="braille-view"
+                  name="view"
+                  className="m-1"
+                  value="BRAILLE"
+                  checked={bookView === ViewModeEnum.NORMAL_VIEW}
+                  onChange={() => setBookView(ViewModeEnum.NORMAL_VIEW)}
+                />
+                <label htmlFor="braille-vy">Svartskrift</label>
+              </div>
+
+            </fieldset>
+          </div>
         </div>
 
         <div>
@@ -262,6 +263,12 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
         </div>
       </div>
-    </main>
+
+      { /* remove this later  */}
+      <button onClick={() => setShowOnlyNecessaryRows(!showOnlyNecessaryRows)} className="button">
+        Hoppa över tomma rader
+      </button>
+
+    </div>
   );
 }
