@@ -1,13 +1,14 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { ViewModeEnum } from "../data/enums.js"
 import { getLatestRowPositionFromCookieJson } from "../functions/cookieManager.js"
+import { TabIndex } from "../data/tab-index.js"
 import brailleIcon from '../media/braille-icon.png';
 
 export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead, jumpToPage, setJumpToPage }) {
 
     const [isLoadingFile, setIsLoadingFile] = useState(false);
-    
+
 
     function handleAddFile(event) {
         if (event.target.files[0]) {
@@ -82,8 +83,18 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                 <h3 className="text-4xl font-bold my-5">Ladda upp filen</h3>
 
                 {/* Disable the file-selector button while the file is being converted */}
-                <input id="file-selector" type="file" accept=".pef" className="hidden" onChange={handleAddFile} disabled={isLoadingFile} />
-                <label htmlFor="file-selector"
+                <input
+                    id="file-selector"
+                    type="file"
+                    accept=".pef"
+                    className="hidden"
+                    onChange={handleAddFile}
+                    disabled={isLoadingFile}
+                    tabIndex={TabIndex.UPLOAD_FILE}
+                />
+                <label
+                    htmlFor="file-selector"
+                    tabIndex={TabIndex.UPLOAD_FILE}
                     className={(isLoadingFile ?
                         "cursor-not-allowed button"
                         : "button")}>
@@ -103,8 +114,9 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                         type="radio"
                         id="oneFlow"
                         name="howToRead"
-                        value="ONEFLOW"
+                        value="ONE_FLOW"
                         className="m-1"
+                        tabIndex={TabIndex.RADIO_FLOW_TEXT}
                         checked={howToRead === ViewModeEnum.ONE_FLOW}
                         onChange={() => setHowToRead(ViewModeEnum.ONE_FLOW)}
                     />
@@ -116,8 +128,9 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                         type="radio"
                         id="byPage"
                         name="howToRead"
-                        value="BYPAGE"
+                        value="PAGE_BY_PAGE"
                         className="m-1"
+                        tabIndex={TabIndex.RADIO_BY_PAGE_TEXT}
                         checked={howToRead === ViewModeEnum.PAGE_BY_PAGE}
                         onChange={() => setHowToRead(ViewModeEnum.PAGE_BY_PAGE)}
                     />
