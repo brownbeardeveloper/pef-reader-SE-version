@@ -1,13 +1,13 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { ViewModeEnum } from "../data/enums.js"
 import { getLatestRowPositionFromCookieJson } from "../functions/cookieManager.js"
 import brailleIcon from '../media/braille-icon.png';
-import InstructionPage from "../pages/instruction.jsx";
 
-export default function UploadFile({ cookiePermission, setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead, jumpToPage, setJumpToPage }) {
+export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead, jumpToPage, setJumpToPage }) {
 
     const [isLoadingFile, setIsLoadingFile] = useState(false);
+    
 
     function handleAddFile(event) {
         if (event.target.files[0]) {
@@ -77,9 +77,6 @@ export default function UploadFile({ cookiePermission, setSavedRowIndex, setRead
                     <p className="text-xl">När du har laddat ner en punktskriftsbok från Legimus kan du läsa den här med din punktdisplay.</p>
                 </div>
             </div>
-
-            {cookiePermission && <InstructionPage /> /* check if this works when there's no cookie */}
-
 
             <div className="flex flex-col items-start my-10">
                 <h3 className="text-4xl font-bold my-5">Ladda upp filen</h3>

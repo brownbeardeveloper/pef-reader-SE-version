@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UploadFile from "../components/upload-file.jsx";
 import ReadModeFlow from "../components/read-mode-flow.jsx";
 import ReadModePage from "../components/read-mode-page.jsx";
 import { ViewModeEnum } from "../data/enums.js";
+import { useNavigate } from "react-router-dom";
 
 export default function Main({ cookiePermission }) {
   const [pefObject, setPefObject] = useState(null);
@@ -11,6 +12,14 @@ export default function Main({ cookiePermission }) {
   const [howToRead, setHowToRead] = useState(ViewModeEnum.ONE_FLOW);
   const [savedRowIndex, setSavedRowIndex] = useState(null);
   const [jumpToPage, setJumpToPage] = useState(0)
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!cookiePermission) {
+      // Navigate to instruction page for first-time users
+      return navigate('/instruktion');
+    }
+  }, [cookiePermission]);
 
   return (
     <main className="flex flex-col justify-start items-start max-w-screen-xl mx-auto pb-20">

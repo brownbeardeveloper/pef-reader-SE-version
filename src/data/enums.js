@@ -4,3 +4,8 @@ export const ViewModeEnum = {
     BRAILLE_VIEW: 'BRAILLEVIEW',
     NORMAL_VIEW: 'NORMALVIEW'
 }
+
+export const CookieEnum= {
+    ALLOWED: 'allowed',
+    DENIED: 'denied'
+}

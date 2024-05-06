@@ -27,7 +27,7 @@ export default function Footer() {
             </a>
             <a
               className="text-neutral-800 dark:text-neutral-400 hover:underline"
-              href="/kakor"
+              href="/om-cookies"
             >
               Kakor och Tillgänglighet
             </a>
