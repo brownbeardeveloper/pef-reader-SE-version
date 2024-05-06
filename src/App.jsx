@@ -1,7 +1,6 @@
 import Navbar from './components/navbar.jsx'
 import Footer from './components/footer.jsx'
 import Main from './pages/main.jsx'
-import CookieBanner from './components/cookie-banner.jsx';
 import InstructionPage from './pages/instruction.jsx';
 import CookiePolicyPage from './pages/cookie-policy.jsx';
 import { BrowserRouter as Router, Routes, Route  } from "react-router-dom";
@@ -27,8 +26,7 @@ export default function App() {
 
   return (
     <Router>
-      {showCookieBanner && <CookieBanner setCookiePermission={setCookiePermission} />}
-      <Navbar />
+      <Navbar showCookieBanner={showCookieBanner} setCookiePermission={setCookiePermission} />
       <Routes>
         <Route path="/instruktion" element={<InstructionPage cookiePermission={cookiePermission} setCookiePermission={setCookiePermission} />} />
         <Route path='/om-cookies' element={<CookiePolicyPage cookiePermission={cookiePermission} setCookiePermission={setCookiePermission} />} />

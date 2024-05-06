@@ -1,25 +1,25 @@
-import { useNavigate } from "react-router-dom";
 import { CookieEnum } from "../data/enums";
 
 export default function CookieBanner({ setCookiePermission }) {
-    const navigate = useNavigate();
 
     return (
-        <div className="flex flex-row items-center justify-center bg-yellow-200 p-4">
-            <div className="w-1/2">
-                <span className="text-lg text-gray-800">
-                    Denna webbplats använder cookies för att förbättra din användarupplevelse och spara din läsposition i boken.
-                </span>
-                <button className="button" onClick={() => {navigate('/om-cookies')}}>
-                    Läs mer om kakor.
-                </button>
+        <div className="flex flex-col bg-slate-50 p-10 ">
+            <strong className="text-2xl text-bold">
+                Kakor på webbplatsen
+            </strong>
+            <span className="text-lg">
+                Denna webbplats använder cookies för att förbättra din användarupplevelse och spara din läsposition i boken.
+                <a className="m-1 underline hover:text-blue-500 transition duration-200 ease-in-out" href="/om-cookies">Läs mer om kakor.</a>
+            </span>
 
-            </div>
-            <div className="">
-                <button onClick={() => setCookiePermission(CookieEnum.ALLOWED)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200 ease-in-out mr-2">
+
+            <div className="flex justify-center w-full m-5">
+                <button onClick={() => setCookiePermission(CookieEnum.ALLOWED)} 
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200 ease-in-out mr-2 w-full">
                     Godkänna nödvändiga cookies
                 </button>
-                <button onClick={() => setCookiePermission(CookieEnum.DENIED)} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-200 ease-in-out">
+                <button onClick={() => setCookiePermission(CookieEnum.DENIED)} 
+                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-200 ease-in-out w-full">
                     Nej tack
                 </button>
             </div>
