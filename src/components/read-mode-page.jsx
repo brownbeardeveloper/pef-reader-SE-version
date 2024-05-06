@@ -10,7 +10,6 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
   const [pages, setPages] = useState([]);
   const [maxPageIndex, setMaxPageIndex] = useState(0);
-  const [showDetails, setShowDetails] = useState(false);
   const [bookView, setBookView] = useState(ViewModeEnum.BRAILLE_VIEW)
   const [showOnlyNecessaryRows, setShowOnlyNecessaryRows] = useState(false)
 

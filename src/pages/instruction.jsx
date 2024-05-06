@@ -1,6 +1,6 @@
 export default function InstructionPage() {
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <main className="max-w-2xl mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold mb-4">Välkommen till Digital punktläsare!</h2>
       <p className="mb-6">Denna applikation är utformad för att göra det enklare för användare utan eller med synnedsättning att få tillgång till punktskriftsböcker digitalt och läsa dem direkt i webbläsaren. Följ dessa enkla steg för att använda applikationen effektivt:</p>
 
@@ -37,6 +37,6 @@ export default function InstructionPage() {
         <h3 className="text-xl font-bold mb-2">5. Fortsätt läsa:</h3>
         <p>Om du har sparat en läsposition tidigare finns det en knapp "Fortsätt läsa" som återvänder till den sparade positionen, oavsett om du använder läsläget "Löpande text" eller "Sida för sida".</p>
       </div>
-    </div>
+    </main>
   );
 }
