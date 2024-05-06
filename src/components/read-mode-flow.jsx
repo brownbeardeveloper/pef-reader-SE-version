@@ -131,7 +131,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
         Tillbaka till startsida
       </button>
 
-      <div className="flex flex-col justify-start items-center h-screen mt-20">
+      <div className="flex flex-col justify-start items-center mt-20">
         <h2 className="ml-8 text-2xl font-bold">Titel: {pefObject.metaData.titel}</h2>
         <p>Författare: {pefObject.metaData.skapare}</p>
 

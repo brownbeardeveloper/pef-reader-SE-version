@@ -13,7 +13,7 @@ export default function Main({ cookiePermission }) {
   const [jumpToPage, setJumpToPage] = useState(0)
 
   return (
-    <main className="flex flex-col justify-start items-start max-w-screen-xl h-screen mx-auto">
+    <main className="flex flex-col justify-start items-start max-w-screen-xl mx-auto pb-20">
       {!viewMode ? (
           <UploadFile
             cookiePermission={cookiePermission}
