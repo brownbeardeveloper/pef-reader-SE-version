@@ -1,16 +1,31 @@
-import { useState } from "react"
 import { TabIndex } from "../data/tab-index"
 import CookieBanner from "./cookie-banner"
 
 export default function Navbar({ showCookieBanner, setCookiePermission }) {
-  const [showShortcutLinks, setShowShortcutLinks] = useState(false)
 
   return (
     <header>
-      <div
-        className={`absolute top-0 left-0 m-10 px-10 py-2 bg-black text-white text-2xl border border-purple-500 ${showShortcutLinks ? 'block' : 'hidden'}`}
-        onFocus={() => setShowShortcutLinks(true)}>
-        <a tabIndex={TabIndex.HIDDEN_LINK_MAIN} href="#MainContentArea">test</a>
+      <div>
+        <a tabIndex={TabIndex.HIDDEN_LINK_MAIN} href="#MainContentArea"
+          className="sr-only focus:not-sr-only bg-black text-white">
+            Till innehåll på sidan
+        </a>
+        <a tabIndex={TabIndex.HIDDEN_LINK_MAIN} href="#MainContentArea"
+          className="sr-only focus:not-sr-only bg-black text-white">
+            Till uppladdning av filen
+        </a>
+        <a tabIndex={TabIndex.HIDDEN_LINK_MAIN} href="/instruktion"
+          className="sr-only focus:not-sr-only bg-black text-white">
+            Till instruktion av hur webbapplikationen fungerar
+        </a>
+        <a tabIndex={TabIndex.HIDDEN_LINK_MAIN} href="https://www.legimus.se/"
+          className="sr-only focus:not-sr-only bg-black text-white">
+            Till Legimus
+        </a>
+        <a tabIndex={TabIndex.HIDDEN_LINK_MAIN} href="https://mtm.se/"
+          className="sr-only focus:not-sr-only bg-black text-white">
+            Till Myndigheten för tillgänliga medier
+        </a>
       </div>
 
       {showCookieBanner && <CookieBanner setCookiePermission={setCookiePermission} />}
