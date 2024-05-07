@@ -19,7 +19,6 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
     if(firstPageIndex !== undefined) setStartPageIndex(firstPageIndex)
   }, []); 
 
-
   function handleShowLatestSavedPositionBtn() {
     if (savedRowIndex) {
 
@@ -75,7 +74,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
   }
 
   function findFirstPage() {
-    for (let index = 0; index < maxPageIndex -1; index++) {
+    for (let index = 1; index < maxPageIndex; index++) {
       const pageId = `page-${index}`
       const element = document.getElementById(pageId)
       
@@ -101,7 +100,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
 
               k = manipulatePageIndexToRemoveUnnecessaryPages(sectionPages, k);
               const page = sectionPages[k]
-              const thisPageIndex = pageIndex + 1;
+              const thisPageIndex = pageIndex;
               pageIndex++;
 
               const pageElement = page && (
@@ -115,13 +114,13 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
 
                       {page.rows.map((row, l) => (
                         <span key={`row-${i}-${j}-${k}-${l}`} id={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}
-                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) && "bg-yellow-300"}>
+                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
                           {(bookView === ViewModeEnum.NORMAL_VIEW) ?
                             brailleTranslator(filterUnnecessarySentence(row))
                             :
                             filterUnnecessarySentence(row)
                           }
-                          {<span>&nbsp;</span>}
+                          {<span>&nbsp;</span> /* fix this issue later */} 
                         </span>
                       ))}
                     </div>
@@ -136,7 +135,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
         }
       }
     }
-    maxPageIndex = pageIndex
+    maxPageIndex = pageIndex -1 // remove the last increase
     return pages;
   };
 
@@ -179,7 +178,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
             handleScrollToPageIndex(pageNumber);
           }}>
             <label htmlFor="goToPage">Ange ett sidnummer: </label>
-            <input className="border rounded" id="goToPage" type="number" min={startPageIndex} max={maxPageIndex - 1} required />
+            <input className="border rounded" id="goToPage" type="number" min={startPageIndex} max={maxPageIndex} required />
             <button type="submit" className="button">Gå till</button>
           </form>
           <fieldset>
@@ -210,10 +209,10 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
         </div>
 
         <div className="flex flex-col bg-slate-200 rounded-lg mt-20 p-10 w-full border">
-          <p className="font-bold">Bokens metadata</p>
+          <p className="font-bold"><strong>Bokens metadata:</strong></p>
           {pefObject.metaData &&
             Object.entries(pefObject.metaData)
-              .map(([key, value]) => value != null && <label key={key}>{key}: {value}</label>)
+              .map(([key, value]) => value != null && <label key={key}><strong>{key}:</strong> {value}</label>)
           }
         </div>
       </div>

@@ -38,7 +38,6 @@ export function setAllowCookie(boolean) {
 export function getAllowCookie() {
     try {
         const cookiePermission = Cookies.get("allowCookie")
-        console.log("direct from cookie", cookiePermission)
         return cookiePermission
     } catch (error) {
         console.error('Error getting cookie:', error);

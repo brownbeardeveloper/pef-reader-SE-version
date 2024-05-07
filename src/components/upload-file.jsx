@@ -6,9 +6,7 @@ import { TabIndex } from "../data/tab-index.js"
 import brailleIcon from '../media/braille-icon.png';
 
 export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead, jumpToPage, setJumpToPage }) {
-
     const [isLoadingFile, setIsLoadingFile] = useState(false);
-
 
     function handleAddFile(event) {
         if (event.target.files[0]) {
@@ -43,8 +41,6 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
     function HandleSwapToReadMode() {
         if (pefObject) {
             setReadmode(true); // IMPORTANT: Swapping this component to read mode    
-
-            // if there's cookie then printout alert
 
             if (pefObject && pefObject.metaData && pefObject.metaData.identifier && pefObject.metaData.titel) {
 
@@ -139,6 +135,7 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                     </label>
                 </div>
 
+                {/* remove this below later...
                 {howToRead === ViewModeEnum.PAGE_BY_PAGE && (
                     <div className="">
                         <label htmlFor="pageNumber">Hoppa till sida: </label>
@@ -166,7 +163,8 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                             }}
                         />
                     </div>
-                )}
+                )} */}
+
             </fieldset>
 
             <div className="inline-block">

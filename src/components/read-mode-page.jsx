@@ -4,7 +4,7 @@ import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
-import { ViewModeEnum } from '../data/enums.js'
+import { ViewModeEnum, CookieEnum } from '../data/enums.js'
 
 export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermission, setReadmode, pefObject, jumpToPage, setJumpToPage }) {
 
@@ -17,7 +17,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
   useEffect(() => {
     const calculatedPages = renderPages();
     setPages(calculatedPages);
-    setMaxPageIndex(calculatedPages.length - 1);
+    setMaxPageIndex(calculatedPages.length);
   }, [pefObject, savedRowIndex, bookView]);
 
   function showBookPage(index) {
@@ -25,7 +25,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
   }
 
   function handleNextPage() {
-    if (jumpToPage < maxPageIndex) {
+    if (jumpToPage < maxPageIndex-1) {
       setJumpToPage(jumpToPage + 1);
     } else {
       alert("Fel: Det finns inga fler sidor i boken.");
@@ -45,7 +45,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
       if (index === 0) {
         alert('Du är redan på den första sidan.')
       } else {
-        alert(`Du är redan på sidan nummer ${index}.`)
+        alert(`Du är redan på sidan nummer ${index+1}.`)
       }
     } else {
       setJumpToPage(index)
@@ -53,11 +53,10 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
   }
 
   function handleClickRow(i, j, k, l) {
-
     const rowId = `row-${i}-${j}-${k}-${l}`;
     setSavedRowIndex(rowId)
 
-    if (cookiePermission === "allowed") {
+    if (cookiePermission === CookieEnum.ALLOWED) {
       setLatestRowPositionToCookie(pefObject.metaData.identifier, rowId)
     } else {
       alert("Din position har sparats, men eftersom cookies inte är tillåtna, kommer positionen inte att sparas när du lämnar sidan.")
@@ -92,7 +91,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
               k = manipulatePageIndexToRemoveUnnecessaryPages(sectionPages, k);
               const page = sectionPages[k]
-              const thisPageIndex = pageIndex + 1;
+              const thisPageIndex = pageIndex
               pageIndex++;
 
               const pageElement = page && (
@@ -103,19 +102,16 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
                   {page && page.rows &&
                     page.rows.map((row, l) => (
-                      <div>
+                      <div key={`${i}-${j}-${k}-${l}`}>
                         <span
                           id={`row-${i}-${j}-${k}-${l}`}
-                          // key={`row-${i}-${j}-${k}-${l}`} 
                           onClick={() => handleClickRow(i, j, k, l)}
-                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) && "bg-yellow-300"}>
-
+                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
                           {(bookView === ViewModeEnum.NORMAL_VIEW) ?
                             brailleTranslator(filterUnnecessarySentence(row))
                             :
                             filterUnnecessarySentence(row)
                             }
-
                         </span>
                       </div>
                     ))}
@@ -129,7 +125,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
         }
       }
     }
-    setMaxPageIndex(pageIndex)
+    setMaxPageIndex(pageIndex-1) // remove the last increase
     return pages;
   };
 
@@ -177,7 +173,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
         <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
           <div className="w-96 h-full">
-            {showBookPage(jumpToPage)}
+            {showBookPage(jumpToPage) /* this is an array */ }
           </div>
         </div>
 
@@ -197,20 +193,23 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
             className="button">
             Fortsätt läsa
           </button>
+
           <button onClick={() => {
             handleSetCurrentPage(0)
           }} className="button">
             Förstasidan
           </button>
+
           <form onSubmit={(e) => {
             e.preventDefault();
             const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
-            handleSetCurrentPage(pageNumber);
+            handleSetCurrentPage(pageNumber-1);
           }}>
             <label htmlFor="goToPage">Ange ett sidnummer: </label>
-            <input className="border rounded" id="goToPage" type="number" min="1" max={maxPageIndex - 1} required />
+            <input className="border rounded" id="goToPage" type="number" min="1" max={maxPageIndex} required />
             <button type="submit" className="button">Gå till</button>
           </form>
+
           <fieldset>
             <legend>Växla vy</legend>
             <div className="flex flex-row justify-center align-center">
@@ -236,6 +235,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
               <label htmlFor="braille-vy">Svartskrift</label>
             </div>
           </fieldset>
+
         </div>
       </div>
     </div>
