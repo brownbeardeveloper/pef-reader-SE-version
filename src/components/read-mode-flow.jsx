@@ -5,6 +5,7 @@ import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 import { ViewModeEnum } from "../data/enums.js";
+import { CookieEnum } from "../data/enums.js";
 
 export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowIndex, setReadmode, pefObject }) {
 
@@ -24,18 +25,16 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
       } else {
         console.error('Error: Unable to find the specified element.')
       }
-
     } else {
       console.error('There is no cookie.')
     }
   }
 
   function handleClickRow(i, j, k, l) {
-
     const rowId = `row-${i}-${j}-${k}-${l}`;
     setSavedRowIndex(rowId)
 
-    if (cookiePermission === "allowed") {
+    if (cookiePermission === CookieEnum.ALLOWED) {
       setLatestRowPositionToCookie(pefObject.metaData.identifier, rowId)
     } else {
       alert("Din position har sparats, men eftersom cookies inte är tillåtna, kommer positionen inte att sparas när du återvänder till sidan.")
@@ -66,6 +65,15 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
 
     } else {
       console.error(`Element with ID '${pageId}' not found.`);
+    }
+  }
+
+  function findFirstPage() {
+    for (let index = 0; index < maxPageIndex; index++) {
+      const pageId = `page-${index}`
+      const element = document.getElementById(pageId)
+      
+      if(element) { return index }
     }
   }
 
@@ -135,7 +143,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
         <h2 className="ml-8 text-2xl font-bold">Titel: {pefObject.metaData.titel}</h2>
         <p>Författare: {pefObject.metaData.skapare}</p>
 
-        {savedRowIndex &&
+        {!savedRowIndex &&
           <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
             <span class="block sm:inline">Man kan spara läspositionen genom att klicka på textraden, vilken sedan sparas i cookies.</span>
           </div>
@@ -153,7 +161,9 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
             className="button">
             Fortsätt läsa
           </button>
-          <button onClick={() => handleScrollToPageIndex(1)} className="button">
+          <button onClick={() => {
+            handleScrollToPageIndex(findFirstPage())
+          }} className="button">
             Förstasidan
           </button>
           <form onSubmit={(e) => {

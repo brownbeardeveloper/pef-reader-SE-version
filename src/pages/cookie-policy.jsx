@@ -35,6 +35,8 @@ export default function CookiePolicyPage({ cookiePermission, setCookiePermission
         <p className="mb-4">Om du inte vill att kakor lagras på din dator kan du stänga av funktionen i din webbläsares inställningar. Då lagras inga kakor men du kommer inte kunna använda vissa funktioner på webbplatsen.</p>
       </section>
 
+      {/* create allow cookie button if the user denied by mistake */}
+
       <div className="w-full flex justify-center">
         {cookiePermission ?
           <button className="button" onClick={() => { navigate('/') }}>
