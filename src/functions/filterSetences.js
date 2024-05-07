@@ -1,5 +1,4 @@
 export function filterUnnecessarySentence(txt) {
-
     const charsToSkip = ["⠀", "⠏", "⠉", "⠹", "⠇", "⠧", "⠤", "⠼", "⠸", "⠒"];
     const symbolsToNotSkip = ["⠼⠉", "⠼⠉⠉", "⠼⠉⠉⠉", "⠼⠉⠉⠉⠉", "⠼⠉⠉⠉⠉⠉"];
 
@@ -23,6 +22,6 @@ export function filterUnnecessarySentence(txt) {
     }
 
     // If whole sentence doesnt contains important information then returns null
-    console.log(txt)
+    // console.log(txt)
     return null;
 }

@@ -19,10 +19,10 @@ export default function Main({ cookiePermission }) {
       // Navigate to instruction page for first-time users
       return navigate('/instruktion');
     }
-  }, [cookiePermission]);
+  }, [cookiePermission, navigate]);
 
   return (
-    <main className="flex flex-col justify-start items-start max-w-screen-xl mx-auto pb-20">
+    <main id="MainContentArea" className="flex flex-col justify-start items-start max-w-screen-xl mx-auto pb-20">
       {!viewMode ? (
           <UploadFile
             cookiePermission={cookiePermission}

@@ -71,7 +71,7 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                         <img src={brailleIcon} className="w-full h-full" alt="Punktskriftsikon" />
                     </div>
                     <div>
-                        <h2 className="ml-8 text-2xl font-bold">Från punktskrift till svartskrift på några sekunder</h2>
+                        <h2 id="MainContentArea" className="ml-8 text-2xl font-bold">Från punktskrift till svartskrift på några sekunder</h2>
                     </div>
                 </div>
                 <div className="m-5">

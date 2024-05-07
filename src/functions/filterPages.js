@@ -8,7 +8,7 @@ export function manipulatePageIndexToRemoveUnnecessaryPages(pages, pageIndex) {
 
     /* Remove the first pages in every volume */
     if (pageIndex === 0 && doesThisPageContainLessThanQuarterText(pages[pageIndex])) {
-        console.log("This page is removed", pages[pageIndex])
+        //console.log("This page is removed", pages[pageIndex])
         pageIndex++
     }
 

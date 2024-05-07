@@ -141,7 +141,6 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
   };
 
   function findPageByRowId(rowId) {
-
     let pageIndex
     let rowFound = false;
 
@@ -151,7 +150,8 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
         if (!rowFound && Array.isArray(element)) { // Retrieve only the rows
           element.forEach(row => {
-            if (!rowFound && String(row.key) === rowId) {
+
+            if (!rowFound && row.props.children.props.id === rowId) {
               pageIndex = value;
               rowFound = true;
             }
@@ -174,9 +174,9 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
       <div className="flex flex-col justify-start items-center h-screen mt-20">
         <h2 className="ml-8 text-2xl font-bold">Titel: {pefObject.metaData.titel}</h2>
-        <p>Författare: {pefObject.metaData.skapare}</p>
+        <p className="mb-5">Författare: {pefObject.metaData.skapare}</p>
 
-        {savedRowIndex &&
+        {!savedRowIndex &&
           <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
             <span class="block sm:inline">Man kan spara läspositionen genom att klicka på textraden, vilken sedan sparas i cookies.</span>
           </div>
@@ -184,7 +184,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
         <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
           <div className="w-96 h-full">
-            {showBookPage(jumpToPage)}
+            { showBookPage(jumpToPage) }
           </div>
         </div>
 

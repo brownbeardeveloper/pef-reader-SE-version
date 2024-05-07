@@ -1,18 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
 import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
-import { ViewModeEnum } from "../data/enums.js";
-import { CookieEnum } from "../data/enums.js";
+import { ViewModeEnum, CookieEnum } from "../data/enums.js";
 
 export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowIndex, setReadmode, pefObject }) {
 
   const [bookView, setBookView] = useState(ViewModeEnum.BRAILLE_VIEW)
+  const [startPageIndex, setStartPageIndex] = useState(1)
   let maxPageIndex
 
   useDocumentTitle(pefObject.metaData.titel)
+
+  useEffect(() => {
+    const firstPageIndex = findFirstPage()
+    if(firstPageIndex !== undefined) setStartPageIndex(firstPageIndex)
+  }, []); 
+
 
   function handleShowLatestSavedPositionBtn() {
     if (savedRowIndex) {
@@ -53,6 +59,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
   }
 
   function handleScrollToPageIndex(index) {
+
     const pageId = `page-${index}`
     const element = document.getElementById(pageId)
 
@@ -62,19 +69,19 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
       if (document.activeElement !== element) {
         element.focus();
       }
-
     } else {
-      console.error(`Element with ID '${pageId}' not found.`);
+      alert(`Sidan '${index}' kunde inte hittas.`);
     }
   }
 
   function findFirstPage() {
-    for (let index = 0; index < maxPageIndex; index++) {
+    for (let index = 0; index < maxPageIndex -1; index++) {
       const pageId = `page-${index}`
       const element = document.getElementById(pageId)
       
       if(element) { return index }
     }
+    alert('Ingen första sida kunde hittades.')
   }
 
   const renderPages = () => {
@@ -172,7 +179,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
             handleScrollToPageIndex(pageNumber);
           }}>
             <label htmlFor="goToPage">Ange ett sidnummer: </label>
-            <input className="border rounded" id="goToPage" type="number" min="1" max={maxPageIndex - 1} required />
+            <input className="border rounded" id="goToPage" type="number" min={startPageIndex} max={maxPageIndex - 1} required />
             <button type="submit" className="button">Gå till</button>
           </form>
           <fieldset>

@@ -6,7 +6,7 @@ export default function CookiePolicyPage({ cookiePermission, setCookiePermission
 
   return (
     <main className="max-w-3xl mx-auto px-10 pt-10 pb-20">
-      <h2 className="text-2xl font-bold mb-4">Kakor och integritetspolicy</h2>
+      <h2 className="text-2xl font-bold mb-4" id="MainContentArea">Kakor och integritetspolicy</h2>
       <p className="mb-6">Syftet med denna policy är att ge dig som användare av Digital punktläsare webbplats information om hur vi använder kakor (cookies) på vår webbplats och vilka inställningar du kan göra när det gäller kakor.</p>
       <section className="mb-8">
         <h3 className="text-lg font-semibold mb-2">Vad är kakor?</h3>
