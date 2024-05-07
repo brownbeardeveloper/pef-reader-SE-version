@@ -11,7 +11,6 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
   const [pages, setPages] = useState([]);
   const [maxPageIndex, setMaxPageIndex] = useState(0);
   const [bookView, setBookView] = useState(ViewModeEnum.BRAILLE_VIEW)
-  const [showOnlyNecessaryRows, setShowOnlyNecessaryRows] = useState(false)
 
   useDocumentTitle(pefObject.metaData.titel);
 
@@ -19,7 +18,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
     const calculatedPages = renderPages();
     setPages(calculatedPages);
     setMaxPageIndex(calculatedPages.length - 1);
-  }, [pefObject, savedRowIndex, bookView, showOnlyNecessaryRows]);
+  }, [pefObject, savedRowIndex, bookView]);
 
   function showBookPage(index) {
     return pages[index];
@@ -111,18 +110,12 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
                           onClick={() => handleClickRow(i, j, k, l)}
                           className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) && "bg-yellow-300"}>
 
-                          {showOnlyNecessaryRows ? (
-                            (bookView === ViewModeEnum.NORMAL_VIEW) ?
-                              brailleTranslator(filterUnnecessarySentence(row))
-                              :
-                              filterUnnecessarySentence(row)
-                          ) : (
-                            (bookView === ViewModeEnum.NORMAL_VIEW) ?
-                              brailleTranslator(row)
-                              :
-                              row
-                          )
-                          }
+                          {(bookView === ViewModeEnum.NORMAL_VIEW) ?
+                            brailleTranslator(filterUnnecessarySentence(row))
+                            :
+                            filterUnnecessarySentence(row)
+                            }
+
                         </span>
                       </div>
                     ))}
@@ -184,11 +177,11 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
         <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
           <div className="w-96 h-full">
-            { showBookPage(jumpToPage) }
+            {showBookPage(jumpToPage)}
           </div>
         </div>
 
-        { /* nauigator buttons */}
+        { /* navigator buttons */}
         <div className="flex flex-row align-center justify-around border mt-1 py-5 px-20 rounded-lg bg-slate-100 w-full">
           <button onClick={handleNextPage} className="button">
             Nästa sida
@@ -245,12 +238,6 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
           </fieldset>
         </div>
       </div>
-
-      { /* remove this later  */}
-      <button onClick={() => setShowOnlyNecessaryRows(!showOnlyNecessaryRows)} className="button">
-        Hoppa över tomma rader
-      </button>
-
     </div>
   );
 }
