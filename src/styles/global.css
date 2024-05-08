@@ -1,6 +1,4 @@
 @import url('variables.css');
-@import url('navbar.css');
-@import url('footer.css');
 @import url('main.css');
 @import url(tailwind.css);
 
@@ -12,6 +10,7 @@
 body, html {
     margin: 0;
     padding: 0;
+    min-height: 100vh;
     background-image: url('../media/bg_body.jpg');
     background-size: cover;
     background-repeat: no-repeat; 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
 import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
@@ -210,6 +210,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
               .map(([key, value]) => value != null && <label key={key}><strong>{key}:</strong> {value}</label>)
           }
         </div>
+
       </div>
     </div>
   )

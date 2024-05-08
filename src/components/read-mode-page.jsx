@@ -237,6 +237,15 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
           </fieldset>
 
         </div>
+
+        <div className="flex flex-col bg-slate-200 rounded-lg mt-20 p-10 w-full border">
+          <p className="font-bold"><strong>Bokens metadata:</strong></p>
+          {pefObject.metaData &&
+            Object.entries(pefObject.metaData)
+              .map(([key, value]) => value != null && <label key={key}><strong>{key}:</strong> {value}</label>)
+          }
+        </div>
+
       </div>
     </div>
   );

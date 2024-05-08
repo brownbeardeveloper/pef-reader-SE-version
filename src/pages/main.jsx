@@ -22,7 +22,7 @@ export default function Main({ cookiePermission }) {
   }, [cookiePermission, navigate]);
 
   return (
-    <main id="MainContentArea" className="flex flex-col justify-start items-start max-w-screen-xl mx-auto pb-20">
+    <main id="MainContentArea" className="flex flex-col justify-start items-start h-screen max-w-screen-xl mx-auto pb-20">
       {!viewMode ? (
           <UploadFile
             cookiePermission={cookiePermission}
