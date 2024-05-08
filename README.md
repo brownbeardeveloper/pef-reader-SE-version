@@ -1,5 +1,5 @@
 # PEF-reader SE version
-This repository contains code for a tool that can convert files in Portable Embosser Format (PEF), which contains braille text and can be used by blind people to read. The tool has support to download the content as HTML, or display the result directly in the browser.
+This application is designed to make it easier for users, with or without visual impairments, to access braille books digitally and read them directly in the web browser with the assistance of a refreshable braille display.
 
 ## Future improvements
 - [ ] Support for multiple languages
