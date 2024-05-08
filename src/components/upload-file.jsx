@@ -2,7 +2,6 @@ import { useState } from "react"
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { ViewModeEnum } from "../data/enums.js"
 import { getLatestRowPositionFromCookieJson } from "../functions/cookieManager.js"
-import { TabIndex } from "../data/tab-index.js"
 import brailleIcon from '../media/braille-icon.png';
 
 export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead, jumpToPage, setJumpToPage }) {
@@ -86,11 +85,9 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                     className="hidden"
                     onChange={handleAddFile}
                     disabled={isLoadingFile}
-                    tabIndex={TabIndex.UPLOAD_FILE}
                 />
                 <label
                     htmlFor="file-selector"
-                    tabIndex={TabIndex.UPLOAD_FILE}
                     className={(isLoadingFile ?
                         "cursor-not-allowed button"
                         : "button")}>
@@ -112,7 +109,6 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                         name="howToRead"
                         value="ONE_FLOW"
                         className="m-1"
-                        tabIndex={TabIndex.RADIO_FLOW_TEXT}
                         checked={howToRead === ViewModeEnum.ONE_FLOW}
                         onChange={() => setHowToRead(ViewModeEnum.ONE_FLOW)}
                     />
@@ -126,7 +122,6 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                         name="howToRead"
                         value="PAGE_BY_PAGE"
                         className="m-1"
-                        tabIndex={TabIndex.RADIO_BY_PAGE_TEXT}
                         checked={howToRead === ViewModeEnum.PAGE_BY_PAGE}
                         onChange={() => setHowToRead(ViewModeEnum.PAGE_BY_PAGE)}
                     />
