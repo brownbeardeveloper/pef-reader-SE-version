@@ -9,8 +9,8 @@ import { ViewModeEnum, CookieEnum } from '../data/enums.js'
 export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermission, setReadmode, pefObject, jumpToPage, setJumpToPage }) {
 
   const [pages, setPages] = useState([]);
-  const [maxPageIndex, setMaxPageIndex] = useState(0);
   const [bookView, setBookView] = useState(ViewModeEnum.BRAILLE_VIEW)
+  const [maxPageIndex, setMaxPageIndex] = useState(0);
 
   useDocumentTitle(pefObject.metaData.titel);
 
@@ -25,7 +25,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
   }
 
   function handleNextPage() {
-    if (jumpToPage < maxPageIndex-1) {
+    if (jumpToPage < maxPageIndex - 1) {
       setJumpToPage(jumpToPage + 1);
     } else {
       alert("Fel: Det finns inga fler sidor i boken.");
@@ -45,7 +45,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
       if (index === 0) {
         alert('Du är redan på den första sidan.')
       } else {
-        alert(`Du är redan på sidan nummer ${index+1}.`)
+        alert(`Du är redan på sidan nummer ${index + 1}.`)
       }
     } else {
       setJumpToPage(index)
@@ -76,7 +76,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
   function renderPages() {
     const pages = [];
-    let pageIndex = 1;
+    let pageIndex = 0;
 
     const volumes = pefObject.bodyData.volumes;
     for (let i = 0; i < volumes.length; i++) {
@@ -92,40 +92,40 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
               k = manipulatePageIndexToRemoveUnnecessaryPages(sectionPages, k);
               const page = sectionPages[k]
               const thisPageIndex = pageIndex
-              pageIndex++;
 
-              const pageElement = page && (
+              const pageElement = (page && page.rows) && (
                 <div key={`page-${thisPageIndex}`} onClick={() => null}>
                   <h3 id={`page-${thisPageIndex}`} className="font-black">
-                    Sida {thisPageIndex}
+                    Sida {thisPageIndex+1}
                   </h3>
 
-                  {page && page.rows &&
-                    page.rows.map((row, l) => (
-                      <div key={`${i}-${j}-${k}-${l}`}>
-                        <span
-                          id={`row-${i}-${j}-${k}-${l}`}
-                          onClick={() => handleClickRow(i, j, k, l)}
-                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
-                          {(bookView === ViewModeEnum.NORMAL_VIEW) ?
-                            brailleTranslator(filterUnnecessarySentence(row))
-                            :
-                            filterUnnecessarySentence(row)
-                            }
-                        </span>
-                      </div>
-                    ))}
+                  {page.rows.map((row, l) => (
+                    <div key={`${i}-${j}-${k}-${l}`}>
+                      <span
+                        id={`row-${i}-${j}-${k}-${l}`}
+                        onClick={() => handleClickRow(i, j, k, l)}
+                        className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
+                        {(bookView === ViewModeEnum.NORMAL_VIEW) ?
+                          brailleTranslator(filterUnnecessarySentence(row))
+                          :
+                          filterUnnecessarySentence(row)
+                        }
+                      </span>
+                    </div>
+                  ))}
                 </div>
               );
+
               if (pageElement) {
                 pages.push(pageElement);
+                pageIndex++;
               }
             }
           }
         }
       }
     }
-    setMaxPageIndex(pageIndex-1) // remove the last increase
+    setMaxPageIndex(pageIndex)
     return pages;
   };
 
@@ -173,7 +173,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
         <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
           <div className="w-96 h-full">
-            {showBookPage(jumpToPage) /* this is an array */ }
+            {showBookPage(jumpToPage) /* this is an array */}
           </div>
         </div>
 
@@ -203,7 +203,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
           <form onSubmit={(e) => {
             e.preventDefault();
             const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
-            handleSetCurrentPage(pageNumber-1);
+            handleSetCurrentPage(pageNumber - 1);
           }}>
             <label htmlFor="goToPage">Ange ett sidnummer: </label>
             <input className="border rounded" id="goToPage" type="number" min="1" max={maxPageIndex} required />

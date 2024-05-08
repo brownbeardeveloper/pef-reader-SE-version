@@ -9,15 +9,10 @@ import { ViewModeEnum, CookieEnum } from "../data/enums.js";
 export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowIndex, setReadmode, pefObject }) {
 
   const [bookView, setBookView] = useState(ViewModeEnum.BRAILLE_VIEW)
-  const [startPageIndex, setStartPageIndex] = useState(1)
-  let maxPageIndex
+  let maxPageIndex = 0
 
   useDocumentTitle(pefObject.metaData.titel)
 
-  useEffect(() => {
-    const firstPageIndex = findFirstPage()
-    if(firstPageIndex !== undefined) setStartPageIndex(firstPageIndex)
-  }, []); 
 
   function handleShowLatestSavedPositionBtn() {
     if (savedRowIndex) {
@@ -77,15 +72,15 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
     for (let index = 1; index < maxPageIndex; index++) {
       const pageId = `page-${index}`
       const element = document.getElementById(pageId)
-      
-      if(element) { return index }
+
+      if (element) { return index }
     }
     alert('Ingen första sida kunde hittades.')
   }
 
   const renderPages = () => {
     const pages = [];
-    let pageIndex = 1;
+    let pageIndex = 0;
 
     const volumes = pefObject.bodyData.volumes;
     for (let i = 0; i < volumes.length; i++) {
@@ -101,41 +96,39 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
               k = manipulatePageIndexToRemoveUnnecessaryPages(sectionPages, k);
               const page = sectionPages[k]
               const thisPageIndex = pageIndex;
-              pageIndex++;
 
-              const pageElement = page && (
+              const pageElement = (page && page.rows) && (
                 <div key={`page-${thisPageIndex}`} onClick={() => null}>
                   <h3 id={`page-${thisPageIndex}`} className="font-black">
-                    Sida {thisPageIndex}
+                    Sida {thisPageIndex+1}
                   </h3>
 
-                  {page && page.rows &&
-                    <div className="flex flex-wrap">
-
-                      {page.rows.map((row, l) => (
-                        <span key={`row-${i}-${j}-${k}-${l}`} id={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}
-                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
-                          {(bookView === ViewModeEnum.NORMAL_VIEW) ?
-                            brailleTranslator(filterUnnecessarySentence(row))
-                            :
-                            filterUnnecessarySentence(row)
-                          }
-                          {<span>&nbsp;</span> /* fix this issue later */} 
-                        </span>
-                      ))}
-                    </div>
-                  }
+                  <div className="flex flex-wrap">
+                    {page.rows.map((row, l) => (
+                      <span key={`row-${i}-${j}-${k}-${l}`} id={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}
+                        className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
+                        {(bookView === ViewModeEnum.NORMAL_VIEW) ?
+                          brailleTranslator(filterUnnecessarySentence(row))
+                          :
+                          filterUnnecessarySentence(row)
+                        }
+                        {<span>&nbsp;</span> /* fix this issue later */}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               );
+
               if (pageElement) {
                 pages.push(pageElement);
+                pageIndex++;
               }
             }
           }
         }
       }
     }
-    maxPageIndex = pageIndex -1 // remove the last increase
+    maxPageIndex = pageIndex
     return pages;
   };
 
@@ -172,15 +165,17 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
           }} className="button">
             Förstasidan
           </button>
+
           <form onSubmit={(e) => {
             e.preventDefault();
-            const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
+            const pageNumber = parseInt(e.target.elements.goToPage.value, 10) -1;
             handleScrollToPageIndex(pageNumber);
           }}>
             <label htmlFor="goToPage">Ange ett sidnummer: </label>
-            <input className="border rounded" id="goToPage" type="number" min={startPageIndex} max={maxPageIndex} required />
+            <input className="border rounded" id="goToPage" type="number" min="1" max={maxPageIndex} required />
             <button type="submit" className="button">Gå till</button>
           </form>
+
           <fieldset>
             <legend>Växla vy</legend>
             <div className="flex flex-row justify-center align-center">
