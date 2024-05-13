@@ -114,7 +114,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
 
                       {page.rows.map((row, l) => (
                         <span key={`row-${i}-${j}-${k}-${l}`} id={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}
-                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300" : ""}>
+                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300 rounded-sm" : ""}>
                           {(bookView === ViewModeEnum.NORMAL_VIEW) ?
                             brailleTranslator(filterUnnecessarySentence(row))
                             :
