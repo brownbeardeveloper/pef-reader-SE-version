@@ -5,8 +5,9 @@ import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 import { ViewModeEnum, CookieEnum } from '../data/enums.js'
+import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
 
-export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermission, setReadmode, pefObject, jumpToPage, setJumpToPage }) {
+export default function ReadModePageByPage({ savedRowIndex, setSavedRowIndex, cookiePermission, setReadmode, pefObject, jumpToPage, setJumpToPage }) {
 
   const [pages, setPages] = useState([]);
   const [maxPageIndex, setMaxPageIndex] = useState(0);
@@ -24,7 +25,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
     return pages[index];
   }
 
-  function handleNextPage() {
+  function handleNextPageBtn() {
     if (jumpToPage < maxPageIndex-1) {
       setJumpToPage(jumpToPage + 1);
     } else {
@@ -32,11 +33,18 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
     }
   }
 
-  function handlePreviousPage() {
+  function handlePreviousPageBtn() {
     if (jumpToPage > 0) {
       setJumpToPage(jumpToPage - 1);
     } else {
       alert("Fel: Du kan inte gå längre bakåt i den här boken.");
+    }
+  }
+
+  function handleCountineReadingBtn() {
+    const pageNumber = findPageByRowId(savedRowIndex)
+    if(handleSetCurrentPage(pageNumber)) {
+      CountineReadingVoice()
     }
   }
 
@@ -49,6 +57,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
       }
     } else {
       setJumpToPage(index)
+      return true
     }
   }
 
@@ -68,6 +77,7 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
       element.scrollIntoView({ behavior: "smooth" })
       if (document.activeElement !== element) {
         element.focus();
+        PositionSavedVoice()
       }
     } else {
       console.error('Error: Unable to find the specified element.')
@@ -179,17 +189,14 @@ export default function ReadMode({ savedRowIndex, setSavedRowIndex, cookiePermis
 
         { /* navigator buttons */}
         <div className="flex flex-row align-center justify-around border mt-1 py-5 px-20 rounded-lg bg-slate-100 w-full">
-          <button onClick={handleNextPage} className="button">
+          <button onClick={handleNextPageBtn} className="button">
             Nästa sida
           </button>
-          <button onClick={handlePreviousPage} className="button">
+          <button onClick={handlePreviousPageBtn} className="button">
             Föregående sida
           </button>
 
-          <button onClick={() => {
-            const pageNumber = findPageByRowId(savedRowIndex)
-            handleSetCurrentPage(pageNumber)
-          }}
+          <button onClick={handleCountineReadingBtn}
             className="button">
             Fortsätt läsa
           </button>

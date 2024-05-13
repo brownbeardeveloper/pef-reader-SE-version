@@ -5,8 +5,9 @@ import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 import { ViewModeEnum, CookieEnum } from "../data/enums.js";
+import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
 
-export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowIndex, setReadmode, pefObject }) {
+export default function ReadModeFlow({ cookiePermission, savedRowIndex, setSavedRowIndex, setReadmode, pefObject }) {
 
   const [bookView, setBookView] = useState(ViewModeEnum.BRAILLE_VIEW)
   const [startPageIndex, setStartPageIndex] = useState(1)
@@ -27,6 +28,8 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
       if (element) {
         element.scrollIntoView({ behavior: "smooth" })
         element.focus()
+        CountineReadingVoice()
+
       } else {
         console.error('Error: Unable to find the specified element.')
       }
@@ -51,6 +54,7 @@ export default function ReadMode({ cookiePermission, savedRowIndex, setSavedRowI
       element.scrollIntoView({ behavior: "smooth" })
       if (document.activeElement !== element) {
         element.focus();
+        PositionSavedVoice()
       }
     } else {
       console.error('Error: Unable to find the specified element.')
