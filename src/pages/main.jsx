@@ -10,7 +10,7 @@ export default function Main({ cookiePermission }) {
   const [fileName, setFileName] = useState('ingen fil vald');
   const [viewMode, setViewMode] = useState(false);
   const [howToRead, setHowToRead] = useState(ViewModeEnum.ONE_FLOW);
-  const [savedRowIndex, setSavedRowIndex] = useState(null);
+  const [savedPageIndex, setSavedPageIndex] = useState(null);
   const [jumpToPage, setJumpToPage] = useState(0)
   const navigate = useNavigate();
 
@@ -33,9 +33,7 @@ export default function Main({ cookiePermission }) {
             setFileName={setFileName}
             howToRead={howToRead}
             setHowToRead={setHowToRead}
-            setSavedRowIndex={setSavedRowIndex}
-            jumpToPage={jumpToPage}
-            setJumpToPage={setJumpToPage}
+            setSavedRowIndex={setSavedPageIndex}
           />
       ) : (
         <>
@@ -45,16 +43,16 @@ export default function Main({ cookiePermission }) {
               setReadmode={setViewMode}
               pefObject={pefObject}
               setHowToRead={setHowToRead}
-              savedRowIndex={savedRowIndex}
-              setSavedRowIndex={setSavedRowIndex}
+              savedPageIndex={savedPageIndex}
+              setSavedPageIndex={setSavedPageIndex}
             />
           ) : (
             <ReadModePage
               cookiePermission={cookiePermission}
               setHowToRead={setHowToRead}
               setReadmode={setViewMode}
-              savedRowIndex={savedRowIndex}
-              setSavedRowIndex={setSavedRowIndex}
+              savedPageIndex={savedPageIndex}
+              setSavedPageIndex={setSavedPageIndex}
               pefObject={pefObject}
               jumpToPage={jumpToPage}
               setJumpToPage={setJumpToPage}

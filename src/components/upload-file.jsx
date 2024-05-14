@@ -1,11 +1,11 @@
 import { useState } from "react"
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { ViewModeEnum } from "../data/enums.js"
-import { getLatestRowPositionFromCookieJson } from "../functions/cookieManager.js"
+import { getLatestPagePositionFromCookieJson } from "../functions/cookieManager.js"
 import { TabIndex } from "../data/tab-index.js"
 import brailleIcon from '../media/braille-icon.png';
 
-export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead, jumpToPage, setJumpToPage }) {
+export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
     const [isLoadingFile, setIsLoadingFile] = useState(false);
 
     function handleAddFile(event) {
@@ -44,7 +44,7 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
 
             if (pefObject && pefObject.metaData && pefObject.metaData.identifier && pefObject.metaData.titel) {
 
-                const data = getLatestRowPositionFromCookieJson(pefObject.metaData.identifier);
+                const data = getLatestPagePositionFromCookieJson(pefObject.metaData.identifier);
 
                 if (data) {
                     setSavedRowIndex(data);

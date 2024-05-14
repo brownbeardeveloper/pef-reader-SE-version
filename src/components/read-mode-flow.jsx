@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
-import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
+import { setLatestPagePositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 import { ViewModeEnum, CookieEnum } from "../data/enums.js";
 import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
 
-export default function ReadModeFlow({ cookiePermission, savedRowIndex, setSavedRowIndex, setReadmode, pefObject }) {
+export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSavedPageIndex, setReadmode, pefObject }) {
 
   const [bookView, setBookView] = useState(ViewModeEnum.BRAILLE_VIEW)
   const [startPageIndex, setStartPageIndex] = useState(1)
@@ -17,13 +17,13 @@ export default function ReadModeFlow({ cookiePermission, savedRowIndex, setSaved
 
   useEffect(() => {
     const firstPageIndex = findFirstPage()
-    if(firstPageIndex !== undefined) setStartPageIndex(firstPageIndex)
-  }, []); 
+    if (firstPageIndex !== undefined) setStartPageIndex(firstPageIndex)
+  }, []);
 
   function handleShowLatestSavedPositionBtn() {
-    if (savedRowIndex) {
+    if (savedPageIndex) {
 
-      const element = document.getElementById(savedRowIndex);
+      const element = document.getElementById(savedPageIndex);
 
       if (element) {
         element.scrollIntoView({ behavior: "smooth" })
@@ -38,27 +38,17 @@ export default function ReadModeFlow({ cookiePermission, savedRowIndex, setSaved
     }
   }
 
-  function handleClickRow(i, j, k, l) {
-    const rowId = `row-${i}-${j}-${k}-${l}`;
-    setSavedRowIndex(rowId)
+  function handleClickPage(pageIndex) {
+    const pageId = `page-${pageIndex}`;
+    setSavedPageIndex(pageId)
 
     if (cookiePermission === CookieEnum.ALLOWED) {
-      setLatestRowPositionToCookie(pefObject.metaData.identifier, rowId)
+      setLatestPagePositionToCookie(pefObject.metaData.identifier, pageId)
     } else {
       alert("Din position har sparats, men eftersom cookies inte är tillåtna, kommer positionen inte att sparas när du återvänder till sidan.")
     }
 
-    const element = document.getElementById(rowId);
-
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-      if (document.activeElement !== element) {
-        element.focus();
-        PositionSavedVoice()
-      }
-    } else {
-      console.error('Error: Unable to find the specified element.')
-    }
+    handleScrollToPageIndex(pageIndex)
   }
 
   function handleScrollToPageIndex(index) {
@@ -81,8 +71,8 @@ export default function ReadModeFlow({ cookiePermission, savedRowIndex, setSaved
     for (let index = 1; index < maxPageIndex; index++) {
       const pageId = `page-${index}`
       const element = document.getElementById(pageId)
-      
-      if(element) { return index }
+
+      if (element) { return index }
     }
     alert('Ingen första sida kunde hittades.')
   }
@@ -109,7 +99,10 @@ export default function ReadModeFlow({ cookiePermission, savedRowIndex, setSaved
 
               const pageElement = page && (
                 <div key={`page-${thisPageIndex}`} onClick={() => null}>
-                  <h3 id={`page-${thisPageIndex}`} className="font-black">
+                  <h3 
+                  id={`page-${thisPageIndex}`} 
+                  className={"font-black " + (`page-${thisPageIndex}` === savedPageIndex ? "bg-yellow-300 rounded-sm" : "")}
+                  onClick={() => handleClickPage(thisPageIndex)}>
                     Sida {thisPageIndex}
                   </h3>
 
@@ -117,20 +110,23 @@ export default function ReadModeFlow({ cookiePermission, savedRowIndex, setSaved
                     <div className="flex flex-wrap">
 
                       {page.rows.map((row, l) => (
-                        <span key={`row-${i}-${j}-${k}-${l}`} id={`row-${i}-${j}-${k}-${l}`} onClick={() => handleClickRow(i, j, k, l)}
-                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300 rounded-sm" : ""}>
+                        <span key={`${i}-${j}-${k}-${l}`}>
+
                           {(bookView === ViewModeEnum.NORMAL_VIEW) ?
                             brailleTranslator(filterUnnecessarySentence(row))
                             :
                             filterUnnecessarySentence(row)
                           }
-                          {<span>&nbsp;</span> /* fix this issue later */} 
+
+                          {<span>&nbsp;</span> /* fix this issue later */}
+
                         </span>
                       ))}
                     </div>
                   }
                 </div>
               );
+
               if (pageElement) {
                 pages.push(pageElement);
               }
@@ -139,7 +135,7 @@ export default function ReadModeFlow({ cookiePermission, savedRowIndex, setSaved
         }
       }
     }
-    maxPageIndex = pageIndex -1 // remove the last increase
+    maxPageIndex = pageIndex - 1 // remove the last increase
     return pages;
   };
 
@@ -153,7 +149,7 @@ export default function ReadModeFlow({ cookiePermission, savedRowIndex, setSaved
         <h2 className="ml-8 text-2xl font-bold">Titel: {pefObject.metaData.titel}</h2>
         <p>Författare: {pefObject.metaData.skapare}</p>
 
-        {!savedRowIndex &&
+        {!savedPageIndex &&
           <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
             <span class="block sm:inline">Man kan spara läspositionen genom att klicka på textraden, vilken sedan sparas i cookies.</span>
           </div>
@@ -165,7 +161,7 @@ export default function ReadModeFlow({ cookiePermission, savedRowIndex, setSaved
           </div>
         </div>
 
-        { /* nauigator buttons */}
+        { /* navigator buttons */}
         <div className="flex flex-row align-center justify-around border mt-1 py-5 px-20 rounded-lg bg-slate-100 w-full">
           <button onClick={handleShowLatestSavedPositionBtn}
             className="button">

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
-import { setLatestRowPositionToCookie } from "../functions/cookieManager.js";
+import { setLatestPagePositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 import { ViewModeEnum, CookieEnum } from '../data/enums.js'
 import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
 
-export default function ReadModePageByPage({ savedRowIndex, setSavedRowIndex, cookiePermission, setReadmode, pefObject, jumpToPage, setJumpToPage }) {
+export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, cookiePermission, setReadmode, pefObject, jumpToPage, setJumpToPage }) {
 
   const [pages, setPages] = useState([]);
   const [maxPageIndex, setMaxPageIndex] = useState(0);
@@ -19,14 +19,14 @@ export default function ReadModePageByPage({ savedRowIndex, setSavedRowIndex, co
     const calculatedPages = renderPages();
     setPages(calculatedPages);
     setMaxPageIndex(calculatedPages.length);
-  }, [pefObject, savedRowIndex, bookView]);
+  }, [pefObject, savedPageIndex, bookView]);
 
   function showBookPage(index) {
     return pages[index];
   }
 
   function handleNextPageBtn() {
-    if (jumpToPage < maxPageIndex-1) {
+    if (jumpToPage < maxPageIndex - 1) {
       setJumpToPage(jumpToPage + 1);
     } else {
       alert("Fel: Det finns inga fler sidor i boken.");
@@ -42,8 +42,8 @@ export default function ReadModePageByPage({ savedRowIndex, setSavedRowIndex, co
   }
 
   function handleCountineReadingBtn() {
-    const pageNumber = findPageByRowId(savedRowIndex)
-    if(handleSetCurrentPage(pageNumber)) {
+    const pageNumber = getPageIndex(savedPageIndex)
+    if (handleSetCurrentPage(pageNumber)) {
       CountineReadingVoice()
     }
   }
@@ -53,7 +53,7 @@ export default function ReadModePageByPage({ savedRowIndex, setSavedRowIndex, co
       if (index === 0) {
         alert('Du är redan på den första sidan.')
       } else {
-        alert(`Du är redan på sidan nummer ${index+1}.`)
+        alert(`Du är redan på sidan nummer ${index + 1}.`)
       }
     } else {
       setJumpToPage(index)
@@ -61,17 +61,17 @@ export default function ReadModePageByPage({ savedRowIndex, setSavedRowIndex, co
     }
   }
 
-  function handleClickRow(i, j, k, l) {
-    const rowId = `row-${i}-${j}-${k}-${l}`;
-    setSavedRowIndex(rowId)
+  function handleClickPage(pageIndex) {
+    const pageId = `page-${pageIndex}`;
+    setSavedPageIndex(pageId)
 
     if (cookiePermission === CookieEnum.ALLOWED) {
-      setLatestRowPositionToCookie(pefObject.metaData.identifier, rowId)
+      setLatestPagePositionToCookie(pefObject.metaData.identifier, pageId)
     } else {
       alert("Din position har sparats, men eftersom cookies inte är tillåtna, kommer positionen inte att sparas när du lämnar sidan.")
     }
 
-    const element = document.getElementById(rowId);
+    const element = document.getElementById(pageId);
 
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
@@ -105,23 +105,23 @@ export default function ReadModePageByPage({ savedRowIndex, setSavedRowIndex, co
               pageIndex++;
 
               const pageElement = page && (
-                <div key={`page-${thisPageIndex}`} onClick={() => null}>
-                  <h3 id={`page-${thisPageIndex}`} className="font-black">
+                <div key={`${i}-${j}-${k}`} onClick={() => null}>
+                  <h3 id={`page-${thisPageIndex}`}
+                    className={"font-black" + ((pageIndex - 1) === savedPageIndex ? " bg-yellow-300 rounded-sm" : "")}
+                    onClick={() => handleClickPage(thisPageIndex)}
+                  >
                     Sida {thisPageIndex}
                   </h3>
 
                   {page && page.rows &&
                     page.rows.map((row, l) => (
                       <div key={`${i}-${j}-${k}-${l}`}>
-                        <span
-                          id={`row-${i}-${j}-${k}-${l}`}
-                          onClick={() => handleClickRow(i, j, k, l)}
-                          className={(`row-${i}-${j}-${k}-${l}` === savedRowIndex) ? "bg-yellow-300 rounded-sm" : ""}>
+                        <span>
                           {(bookView === ViewModeEnum.NORMAL_VIEW) ?
                             brailleTranslator(filterUnnecessarySentence(row))
                             :
                             filterUnnecessarySentence(row)
-                            }
+                          }
                         </span>
                       </div>
                     ))}
@@ -135,34 +135,12 @@ export default function ReadModePageByPage({ savedRowIndex, setSavedRowIndex, co
         }
       }
     }
-    setMaxPageIndex(pageIndex-1) // remove the last increase
+    setMaxPageIndex(pageIndex - 1) // remove the last increase
     return pages;
   };
 
-  function findPageByRowId(rowId) {
-    let pageIndex
-    let rowFound = false;
-
-    /* pages[] contain both page and rows data */
-    for (let [value, key] of pages.entries()) {
-      key.props.children.forEach(element => {
-
-        if (!rowFound && Array.isArray(element)) { // Retrieve only the rows
-          element.forEach(row => {
-
-            if (!rowFound && row.props.children.props.id === rowId) {
-              pageIndex = value;
-              rowFound = true;
-            }
-          });
-        }
-      });
-
-      if (rowFound) { // break 
-        break;
-      }
-    }
-    return pageIndex
+  function getPageIndex(pageId) {
+    return pageId.replace("page-", "") 
   }
 
   return (
@@ -175,7 +153,7 @@ export default function ReadModePageByPage({ savedRowIndex, setSavedRowIndex, co
         <h2 className="ml-8 text-2xl font-bold">Titel: {pefObject.metaData.titel}</h2>
         <p className="mb-5">Författare: {pefObject.metaData.skapare}</p>
 
-        {!savedRowIndex &&
+        {!savedPageIndex &&
           <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
             <span class="block sm:inline">Man kan spara läspositionen genom att klicka på textraden, vilken sedan sparas i cookies.</span>
           </div>
@@ -183,7 +161,7 @@ export default function ReadModePageByPage({ savedRowIndex, setSavedRowIndex, co
 
         <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
           <div className="w-96 h-full">
-            {showBookPage(jumpToPage) /* this is an array */ }
+            {showBookPage(jumpToPage) /* this is an array */}
           </div>
         </div>
 
@@ -210,7 +188,7 @@ export default function ReadModePageByPage({ savedRowIndex, setSavedRowIndex, co
           <form onSubmit={(e) => {
             e.preventDefault();
             const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
-            handleSetCurrentPage(pageNumber-1);
+            handleSetCurrentPage(pageNumber - 1);
           }}>
             <label htmlFor="goToPage">Ange ett sidnummer: </label>
             <input className="border rounded" id="goToPage" type="number" min="1" max={maxPageIndex} required />

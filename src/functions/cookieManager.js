@@ -1,15 +1,16 @@
 import Cookies from 'js-cookie';
+import { CookieEnum } from '../data/enums';
 
-export function setLatestRowPositionToCookie(bookId, rowId) {
+export function setLatestPagePositionToCookie(bookId, pageId) {
     try {
-        const cookieObj = JSON.stringify(rowId);
+        const cookieObj = JSON.stringify(pageId);
         Cookies.set(`${bookId}-latest-position`, cookieObj, { expires: 365 });
     } catch (error) {
         console.error('Error setting cookie:', error);
     }
 }
 
-export function getLatestRowPositionFromCookieJson(bookId) {
+export function getLatestPagePositionFromCookieJson(bookId) {
     try {
         const cookieObj = Cookies.get(`${bookId}-latest-position`);
         if (cookieObj) {
@@ -26,9 +27,9 @@ export function getLatestRowPositionFromCookieJson(bookId) {
 export function setAllowCookie(boolean) {
     try {
         if(boolean) {
-            Cookies.set("allowCookie", "allowed", { expires: 365 });
+            Cookies.set("allowCookie", CookieEnum.ALLOWED, { expires: 365 });
         } else {
-            Cookies.set("allowCookie", "denied", { expires: 1 });
+            Cookies.set("allowCookie", CookieEnum.DENIED, { expires: 1 });
         }
     } catch (error) {
         console.error('Error setting cookie:', error);

@@ -13,6 +13,7 @@ This repository contains code for a tool that can convert files in Portable Embo
 
 ### 2.0.1 (Latest Version)
 - Added voices
+- Changed from saving row position to autosaving the page position
 
 ### 2.0.0
 - The first demo
