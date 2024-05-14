@@ -11,7 +11,6 @@ export default function Main({ cookiePermission }) {
   const [viewMode, setViewMode] = useState(false);
   const [howToRead, setHowToRead] = useState(ViewModeEnum.ONE_FLOW);
   const [savedPageIndex, setSavedPageIndex] = useState(null);
-  const [jumpToPage, setJumpToPage] = useState(0)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,8 +53,6 @@ export default function Main({ cookiePermission }) {
               savedPageIndex={savedPageIndex}
               setSavedPageIndex={setSavedPageIndex}
               pefObject={pefObject}
-              jumpToPage={jumpToPage}
-              setJumpToPage={setJumpToPage}
             />
           )}
         </>

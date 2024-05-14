@@ -12,11 +12,10 @@ This repository contains code for a tool that can convert files in Portable Embo
 ## Versions
 
 ### 2.0.1 (Latest Version)
-- Added voices
-- Changed from saving row position to autosaving the page position
+  - Added voices
+  - Changed from saving the row position by clicking on it to automatically saving the page position
 
 ### 2.0.0
-- The first demo
   - Implemented as a React app
 
 ### 1.0.0 

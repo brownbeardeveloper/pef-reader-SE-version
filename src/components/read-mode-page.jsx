@@ -7,35 +7,30 @@ import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filter
 import { ViewModeEnum, CookieEnum } from '../data/enums.js'
 import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
 
-export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, cookiePermission, setReadmode, pefObject, jumpToPage, setJumpToPage }) {
-
+export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, cookiePermission, setReadmode, pefObject }) {
   const [pages, setPages] = useState([]);
   const [maxPageIndex, setMaxPageIndex] = useState(0);
   const [bookView, setBookView] = useState(ViewModeEnum.BRAILLE_VIEW)
+  const [currentPageIndex, setCurrentPageIndex] = useState(0)
+  const [firstPageIndex, setFirstPageIndex] = useState(0)
 
   useDocumentTitle(pefObject.metaData.titel);
 
   useEffect(() => {
-    const calculatedPages = renderPages();
-    setPages(calculatedPages);
-    setMaxPageIndex(calculatedPages.length);
-  }, [pefObject, savedPageIndex, bookView]);
-
-  function showBookPage(index) {
-    return pages[index];
-  }
+    savePagesFromPefObject();
+  }, [pefObject, bookView]);
 
   function handleNextPageBtn() {
-    if (jumpToPage < maxPageIndex - 1) {
-      setJumpToPage(jumpToPage + 1);
+    if (currentPageIndex < maxPageIndex) {
+      setCurrentPageIndex(currentPageIndex + 1);
     } else {
       alert("Fel: Det finns inga fler sidor i boken.");
     }
   }
 
   function handlePreviousPageBtn() {
-    if (jumpToPage > 0) {
-      setJumpToPage(jumpToPage - 1);
+    if (currentPageIndex > firstPageIndex) {
+      setCurrentPageIndex(currentPageIndex - 1);
     } else {
       alert("Fel: Du kan inte gå längre bakåt i den här boken.");
     }
@@ -49,19 +44,20 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
   }
 
   function handleSetCurrentPage(index) {
-    if (jumpToPage === index) {
+    if (currentPageIndex === index) {
       if (index === 0) {
         alert('Du är redan på den första sidan.')
       } else {
-        alert(`Du är redan på sidan nummer ${index + 1}.`)
+        alert(`Du är redan på sidan nummer ${index}.`)
       }
     } else {
-      setJumpToPage(index)
+      setCurrentPageIndex(index)
       return true
     }
   }
 
   function handleClickPage(pageIndex) {
+    console.log(pageIndex) // remove
     const pageId = `page-${pageIndex}`;
     setSavedPageIndex(pageId)
 
@@ -84,8 +80,17 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
     }
   }
 
-  function renderPages() {
-    const pages = [];
+  function getPageIndex(pageId) {
+    return pageId.replace("page-", "")
+  }
+
+  function showCurrentPage(pageIndex) {
+    return pages[pageIndex]
+  }
+
+  function savePagesFromPefObject() {
+    const pagesFromPefObject = [];
+    let firstPageIndex;
     let pageIndex = 1;
 
     const volumes = pefObject.bodyData.volumes;
@@ -107,7 +112,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
               const pageElement = page && (
                 <div key={`${i}-${j}-${k}`} onClick={() => null}>
                   <h3 id={`page-${thisPageIndex}`}
-                    className={"font-black" + ((pageIndex - 1) === savedPageIndex ? " bg-yellow-300 rounded-sm" : "")}
+                    className={"font-black" + (`page-${thisPageIndex}` === savedPageIndex ? " bg-yellow-300 rounded-sm" : "")}
                     onClick={() => handleClickPage(thisPageIndex)}
                   >
                     Sida {thisPageIndex}
@@ -127,21 +132,25 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                     ))}
                 </div>
               );
-              if (pageElement) {
-                pages.push(pageElement);
+
+              if (!firstPageIndex && pageElement) {
+                firstPageIndex = thisPageIndex
+                pagesFromPefObject[thisPageIndex] = pageElement;
+              } else if (pageElement) {
+                pagesFromPefObject[thisPageIndex] = pageElement;
               }
             }
           }
         }
       }
     }
-    setMaxPageIndex(pageIndex - 1) // remove the last increase
-    return pages;
+
+    setPages(pagesFromPefObject); // save into pages array
+    setFirstPageIndex(firstPageIndex); // set start page index
+    setMaxPageIndex(pageIndex - 1); // set max page index
+    setCurrentPageIndex(firstPageIndex) // set first page as default
   };
 
-  function getPageIndex(pageId) {
-    return pageId.replace("page-", "") 
-  }
 
   return (
     <div className="flex flex-col pt-5 px-10 w-full">
@@ -161,26 +170,26 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
         <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
           <div className="w-96 h-full">
-            {showBookPage(jumpToPage) /* this is an array */}
+            {showCurrentPage(currentPageIndex) /* this is an array */}
           </div>
         </div>
 
         { /* navigator buttons */}
         <div className="flex flex-row align-center justify-around border mt-1 py-5 px-20 rounded-lg bg-slate-100 w-full">
-          <button onClick={handleNextPageBtn} className="button">
+          <button onClick={() => handleNextPageBtn()} className="button">
             Nästa sida
           </button>
-          <button onClick={handlePreviousPageBtn} className="button">
+          <button onClick={() => handlePreviousPageBtn()} className="button">
             Föregående sida
           </button>
 
-          <button onClick={handleCountineReadingBtn}
+          <button onClick={() => handleCountineReadingBtn()}
             className="button">
             Fortsätt läsa
           </button>
 
           <button onClick={() => {
-            handleSetCurrentPage(0)
+            handleSetCurrentPage(firstPageIndex)
           }} className="button">
             Förstasidan
           </button>
@@ -188,10 +197,10 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
           <form onSubmit={(e) => {
             e.preventDefault();
             const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
-            handleSetCurrentPage(pageNumber - 1);
+            handleSetCurrentPage(pageNumber);
           }}>
             <label htmlFor="goToPage">Ange ett sidnummer: </label>
-            <input className="border rounded" id="goToPage" type="number" min="1" max={maxPageIndex} required />
+            <input className="border rounded" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
             <button type="submit" className="button">Gå till</button>
           </form>
 

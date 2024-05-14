@@ -3,12 +3,12 @@ import { doesThisPageContainLessThanQuarterText } from "./translator/skipFirstPa
 export function manipulatePageIndexToRemoveUnnecessaryPages(pages, pageIndex) {
 
     const endOfPageToSkipRegEx = new RegExp("[⠀,⠒]+$")
-    const textToSkip = ["⠞⠗⠽⠉⠅⠥⠏⠏⠛⠊⠋⠞⠑⠗", "⠃⠁⠅⠎⠊⠙⠑⠎⠞⠑⠭⠞"];
+    const textToSkip = ["⠞⠗⠽⠉⠅⠥⠏⠏⠛⠊⠋⠞⠑⠗", "⠃⠁⠅⠎⠊⠙⠑⠎⠞⠑⠭⠞"]; // please add comment here 
     const isFirstRowSkippable = textToSkip.some(text => pages[pageIndex].rows[0].includes(text));
 
     /* Remove the first pages in every volume */
     if (pageIndex === 0 && doesThisPageContainLessThanQuarterText(pages[pageIndex])) {
-        //console.log("This page is removed", pages[pageIndex])
+        // console.log("This page is removed", pages[pageIndex])
         pageIndex++
     }
 

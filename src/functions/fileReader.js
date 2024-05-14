@@ -80,42 +80,35 @@ export function getBodyData(xmlDoc) {
         const bodyData = {
             volumes: []
         };
-
         volumes.forEach((volume) => {
             const sections = volume.querySelectorAll("section");
             const volumeObj = {
                 sections: []
             };
-
             sections.forEach((section) => {
                 const pages = section.querySelectorAll("page");
                 const sectionObj = {
                     pages: []
                 };
-
                 pages.forEach((page) => {
                     const rows = page.querySelectorAll("row");
                     const pageObj = {
                         rows: []
                     };
-
                     rows.forEach(row => {
                         const trimmedContent = row.textContent.trim();
                         if (trimmedContent !== "") {
                             pageObj.rows.push(trimmedContent);
                         }
                     });
-
                     if (pageObj.rows.length > 0) {
                         sectionObj.pages.push(pageObj);
                     }
                 });
-
                 if (sectionObj.pages.length > 0) {
                     volumeObj.sections.push(sectionObj);
                 }
             });
-
             bodyData.volumes.push(volumeObj);
         });
 
