@@ -33,7 +33,7 @@ export default function brailleTranslator(braillePhrase) {
             continue
         }
 
-        if (i + 1 < braillePhrase.length) { // If bigger than the current phrase's length
+        if (i + 1 < braillePhrase.length) { // If longer than the current phrase's length
 
             //Check for next character
             let nextChar = braillePhrase.charAt(i + 1)
@@ -43,7 +43,7 @@ export default function brailleTranslator(braillePhrase) {
 
             if (isIgnoreSymbol(doubleSymbols)) {
                 newPhrase += doubleSymbols
-                i++
+                i++ // should this be +2 ? 
                 continue
             }
 
@@ -52,7 +52,7 @@ export default function brailleTranslator(braillePhrase) {
 
             if (newChar) {
                 newPhrase += newChar
-                i++
+                i++ // should this be +2 ? 
                 continue
             }
         }
@@ -62,12 +62,12 @@ export default function brailleTranslator(braillePhrase) {
             continue
         }
 
-        if ((newChar = braillePhraseToUpperCaseCharacters(braillePhrase, i))) {
+        if ((newChar = braillePhraseToUpperCaseCharacters(braillePhrase, i))) { // there's an error 
             newPhrase += newChar
             i++
 
             if (newChar.length > 1) {
-                i += newChar.length
+                i += newChar.length +1 // added +1 and it seems work fine but not 100 precent then check it again later
             }
 
             continue

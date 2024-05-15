@@ -28,9 +28,11 @@ export default function braillePhraseToUpperCaseCharacters(braillePhrase, curren
 
             const convertedChar = brailleCharToLetter(braillePhrase.charAt(i));
 
-            if (!convertedChar) break;
-
-            stringBuilder += convertedChar;
+            if (!convertedChar) {
+                break;
+            } else {
+                stringBuilder += convertedChar;
+            }
         }
         return stringBuilder.toUpperCase();
     }
@@ -42,7 +44,9 @@ export default function braillePhraseToUpperCaseCharacters(braillePhrase, curren
         const nextChar = braillePhrase.charAt(i + 1);
         let charPlaceholder;
 
-        if (currentChar === stopSign) { break; }
+        if (currentChar === stopSign) { 
+            break; 
+        }
 
         charPlaceholder = ((currentChar === blankSign) ? ' ' : undefined ) ||
             brailleCharToLetter(currentChar) ||

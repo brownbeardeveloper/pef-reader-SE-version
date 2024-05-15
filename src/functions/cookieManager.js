@@ -1,20 +1,22 @@
 import Cookies from 'js-cookie';
 import { CookieEnum } from '../data/enums';
 
-export function setLatestPagePositionToCookie(bookId, pageId) {
+export function setLatestPageIndexToCookie(bookId, pageIndex) {
     try {
-        const cookieObj = JSON.stringify(pageId);
-        Cookies.set(`${bookId}-latest-position`, cookieObj, { expires: 365 });
+        const pageId = `page-${pageIndex}` 
+        const cookieJson = JSON.stringify(pageId);
+        Cookies.set(`${bookId}-latest-position`, cookieJson, { expires: 365 });
     } catch (error) {
         console.error('Error setting cookie:', error);
     }
 }
 
-export function getLatestPagePositionFromCookieJson(bookId) {
+export function getLatestPageIndexFromCookieJson(bookId) {
     try {
-        const cookieObj = Cookies.get(`${bookId}-latest-position`);
-        if (cookieObj) {
-            return JSON.parse(cookieObj);
+        const cookieJson = Cookies.get(`${bookId}-latest-position`);
+        if (cookieJson) {
+            const cookieJsonToStr = JSON.parse(cookieJson)
+            return cookieJsonToStr.replace("page-", "")
         } else {
             return null;
         }

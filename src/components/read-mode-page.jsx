@@ -1,28 +1,32 @@
 import React, { useEffect, useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
-import { setLatestPagePositionToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 import { ViewModeEnum, CookieEnum } from '../data/enums.js'
-import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
+// import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
 
-export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, cookiePermission, setReadmode, pefObject }) {
+export default function ReadModePageByPage({ currentPageIndex, setCurrentPageIndex, cookiePermission, setReadmode, pefObject }) {
   const [pages, setPages] = useState([]);
   const [maxPageIndex, setMaxPageIndex] = useState(0);
   const [bookView, setBookView] = useState(ViewModeEnum.BRAILLE_VIEW)
-  const [currentPageIndex, setCurrentPageIndex] = useState(0)
   const [firstPageIndex, setFirstPageIndex] = useState(0)
+  const [autoSave, setAutoSave] = useState(true)
 
   useDocumentTitle(pefObject.metaData.titel);
 
-  useEffect(() => {
+  useEffect(() => { // render pagewhen book view or pefObj changes 
     savePagesFromPefObject();
   }, [pefObject, bookView]);
 
+  useEffect(() => { // update saved page index
+    setSavedPageIndex(currentPageIndex)
+  }, [currentPageIndex])
+
+
   function handleNextPageBtn() {
     if (currentPageIndex < maxPageIndex) {
-      setCurrentPageIndex(currentPageIndex + 1);
+      setCurrentPageIndex(currentPageIndex +1);
     } else {
       alert("Fel: Det finns inga fler sidor i boken.");
     }
@@ -30,16 +34,9 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
   function handlePreviousPageBtn() {
     if (currentPageIndex > firstPageIndex) {
-      setCurrentPageIndex(currentPageIndex - 1);
+      setCurrentPageIndex(currentPageIndex -1);
     } else {
       alert("Fel: Du kan inte gå längre bakåt i den här boken.");
-    }
-  }
-
-  function handleCountineReadingBtn() {
-    const pageNumber = getPageIndex(savedPageIndex)
-    if (handleSetCurrentPage(pageNumber)) {
-      CountineReadingVoice()
     }
   }
 
@@ -48,13 +45,15 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
       if (index === 0) {
         alert('Du är redan på den första sidan.')
       } else {
-        alert(`Du är redan på sidan nummer ${index}.`)
+        alert(`Du är redan på sidan ${index}.`)
       }
     } else {
       setCurrentPageIndex(index)
       return true
     }
   }
+
+  /*
 
   function handleClickPage(pageIndex) {
     console.log(pageIndex) // remove
@@ -79,6 +78,8 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
       console.error('Error: Unable to find the specified element.')
     }
   }
+
+  */
 
   function getPageIndex(pageId) {
     return pageId.replace("page-", "")
@@ -112,8 +113,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
               const pageElement = page && (
                 <div key={`${i}-${j}-${k}`} onClick={() => null}>
                   <h3 id={`page-${thisPageIndex}`}
-                    className={"font-black" + (`page-${thisPageIndex}` === savedPageIndex ? " bg-yellow-300 rounded-sm" : "")}
-                    onClick={() => handleClickPage(thisPageIndex)}
+                    className={"font-black"}
                   >
                     Sida {thisPageIndex}
                   </h3>
@@ -158,13 +158,37 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
         Tillbaka till startsida
       </button>
 
+      <fieldset>
+            <legend>Autosave</legend>
+              <input type="radio"
+                id="autosave-radio-on"
+                name="autosave"
+                className="m-1"
+                value="ON"
+                checked={autoSave === true}
+                onChange={() => setAutoSave(true)}
+              />
+              <label htmlFor="autosave-radio-on">Påslagen</label>
+              <input type="radio"
+                id="autosave-radio-off"
+                name="autosave"
+                className="m-1"
+                value="BRAILLE"
+                checked={autoSave === false}
+                onChange={() => setAutoSave(false)}
+              />
+              <label htmlFor="autosave-radio-off">Avslagen</label>
+          </fieldset>
+
+
       <div className="flex flex-col justify-start items-center h-screen mt-20">
         <h2 className="ml-8 text-2xl font-bold">Titel: {pefObject.metaData.titel}</h2>
         <p className="mb-5">Författare: {pefObject.metaData.skapare}</p>
 
-        {!savedPageIndex &&
+        {!autoSave &&
           <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
-            <span class="block sm:inline">Man kan spara läspositionen genom att klicka på textraden, vilken sedan sparas i cookies.</span>
+            <span class="block sm:inline">Om du aktiverar radioknappen för autosave, kommer din position att sparas varje gång du byter sida.
+            </span>
           </div>
         }
 
@@ -181,11 +205,6 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
           </button>
           <button onClick={() => handlePreviousPageBtn()} className="button">
             Föregående sida
-          </button>
-
-          <button onClick={() => handleCountineReadingBtn()}
-            className="button">
-            Fortsätt läsa
           </button>
 
           <button onClick={() => {
