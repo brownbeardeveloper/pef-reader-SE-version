@@ -1,11 +1,10 @@
 import { useState } from "react"
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
-import { ViewModeEnum } from "../data/enums.js"
-import { getLatestPagePositionFromCookieJson } from "../functions/cookieManager.js"
+import { UnitModeEnum } from "../data/enums.js"
 import { TabIndex } from "../data/tab-index.js"
 import brailleIcon from '../media/braille-icon.png';
 
-export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
+export default function UploadFile({ setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
     const [isLoadingFile, setIsLoadingFile] = useState(false);
 
     function handleAddFile(event) {
@@ -42,18 +41,6 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
         if (pefObject) {
             setReadmode(true); // IMPORTANT: Swapping this component to read mode    
 
-            if (pefObject && pefObject.metaData && pefObject.metaData.identifier && pefObject.metaData.titel) {
-
-                const data = getLatestPagePositionFromCookieJson(pefObject.metaData.identifier);
-
-                if (data) {
-                    setSavedRowIndex(data);
-                } else {
-                    console.error('There is no cookie.');
-                }
-            } else {
-                console.error('pefObject.metaData.identifier is undefined.');
-            }
         } else {
             alert('Fel: Lägg först till en PEF-fil innan du försöker läsa boken.');
         }
@@ -113,8 +100,8 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                         value="ONE_FLOW"
                         className="m-1"
                         tabIndex={TabIndex.RADIO_FLOW_TEXT}
-                        checked={howToRead === ViewModeEnum.ONE_FLOW}
-                        onChange={() => setHowToRead(ViewModeEnum.ONE_FLOW)}
+                        checked={howToRead === UnitModeEnum.ONE_FLOW}
+                        onChange={() => setHowToRead(UnitModeEnum.ONE_FLOW)}
                     />
                     <label htmlFor="oneFlow" className="ml-1 mr-10">
                         Löpande text
@@ -127,44 +114,13 @@ export default function UploadFile({ setSavedRowIndex, setReadmode, pefObject, s
                         value="PAGE_BY_PAGE"
                         className="m-1"
                         tabIndex={TabIndex.RADIO_BY_PAGE_TEXT}
-                        checked={howToRead === ViewModeEnum.PAGE_BY_PAGE}
-                        onChange={() => setHowToRead(ViewModeEnum.PAGE_BY_PAGE)}
+                        checked={howToRead === UnitModeEnum.PAGE_BY_PAGE}
+                        onChange={() => setHowToRead(UnitModeEnum.PAGE_BY_PAGE)}
                     />
                     <label htmlFor="byPage" className="ml-1">
                         Sida för sida
                     </label>
                 </div>
-
-                {/* remove this below later...
-                {howToRead === ViewModeEnum.PAGE_BY_PAGE && (
-                    <div className="">
-                        <label htmlFor="pageNumber">Hoppa till sida: </label>
-                        <input
-                            type="number"
-                            id="pageNumber"
-                            name="pageNumber"
-                            min="1"
-                            max="100000"
-                            pattern="[0-9]*"
-                            className="border rounded"
-                            placeholder={jumpToPage + 1}
-                            onChange={(e) => {
-                                setJumpToPage(parseInt(e.target.value, 10) - 1);
-                            }}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    e.preventDefault();
-                                    const pageIndex = parseInt(e.target.value, 10);
-                                    if (!isNaN(pageIndex)) {
-                                        setJumpToPage(pageIndex - 1);
-                                        HandleSwapToReadMode();
-                                    }
-                                }
-                            }}
-                        />
-                    </div>
-                )} */}
-
             </fieldset>
 
             <div className="inline-block">

@@ -12,12 +12,20 @@ This repository contains code for a tool that can convert files in Portable Embo
 ## Versions
 
 ### 2.0.1 (Latest Version)
-  - Added voices
-  - Changed from saving the row position by clicking on it to automatically saving the page position
+  - Added voices.
+  - Changed from saving the row position by clicking on it to automatically saving the page position.
 
 ### 2.0.0
-  - Implemented as a React app
-
+  - Implemented as a React app.
+  - Added Braille and black text views.
+  - Implemented saving row position using cookies by book's ID.
+  - Added "Instructor" and "Cookie" pages.
+  - Enabled navigation with the tab key.
+  
 ### 1.0.0 
 - Initial release
-  - Project created using pure JavaScript, HTML, and CSS
+  - Project created using pure JavaScript, HTML, and CSS.
+
+
+## To-Do 
+  - Set focus on the page header index when changing the page index.

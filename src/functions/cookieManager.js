@@ -11,12 +11,13 @@ export function setLatestPageIndexToCookie(bookId, pageIndex) {
     }
 }
 
-export function getLatestPageIndexFromCookieJson(bookId) {
+export function getLatestPageIndexFromCookieInt(bookId) {
     try {
         const cookieJson = Cookies.get(`${bookId}-latest-position`);
         if (cookieJson) {
             const cookieJsonToStr = JSON.parse(cookieJson)
-            return cookieJsonToStr.replace("page-", "")
+            const pageIndexStr = cookieJsonToStr.replace("page-", "")
+            return parseInt(pageIndexStr)
         } else {
             return null;
         }

@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
-import { setLatestPagePositionToCookie } from "../functions/cookieManager.js";
+import { setLatestPageIndexToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
-import { ViewModeEnum, CookieEnum } from "../data/enums.js";
+import { FormatModeEnum, CookieEnum } from "../data/enums.js";
 import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
 
 export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSavedPageIndex, setReadmode, pefObject }) {
 
-  const [bookView, setBookView] = useState(ViewModeEnum.BRAILLE_VIEW)
+  const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
   const [startPageIndex, setStartPageIndex] = useState(1)
   let maxPageIndex
 
@@ -43,7 +43,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
     setSavedPageIndex(pageId)
 
     if (cookiePermission === CookieEnum.ALLOWED) {
-      setLatestPagePositionToCookie(pefObject.metaData.identifier, pageId)
+      setLatestPageIndexToCookie(pefObject.metaData.identifier, pageId)
     } else {
       alert("Din position har sparats, men eftersom cookies inte är tillåtna, kommer positionen inte att sparas när du återvänder till sidan.")
     }
@@ -112,7 +112,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
                       {page.rows.map((row, l) => (
                         <span key={`${i}-${j}-${k}-${l}`}>
 
-                          {(bookView === ViewModeEnum.NORMAL_VIEW) ?
+                          {(bookView === FormatModeEnum.NORMAL_VIEW) ?
                             brailleTranslator(filterUnnecessarySentence(row))
                             :
                             filterUnnecessarySentence(row)
@@ -189,8 +189,8 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
                 name="view"
                 className="m-1"
                 value="BRAILLE"
-                checked={bookView === ViewModeEnum.BRAILLE_VIEW}
-                onChange={() => setBookView(ViewModeEnum.BRAILLE_VIEW)}
+                checked={bookView === FormatModeEnum.BRAILLE_VIEW}
+                onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
               />
               <label htmlFor="braille-vy">Punktskrift</label>
             </div>
@@ -200,8 +200,8 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
                 name="view"
                 className="m-1"
                 value="BRAILLE"
-                checked={bookView === ViewModeEnum.NORMAL_VIEW}
-                onChange={() => setBookView(ViewModeEnum.NORMAL_VIEW)}
+                checked={bookView === FormatModeEnum.NORMAL_VIEW}
+                onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
               />
               <label htmlFor="braille-vy">Svartskrift</label>
             </div>
