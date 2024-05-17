@@ -119,7 +119,7 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
                 <span>{fileName}</span>
             </div>
 
-            <fieldset className="my-10">
+            <fieldset className="mt-10">
                 <legend className="text-2xl font-bold" >Hur vill du läsa boken?</legend>
                 <div className="flex flex-row my-6">
                     <input
@@ -152,8 +152,8 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
                 </div>
             </fieldset>
 
-            <div className="inline-block">
-                {fileLoadStatus === FileLoadStatusEnum.SUCCESSFUL && (
+            <div>
+                {(fileLoadStatus === FileLoadStatusEnum.INITIAL || fileLoadStatus === FileLoadStatusEnum.SUCCESSFUL) && (
                     <button onClick={HandleSwapToReadMode} className="button" >Läs boken</button>
                 )}
 
