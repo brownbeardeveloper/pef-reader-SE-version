@@ -57,8 +57,8 @@ export default function Main({ cookiePermission }) {
               setReadmode={setViewMode}
               pefObject={pefObject}
               setHowToRead={setHowToRead}
-              currentPageIndex={savedPageIndex}
-              setCurrentPageIndex={setSavedPageIndex}
+              savedPageIndex={savedPageIndex}
+              setSavedPageIndex={setSavedPageIndex}
             />
           ) : (
             <ReadModePage

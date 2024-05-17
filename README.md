@@ -26,6 +26,9 @@ This repository contains code for a tool that can convert files in Portable Embo
 - Initial release
   - Project created using pure JavaScript, HTML, and CSS.
 
-
 ## To-Do 
-  - Set focus on the page header index when changing the page index.
+  - Set focus on the page index (<h3>) when changing the page index.
+  - Remove hyphenation as the last character in flow read-mode.
+  - Add cursive formatting (<em>) to the text.
+  - Adjust the GUI for a browser window zoomed to 200%.
+  - Send this application to the external testers.

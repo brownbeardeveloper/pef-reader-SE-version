@@ -1,34 +1,32 @@
 import { useEffect, useState } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
-import { setLatestPageIndexToCookie } from "../functions/cookieManager.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 import { FormatModeEnum, CookieEnum } from "../data/enums.js";
-import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
+// import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
 
 export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSavedPageIndex, setReadmode, pefObject }) {
-
   const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
-  const [startPageIndex, setStartPageIndex] = useState(1)
-  let maxPageIndex
+  const [startPageIndex, setStartPageIndex] = useState(null)
+  const [maxPageIndex, setMaxPageIndex] = useState(null);
+  const [autoSave, setAutoSave] = useState(true)
 
   useDocumentTitle(pefObject.metaData.titel)
 
   useEffect(() => {
-    const firstPageIndex = findFirstPage()
-    if (firstPageIndex !== undefined) setStartPageIndex(firstPageIndex)
-  }, []);
+    // Rerender the pages when it changes
+    renderPages()
+  }, [pefObject, bookView]);
 
   function handleShowLatestSavedPositionBtn() {
     if (savedPageIndex) {
-
-      const element = document.getElementById(savedPageIndex);
+      const pageId = `page-${savedPageIndex}`
+      const element = document.getElementById(pageId);
 
       if (element) {
         element.scrollIntoView({ behavior: "smooth" })
         element.focus()
-        CountineReadingVoice()
 
       } else {
         console.error('Error: Unable to find the specified element.')
@@ -38,21 +36,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
     }
   }
 
-  function handleClickPage(pageIndex) {
-    const pageId = `page-${pageIndex}`;
-    setSavedPageIndex(pageId)
-
-    if (cookiePermission === CookieEnum.ALLOWED) {
-      setLatestPageIndexToCookie(pefObject.metaData.identifier, pageId)
-    } else {
-      alert("Din position har sparats, men eftersom cookies inte är tillåtna, kommer positionen inte att sparas när du återvänder till sidan.")
-    }
-
-    handleScrollToPageIndex(pageIndex)
-  }
-
   function handleScrollToPageIndex(index) {
-
     const pageId = `page-${index}`
     const element = document.getElementById(pageId)
 
@@ -78,7 +62,11 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
   }
 
   const renderPages = () => {
-    const pages = [];
+    // Object to store all JSX elements
+    const pagesFromPefObject = [];
+    // Variable to store index of the first page
+    let firstPageIndex;
+    // Variable to track current page index
     let pageIndex = 1;
 
     const volumes = pefObject.bodyData.volumes;
@@ -92,51 +80,61 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
             const sectionPages = section.pages;
             for (let k = 0; k < sectionPages.length; k++) {
 
+              // Apply manipulation to page index if necessary
               k = manipulatePageIndexToRemoveUnnecessaryPages(sectionPages, k);
               const page = sectionPages[k]
-              const thisPageIndex = pageIndex;
+              const thisPageIndex = pageIndex
               pageIndex++;
 
-              const pageElement = page && (
-                <div key={`page-${thisPageIndex}`} onClick={() => null}>
-                  <h3 
-                  id={`page-${thisPageIndex}`} 
-                  className={"font-black " + (`page-${thisPageIndex}` === savedPageIndex ? "bg-yellow-300 rounded-sm" : "")}
-                  onClick={() => handleClickPage(thisPageIndex)}>
+              // Generate JSX element for page content
+              const pageElement = page && page.rows && (
+                <div key={`${i}-${j}-${k}`} onClick={() => null}>
+                  <h3 id={`page-${thisPageIndex}`} className="font-black">
                     Sida {thisPageIndex}
                   </h3>
 
-                  {page && page.rows &&
-                    <div className="flex flex-wrap">
+                  {page.rows.map((row, l) => (
+                    <div key={`${i}-${j}-${k}-${l}`}>
+                      <span>
+                        {bookView === FormatModeEnum.NORMAL_VIEW
+                          ? brailleTranslator(filterUnnecessarySentence(row))
+                          : filterUnnecessarySentence(row)}
+                      </span>
 
-                      {page.rows.map((row, l) => (
-                        <span key={`${i}-${j}-${k}-${l}`}>
+                      {<span>&nbsp;</span> /* fix this issue later */}
 
-                          {(bookView === FormatModeEnum.NORMAL_VIEW) ?
-                            brailleTranslator(filterUnnecessarySentence(row))
-                            :
-                            filterUnnecessarySentence(row)
-                          }
-
-                          {<span>&nbsp;</span> /* fix this issue later */}
-
-                        </span>
-                      ))}
                     </div>
-                  }
+                  ))}
                 </div>
               );
 
-              if (pageElement) {
-                pages.push(pageElement);
+              // Save the page element if it's the first page index and there's a page element
+              if (!firstPageIndex && pageElement) {
+                firstPageIndex = thisPageIndex;
+                console.log("thisPageIndex", thisPageIndex)
+              }
+              // Save the page element if there's a page element
+              else if (pageElement) {
+                pagesFromPefObject.push(pageElement);
+              }
+              // Move the page index back one page if the page element is empty
+              else {
+                // Use the following line for debugging to log which page index is missing
+                // console.error("Page index undefined:", thisPageIndex, "Page element:", pageElement);
+                pageIndex--;
               }
             }
           }
         }
       }
     }
-    maxPageIndex = pageIndex - 1 // remove the last increase
-    return pages;
+
+    // Set the first page as the current page if there's no saved page index    
+    if (savedPageIndex === null) setSavedPageIndex(firstPageIndex);
+
+    console.log(savedPageIndex, "savedPageIndex")
+
+    return pagesFromPefObject
   };
 
   return (
@@ -145,15 +143,58 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
         Tillbaka till startsida
       </button>
 
+      {cookiePermission === CookieEnum.ALLOWED && (
+        <fieldset>
+          <legend>Autosave</legend>
+          <input type="radio"
+            id="autosave-radio-on"
+            name="autosave"
+            className="m-1"
+            value="ON"
+            checked={autoSave === true}
+            onChange={() => setAutoSave(true)}
+          />
+          <label htmlFor="autosave-radio-on">Påslagen</label>
+          <input type="radio"
+            id="autosave-radio-off"
+            name="autosave"
+            className="m-1"
+            value="BRAILLE"
+            checked={autoSave === false}
+            onChange={() => setAutoSave(false)}
+          />
+          <label htmlFor="autosave-radio-off">Avslagen</label>
+        </fieldset>
+      )}
+
       <div className="flex flex-col justify-start items-center mt-20">
         <h2 className="ml-8 text-2xl font-bold">Titel: {pefObject.metaData.titel}</h2>
         <p>Författare: {pefObject.metaData.skapare}</p>
 
         {!savedPageIndex &&
-          <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
-            <span class="block sm:inline">Man kan spara läspositionen genom att klicka på textraden, vilken sedan sparas i cookies.</span>
+          <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
+            <span className="block sm:inline">
+              Man kan spara läspositionen genom att klicka på textraden, vilken sedan sparas i cookies.
+            </span>
           </div>
         }
+
+        {!autoSave && cookiePermission === CookieEnum.ALLOWED &&
+          <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
+            <span className="block sm:inline">
+              Om du aktiverar radioknappen för autosave, kommer din position att sparas varje gång du scrollar ner förbi en sida.
+            </span>
+          </div>
+        }
+
+        {cookiePermission === CookieEnum.DENIED &&
+          <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
+            <span className="block sm:inline">
+              Autosave funktionen är inte tillgänglig eftersom cookies är inaktiverade.
+            </span>
+          </div>
+        }
+
 
         <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
           <div className="w-full overflow-y-auto h-96">
@@ -163,15 +204,17 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
         { /* navigator buttons */}
         <div className="flex flex-row align-center justify-around border mt-1 py-5 px-20 rounded-lg bg-slate-100 w-full">
-          <button onClick={handleShowLatestSavedPositionBtn}
+          <button onClick={() => handleShowLatestSavedPositionBtn()}
             className="button">
             Fortsätt läsa
           </button>
+
           <button onClick={() => {
-            handleScrollToPageIndex(findFirstPage())
+            handleScrollToPageIndex(startPageIndex)
           }} className="button">
             Förstasidan
           </button>
+
           <form onSubmit={(e) => {
             e.preventDefault();
             const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
@@ -181,6 +224,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
             <input className="border rounded" id="goToPage" type="number" min={startPageIndex} max={maxPageIndex} required />
             <button type="submit" className="button">Gå till</button>
           </form>
+
           <fieldset>
             <legend>Växla vy</legend>
             <div className="flex flex-row justify-center align-center">
