@@ -27,7 +27,7 @@ export default function Main({ cookiePermission }) {
       const latestPageIndex = getLatestPageIndexFromCookieInt(pefObject.metaData.identifier);
       setSavedPageIndex(latestPageIndex);
     }
-    // If the user has allowed cookies, a page index is saved, and a PDF file is uploaded, 
+    // If the user has allowed cookies, savedPageIndex isn't null, and a pef file is uploaded, 
     // save the current position to the cookie when state changes
     else if (cookiePermission === CookieEnum.ALLOWED && savedPageIndex && pefObject) {
       setLatestPageIndexToCookie(pefObject.metaData.identifier, savedPageIndex);
@@ -47,7 +47,7 @@ export default function Main({ cookiePermission }) {
           setFileName={setFileName}
           howToRead={howToRead}
           setHowToRead={setHowToRead}
-          setSavedRowIndex={setSavedPageIndex}
+          setSavedPageIndex={setSavedPageIndex}
         />
       ) : (
         <>
