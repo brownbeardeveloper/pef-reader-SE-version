@@ -2,7 +2,8 @@
 
 main {
     background-color: #fff;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
 }
 
 main .button {
