@@ -141,8 +141,9 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
       </button>
 
       {cookiePermission === CookieEnum.ALLOWED && (
+        <div className="mt-2 p-8 bg-slate-200 w-64 rounded-lg drop-shadow-md">
         <fieldset>
-          <legend>Autosave</legend>
+          <legend className="font-bold mb-2">Autosave</legend>
           <input type="radio"
             id="autosave-radio-on"
             name="autosave"
@@ -162,8 +163,8 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
           />
           <label htmlFor="autosave-radio-off">Avslagen</label>
         </fieldset>
+        </div>
       )}
-
 
       <div className="flex flex-col justify-start items-center h-screen mt-20">
         <h2 className="ml-8 text-2xl font-bold">Titel: {pefObject.metaData.titel}</h2>

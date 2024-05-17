@@ -8,9 +8,9 @@ import { FormatModeEnum, CookieEnum } from "../data/enums.js";
 
 export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSavedPageIndex, setReadmode, pefObject }) {
   const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
-  const [startPageIndex, setStartPageIndex] = useState(null)
   const [maxPageIndex, setMaxPageIndex] = useState(null);
   const [autoSave, setAutoSave] = useState(true)
+  let startPageIndex
 
   useDocumentTitle(pefObject.metaData.titel)
 
@@ -110,8 +110,8 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
               // Save the page element if it's the first page index and there's a page element
               if (!firstPageIndex && pageElement) {
-                firstPageIndex = thisPageIndex;
-                console.log("thisPageIndex", thisPageIndex)
+                firstPageIndex = thisPageIndex
+                pagesFromPefObject.push(pageElement);
               }
               // Save the page element if there's a page element
               else if (pageElement) {
@@ -129,10 +129,10 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
       }
     }
 
+    startPageIndex = firstPageIndex
+
     // Set the first page as the current page if there's no saved page index    
     if (savedPageIndex === null) setSavedPageIndex(firstPageIndex);
-
-    console.log(savedPageIndex, "savedPageIndex")
 
     return pagesFromPefObject
   };
@@ -144,8 +144,9 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
       </button>
 
       {cookiePermission === CookieEnum.ALLOWED && (
+        <div className="mt-2 p-8 bg-slate-200 w-64 rounded-lg drop-shadow-md">
         <fieldset>
-          <legend>Autosave</legend>
+          <legend className="font-bold mb-2">Autosave</legend>
           <input type="radio"
             id="autosave-radio-on"
             name="autosave"
@@ -165,6 +166,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
           />
           <label htmlFor="autosave-radio-off">Avslagen</label>
         </fieldset>
+        </div>
       )}
 
       <div className="flex flex-col justify-start items-center mt-20">
