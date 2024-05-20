@@ -5,45 +5,48 @@ export default function InstructionPage({ cookiePermission, setCookiePermission 
   const navigate = useNavigate();
 
   return (
-    <main className="max-w-2xl mx-auto px-10 pt-10 pb-20 h-screen">
+    <main className="max-w-2xl mx-auto px-10 pt-10 pb-20">
       <h2 className="text-2xl font-bold mb-4">Välkommen till Digital punktläsare!</h2>
-      <p className="mb-6">Denna applikation är utformad för att göra det enklare för användare utan eller med synnedsättning att få tillgång till punktskriftsböcker digitalt och läsa dem direkt i webbläsaren. Följ dessa enkla steg för att använda applikationen effektivt:</p>
+      <p className="mb-6">Denna applikation är utformad för att göra det enklare för användare utan eller med synnedsättning att få tillgång till punktskriftsböcker digitalt och läsa dem direkt i webbläsaren.</p>
 
       <div className="mb-8">
-        <h3 className="text-xl font-bold mb-2">1. Ladda upp filen:</h3>
+        <h3 className="text-md font-bold mb-2">
+        Följ dessa enkla steg för att använda applikationen effektivt:
+        </h3>
+      </div>
+
+      <div className="mb-8">
+        <h4 className="text-lg font-bold mb-2">1. Ladda upp filen:</h4>
         <p>Klicka på knappen "Ladda upp fil" för att välja en punktskriftsfil (.pef) från din enhet.</p>
       </div>
 
       <div className="mb-8">
-        <h3 className="text-xl font-bold mb-2">2. Välj läsläge:</h3>
+        <h4 className="text-lg font-bold mb-2">2. Välj läsläge:</h4>
         <p>Du kan välja mellan två läslägen:</p>
         <ul className="list-disc pl-6">
-          <li><strong>"Löpande text":</strong> Texten visas löpande på webbsidan med längre rader för en kontinuerlig läsupplevelse.</li>
-          <li><strong>"Sida för sida":</strong> Varje sida från boken visas som en separat sida på webbsidan med samma radlängd som i den ursprungliga boken.</li>
+          <li className="m-2"><strong>"Löpande text":</strong> Texten visas löpande på webbsidan med längre rader för en kontinuerlig läsupplevelse.</li>
+          <li className="m-2"><strong>"Sida för sida":</strong> Varje sida från boken visas som en separat sida på webbsidan med samma radlängd som i den ursprungliga boken.</li>
         </ul>
       </div>
 
       <div className="mb-8">
-        <h3 className="text-xl font-bold mb-2">3. Byt visningsläge:</h3>
+        <h4 className="text-lg font-bold mb-2">3. Byt visningsläge:</h4>
         <p>Du kan också välja mellan två visningslägen:</p>
         <ul className="list-disc pl-6">
-          <li><strong>"Punktskrift vy":</strong> Visar texten i punktskrift för användare utan syn eller med synnedsättning.</li>
-          <li><strong>"Svartskrift vy":</strong> Visar texten i vanlig svart text på vit bakgrund för användare som föredrar det konventionella visningsläget.</li>
-          {/* tillägga att det går välja i vilken sida man ska hoppa till när man klickar i sida för sida funktion och om det lämnas som default så blir det första sidan */}
+          <li className="m-2"><strong>"Punktskrift vy":</strong> Visar texten i punktskrift för användare utan syn eller med synnedsättning.</li>
+          <li className="m-2"><strong>"Svartskrift vy":</strong> Visar texten i vanlig svart text på vit bakgrund för användare som föredrar det konventionella visningsläget.</li>
         </ul>
       </div>
 
       <div className="mb-8">
-        <h3 className="text-xl font-bold mb-2">4. Spara senaste läspositionen:</h3>
-        <p>För att spara den senaste läspositionen, klicka på raden där du vill spara positionen. Den senaste läspositionen sparas automatiskt i en cookie och är tillgänglig nästa gång du öppnar samma bok. Sparade rader markeras med en gul bakgrundsfärg för enkel åtkomst.</p>
+        <h4 className="text-lg font-bold mb-2">4. Spara senaste läspositionen:</h4>
+        <p>För att spara den senaste läspositionen, behöver du tillåta cookies och sedan ha auto-save knappen påslagen. Den senaste läspositionen sparas automatiskt i en cookie så fort sidan scrollas och visas denna sida när du laddar upp samma bok.</p>
       </div>
 
       <div className="mb-8">
-        <h3 className="text-xl font-bold mb-2">5. Fortsätt läsa:</h3>
-        <p>Om du har sparat en läsposition tidigare finns det en knapp "Fortsätt läsa" som återvänder till den sparade positionen, oavsett om du använder läsläget "Löpande text" eller "Sida för sida".</p>
+        <h4 className="text-lg font-bold mb-2">5. Navigera i boken:</h4>
+        <p>Det finns knappar nedanför bokens sidor för att navigera runt i boken. Beroende på vilket läge du använder, kan du använda dem för att hoppa mellan sidor. Observera att om auto-save är aktiverat och du navigerar till första sidan eller till en annan sida som du har angivit, sparas sidan som senaste läspositionen.</p>
       </div>
-
-      {/* läs mer om cookies och länka till cookies sidan */}
 
       <div className="w-full flex justify-center">
         {cookiePermission ?
@@ -55,7 +58,7 @@ export default function InstructionPage({ cookiePermission, setCookiePermission 
             setCookiePermission(CookieEnum.ALLOWED); 
             navigate('/');
             }}>
-            Godkänna kakor och ta mig till applikationen
+            Godkänn kakor och ta mig till applikationen
           </button>
         }
       </div>
