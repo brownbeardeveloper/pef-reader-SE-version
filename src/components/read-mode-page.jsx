@@ -171,15 +171,15 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
         <p className="mb-5">Författare: {pefObject.metaData.skapare}</p>
 
         {!autoSave && cookiePermission === CookieEnum.ALLOWED &&
-          <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
-            <span class="block sm:inline">Om du aktiverar radioknappen för autosave, kommer din position att sparas varje gång du byter sida.
+          <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
+            <span className="block sm:inline">Om du aktiverar radioknappen för autosave, kommer din position att sparas varje gång du byter sida.
             </span>
           </div>
         }
 
         {cookiePermission === CookieEnum.DENIED &&
-          <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
-            <span class="block sm:inline">Autosave funktionen är inte tillgänglig eftersom cookies är inaktiverade.
+          <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
+            <span className="block sm:inline">Autosave funktionen är inte tillgänglig eftersom cookies är inaktiverade.
             </span>
           </div>
         }

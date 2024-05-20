@@ -21,32 +21,40 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
   useEffect(() => {
     if (autoSave) {
+      // Get the scrollable element by its ID
       const scrollableElement = document.getElementById("pages-scrollable-element");
       if (!scrollableElement) return;
-  
+
       const handleScroll = () => {
         const pages = scrollableElement.querySelectorAll("[id^='page-']");
         let lastVisiblePageIndex = null;
-  
+
+        // Loop through each page to determine which one is currently visible
         pages.forEach(page => {
           const rect = page.getBoundingClientRect();
+          // Check if the top of the page is within the viewport of the scrollable element
+          // and if the bottom of the page is below the top of the scrollable element
           if (rect.top >= 0 && rect.bottom <= scrollableElement.clientHeight) {
             lastVisiblePageIndex = parseInt(page.id.split('-')[1], 10);
           }
         });
-  
+
+        // If a visible page index is found, update the savedPageIndex state
         if (lastVisiblePageIndex !== null) {
           console.log("Setting savedPageIndex to:", lastVisiblePageIndex);
           setSavedPageIndex(lastVisiblePageIndex);
         }
       };
+
+      // Attach the scroll event listener to the scrollable element
       scrollableElement.addEventListener("scroll", handleScroll);
 
+      // Cleanup function to remove the scroll event listener when the component unmounts or autoSave is toggled off
       return () => {
         scrollableElement.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [autoSave]);  
+  }, [autoSave]);
 
   function handleShowLatestSavedPositionBtn() {
     if (savedPageIndex) {
@@ -108,10 +116,10 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
               // Generate JSX element for page content
               const pageElement = page && page.rows && (
                 <div key={`${i}-${j}-${k}`} onClick={() => null}>
-                  <h3 id={`page-${thisPageIndex}`} 
-                  className="font-black"
-                  tabIndex="0" // Ensure the element can receive focus
-                  onFocus={() => setSavedPageIndex(thisPageIndex)}
+                  <h3 id={`page-${thisPageIndex}`}
+                    className="font-black"
+                    tabIndex="0" // Ensure the element can receive focus
+                    onFocus={() => setSavedPageIndex(thisPageIndex)}
                   >
                     Sida {thisPageIndex}
                   </h3>
@@ -153,7 +161,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
     }
 
     startPageIndex = firstPageIndex
-    maxPageIndex = pageIndex -1
+    maxPageIndex = pageIndex - 1
 
     // Set the first page as the current page if there's no saved page index    
     if (savedPageIndex === null) setSavedPageIndex(firstPageIndex);
@@ -169,27 +177,27 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
       {cookiePermission === CookieEnum.ALLOWED && (
         <div className="mt-2 p-8 bg-slate-200 w-64 rounded-lg drop-shadow-md">
-        <fieldset>
-          <legend className="font-bold mb-2">Autosave</legend>
-          <input type="radio"
-            id="autosave-radio-on"
-            name="autosave"
-            className="m-1"
-            value="ON"
-            checked={autoSave === true}
-            onChange={() => setAutoSave(true)}
-          />
-          <label htmlFor="autosave-radio-on">Påslagen</label>
-          <input type="radio"
-            id="autosave-radio-off"
-            name="autosave"
-            className="m-1"
-            value="BRAILLE"
-            checked={autoSave === false}
-            onChange={() => setAutoSave(false)}
-          />
-          <label htmlFor="autosave-radio-off">Avslagen</label>
-        </fieldset>
+          <fieldset>
+            <legend className="font-bold mb-2">Autosave</legend>
+            <input type="radio"
+              id="autosave-radio-on"
+              name="autosave"
+              className="m-1"
+              value="ON"
+              checked={autoSave === true}
+              onChange={() => setAutoSave(true)}
+            />
+            <label htmlFor="autosave-radio-on">Påslagen</label>
+            <input type="radio"
+              id="autosave-radio-off"
+              name="autosave"
+              className="m-1"
+              value="BRAILLE"
+              checked={autoSave === false}
+              onChange={() => setAutoSave(false)}
+            />
+            <label htmlFor="autosave-radio-off">Avslagen</label>
+          </fieldset>
         </div>
       )}
 
