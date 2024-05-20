@@ -22,7 +22,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
   function handleNextPageBtn() {
     if (savedPageIndex < maxPageIndex) {
-      setSavedPageIndex(savedPageIndex + 1);
+      setSavedPageIndex(savedPageIndex +1);
     } else {
       alert("Fel: Det finns inga fler sidor i boken.");
     }
@@ -30,7 +30,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
   function handlePreviousPageBtn() {
     if (savedPageIndex > firstPageIndex) {
-      setSavedPageIndex(savedPageIndex - 1);
+      setSavedPageIndex(savedPageIndex -1);
     } else {
       alert("Fel: Du kan inte gå längre bakåt i den här boken.");
     }

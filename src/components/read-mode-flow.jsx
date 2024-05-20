@@ -8,8 +8,8 @@ import { FormatModeEnum, CookieEnum } from "../data/enums.js";
 
 export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSavedPageIndex, setReadmode, pefObject }) {
   const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
-  const [maxPageIndex, setMaxPageIndex] = useState(null);
   const [autoSave, setAutoSave] = useState(true)
+  let maxPageIndex
   let startPageIndex
 
   useDocumentTitle(pefObject.metaData.titel)
@@ -18,6 +18,35 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
     // Rerender the pages when it changes
     renderPages()
   }, [pefObject, bookView]);
+
+  useEffect(() => {
+    if (autoSave) {
+      const scrollableElement = document.getElementById("pages-scrollable-element");
+      if (!scrollableElement) return;
+  
+      const handleScroll = () => {
+        const pages = scrollableElement.querySelectorAll("[id^='page-']");
+        let lastVisiblePageIndex = null;
+  
+        pages.forEach(page => {
+          const rect = page.getBoundingClientRect();
+          if (rect.top >= 0 && rect.bottom <= scrollableElement.clientHeight) {
+            lastVisiblePageIndex = parseInt(page.id.split('-')[1], 10);
+          }
+        });
+  
+        if (lastVisiblePageIndex !== null) {
+          console.log("Setting savedPageIndex to:", lastVisiblePageIndex);
+          setSavedPageIndex(lastVisiblePageIndex);
+        }
+      };
+      scrollableElement.addEventListener("scroll", handleScroll);
+
+      return () => {
+        scrollableElement.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [autoSave]);  
 
   function handleShowLatestSavedPositionBtn() {
     if (savedPageIndex) {
@@ -51,16 +80,6 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
     }
   }
 
-  function findFirstPage() {
-    for (let index = 1; index < maxPageIndex; index++) {
-      const pageId = `page-${index}`
-      const element = document.getElementById(pageId)
-
-      if (element) { return index }
-    }
-    alert('Ingen första sida kunde hittades.')
-  }
-
   const renderPages = () => {
     // Object to store all JSX elements
     const pagesFromPefObject = [];
@@ -89,7 +108,11 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
               // Generate JSX element for page content
               const pageElement = page && page.rows && (
                 <div key={`${i}-${j}-${k}`} onClick={() => null}>
-                  <h3 id={`page-${thisPageIndex}`} className="font-black">
+                  <h3 id={`page-${thisPageIndex}`} 
+                  className="font-black"
+                  tabIndex="0" // Ensure the element can receive focus
+                  onFocus={() => setSavedPageIndex(thisPageIndex)}
+                  >
                     Sida {thisPageIndex}
                   </h3>
 
@@ -130,6 +153,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
     }
 
     startPageIndex = firstPageIndex
+    maxPageIndex = pageIndex -1
 
     // Set the first page as the current page if there's no saved page index    
     if (savedPageIndex === null) setSavedPageIndex(firstPageIndex);
@@ -199,7 +223,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
 
         <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
-          <div className="w-full overflow-y-auto h-96">
+          <div id="pages-scrollable-element" className="w-full overflow-y-auto h-96">
             {renderPages()}
           </div>
         </div>
