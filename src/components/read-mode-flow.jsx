@@ -17,6 +17,22 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
   useEffect(() => {
     // Rerender the pages when it changes
     renderPages()
+
+    if (savedPageIndex) {
+      const pageId = `page-${savedPageIndex}`
+      const element = document.getElementById(pageId);
+
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" })
+        element.focus()
+
+      } else {
+        console.error('Error: Unable to find the specified element.')
+      }
+    } else {
+      console.error('There is no cookie.')
+    }
+
   }, [pefObject, bookView]);
 
   useEffect(() => {
@@ -41,7 +57,6 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
         // If a visible page index is found, update the savedPageIndex state
         if (lastVisiblePageIndex !== null) {
-          console.log("Setting savedPageIndex to:", lastVisiblePageIndex);
           setSavedPageIndex(lastVisiblePageIndex);
         }
       };
@@ -57,20 +72,6 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
   }, [autoSave]);
 
   function handleShowLatestSavedPositionBtn() {
-    if (savedPageIndex) {
-      const pageId = `page-${savedPageIndex}`
-      const element = document.getElementById(pageId);
-
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" })
-        element.focus()
-
-      } else {
-        console.error('Error: Unable to find the specified element.')
-      }
-    } else {
-      console.error('There is no cookie.')
-    }
   }
 
   function handleScrollToPageIndex(index) {
@@ -238,11 +239,6 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
         { /* navigator buttons */}
         <div className="flex flex-row align-center justify-around border mt-1 py-5 px-20 rounded-lg bg-slate-100 w-full">
-          <button onClick={() => handleShowLatestSavedPositionBtn()}
-            className="button">
-            Fortsätt läsa
-          </button>
-
           <button onClick={() => {
             handleScrollToPageIndex(startPageIndex)
           }} className="button">

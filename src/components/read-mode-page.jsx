@@ -9,42 +9,49 @@ import { FormatModeEnum, CookieEnum } from '../data/enums.js'
 export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, cookiePermission, setReadmode, pefObject }) {
   const [pages, setPages] = useState([]);
   const [maxPageIndex, setMaxPageIndex] = useState(0);
-  const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
   const [firstPageIndex, setFirstPageIndex] = useState(0)
+  const [currentPageIndex, setCurrentPageIndex] = useState(0)
+  const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
   const [autoSave, setAutoSave] = useState(true)
 
   useDocumentTitle(pefObject.metaData.titel);
 
   useEffect(() => {
     // Resave the pages array when it changes
-    savePagesFromPefObject();
+    renderPagesFromPefObject();
   }, [pefObject, bookView]);
 
+  useEffect(() => {
+    if(autoSave) {
+      setSavedPageIndex(currentPageIndex)
+    }
+  }, [autoSave, currentPageIndex]);
+
   function handleNextPageBtn() {
-    if (savedPageIndex < maxPageIndex) {
-      setSavedPageIndex(savedPageIndex +1);
+    if (currentPageIndex < maxPageIndex) {
+      setCurrentPageIndex(currentPageIndex +1);
     } else {
       alert("Fel: Det finns inga fler sidor i boken.");
     }
   }
 
   function handlePreviousPageBtn() {
-    if (savedPageIndex > firstPageIndex) {
-      setSavedPageIndex(savedPageIndex -1);
+    if (currentPageIndex > firstPageIndex) {
+      setCurrentPageIndex(currentPageIndex -1);
     } else {
       alert("Fel: Du kan inte gå längre bakåt i den här boken.");
     }
   }
 
   function handleSetCurrentPage(index) {
-    if (savedPageIndex === index) {
+    if (currentPageIndex === index) {
       if (index === firstPageIndex) {
         alert('Du är redan på den första sidan.')
       } else {
         alert(`Du är redan på sidan ${index}.`)
       }
     } else {
-      setSavedPageIndex(index)
+      setCurrentPageIndex(index)
       return true
     }
   }
@@ -58,7 +65,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
     }
   }
 
-  function savePagesFromPefObject() {
+  function renderPagesFromPefObject() {
     // Array to store pages
     const pagesFromPefObject = [];
     // Variable to store index of the first page
@@ -130,7 +137,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
     // Set the maximum page index
     setMaxPageIndex(pageIndex - 1);
     // Set the first page as the current page if there's no saved page index    
-    if (savedPageIndex == null) setSavedPageIndex(firstPageIndex);
+    if (savedPageIndex == null) setCurrentPageIndex(firstPageIndex);
   };
 
 
@@ -186,7 +193,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
         <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
           <div className="w-96">
-            {showCurrentPage(savedPageIndex)}
+            {showCurrentPage(currentPageIndex)}
           </div>
         </div>
 
