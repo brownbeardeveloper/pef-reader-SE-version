@@ -10,9 +10,7 @@ export default function InstructionPage({ cookiePermission, setCookiePermission 
       <p className="mb-6">Denna applikation är utformad för att göra det enklare för användare utan eller med synnedsättning att få tillgång till punktskriftsböcker digitalt och läsa dem direkt i webbläsaren.</p>
 
       <div className="mb-8">
-        <h3 className="text-md font-bold mb-2">
-        Följ dessa enkla steg för att använda applikationen effektivt:
-        </h3>
+        <h3 className="text-md font-bold mb-2">Följ dessa enkla steg för att använda applikationen effektivt:</h3>
       </div>
 
       <div className="mb-8">
@@ -33,19 +31,23 @@ export default function InstructionPage({ cookiePermission, setCookiePermission 
         <h4 className="text-lg font-bold mb-2">3. Byt visningsläge:</h4>
         <p>Du kan också välja mellan två visningslägen:</p>
         <ul className="list-disc pl-6">
-          <li className="m-2"><strong>"Punktskrift vy":</strong> Visar texten i punktskrift för användare utan syn eller med synnedsättning.</li>
-          <li className="m-2"><strong>"Svartskrift vy":</strong> Visar texten i vanlig svart text på vit bakgrund för användare som föredrar det konventionella visningsläget.</li>
+          <li className="m-2"><strong>"Punktskriftvy":</strong> Visar texten i punktskrift för användare utan syn eller med synnedsättning.</li>
+          <li className="m-2"><strong>"Svartskriftvy":</strong> Visar texten i vanlig svart text på vit bakgrund för användare som föredrar det konventionella visningsläget.</li>
         </ul>
       </div>
 
       <div className="mb-8">
         <h4 className="text-lg font-bold mb-2">4. Spara senaste läspositionen:</h4>
-        <p>För att spara den senaste läspositionen, behöver du tillåta cookies och sedan ha auto-save knappen påslagen. Den senaste läspositionen sparas automatiskt i en cookie så fort sidan scrollas och visas denna sida när du laddar upp samma bok.</p>
+        <p>För att spara den senaste läspositionen behöver du tillåta kakor och sedan ha autosave-knappen påslagen. Den senaste läspositionen sparas automatiskt i kakor så fort sidan scrollas och visas automatiskt när du laddar upp samma bok igen.</p>
       </div>
 
       <div className="mb-8">
         <h4 className="text-lg font-bold mb-2">5. Navigera i boken:</h4>
-        <p>Det finns knappar nedanför bokens sidor för att navigera runt i boken. Beroende på vilket läge du använder, kan du använda dem för att hoppa mellan sidor. Observera att om auto-save är aktiverat och du navigerar till första sidan eller till en annan sida som du har angivit, sparas sidan som senaste läspositionen.</p>
+        <p>Det finns knappar nedanför bokens sidor för att navigera runt i boken. Beroende på vilket läge du använder kan du använda dem för att hoppa mellan sidor. Observera att om autosave är aktiverat och du navigerar till första sidan eller till en annan sida, sparas den nya sidan som senaste läsposition.</p>
+      </div>
+
+      <div className="mb-8">
+        <p>Vid anmärkningar om sidans tillgänglighet, gå till sidfoten och klicka på "Kakor och Tillgänglighet" för att komma till en sida där du kan lämna feedback och få kontaktuppgifter.</p>
       </div>
 
       <div className="w-full flex justify-center">
