@@ -10,7 +10,6 @@
 body, html {
     margin: 0;
     padding: 0;
-    min-height: 100vh;
     background-image: url('../media/bg_body.jpg');
     background-size: cover;
     background-repeat: no-repeat; 
