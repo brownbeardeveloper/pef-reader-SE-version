@@ -10,7 +10,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
   const [pages, setPages] = useState([]);
   const [maxPageIndex, setMaxPageIndex] = useState(0);
   const [firstPageIndex, setFirstPageIndex] = useState(0)
-  const [currentPageIndex, setCurrentPageIndex] = useState(0)
+  const [currentPageIndex, setCurrentPageIndex] = useState(null)
   const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
   const [autoSave, setAutoSave] = useState(true)
 
@@ -22,10 +22,12 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
   }, [pefObject, bookView]);
 
   useEffect(() => {
-    if(autoSave) {
+    if(currentPageIndex === null && savedPageIndex) {
+      setCurrentPageIndex(savedPageIndex)
+    } else if (autoSave && currentPageIndex) {
       setSavedPageIndex(currentPageIndex)
     }
-  }, [autoSave, currentPageIndex]);
+  }, [autoSave, currentPageIndex, savedPageIndex]);
 
   function handleNextPageBtn() {
     if (currentPageIndex < maxPageIndex) {

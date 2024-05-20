@@ -71,9 +71,6 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
     }
   }, [autoSave]);
 
-  function handleShowLatestSavedPositionBtn() {
-  }
-
   function handleScrollToPageIndex(index) {
     const pageId = `page-${index}`
     const element = document.getElementById(pageId)
@@ -205,14 +202,6 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
       <div className="flex flex-col justify-start items-center mt-20">
         <h2 className="ml-8 text-2xl font-bold">Titel: {pefObject.metaData.titel}</h2>
         <p>Författare: {pefObject.metaData.skapare}</p>
-
-        {!savedPageIndex &&
-          <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
-            <span className="block sm:inline">
-              Man kan spara läspositionen genom att klicka på textraden, vilken sedan sparas i cookies.
-            </span>
-          </div>
-        }
 
         {!autoSave && cookiePermission === CookieEnum.ALLOWED &&
           <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
