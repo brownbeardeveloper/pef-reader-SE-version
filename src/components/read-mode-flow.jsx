@@ -51,12 +51,12 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
           // Check if the top of the page is within the viewport of the scrollable element
           // and if the bottom of the page is below the top of the scrollable element
           if (rect.top >= 0 && rect.bottom <= scrollableElement.clientHeight) {
-            lastVisiblePageIndex = parseInt(page.id.split('-')[1], 10);
+            lastVisiblePageIndex = parseInt(page.id.replace("page-", ""), 10);
           }
         });
 
         // If a visible page index is found, update the savedPageIndex state
-        if (lastVisiblePageIndex !== null) {
+        if (lastVisiblePageIndex) {
           setSavedPageIndex(lastVisiblePageIndex);
         }
       };
@@ -79,6 +79,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
       element.scrollIntoView({ behavior: "smooth" });
 
       if (document.activeElement !== element) {
+        element.tabIndex = 0
         element.focus();
       }
     } else {
@@ -113,11 +114,10 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
               // Generate JSX element for page content
               const pageElement = page && page.rows && (
-                <div key={`${i}-${j}-${k}`} onClick={() => null}>
+                <div key={`${i}-${j}-${k}`}>
                   <h3 id={`page-${thisPageIndex}`}
                     className="font-black"
-                    tabIndex="0" // Ensure the element can receive focus
-                    onFocus={() => setSavedPageIndex(thisPageIndex)}
+                    tabIndex={(thisPageIndex === savedPageIndex) ? 0 : null}
                   >
                     Sida {thisPageIndex}
                   </h3>
@@ -174,38 +174,42 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
       </button>
 
       {cookiePermission === CookieEnum.ALLOWED && (
-        <div className="mt-2 p-8 bg-slate-200 w-64 rounded-lg drop-shadow-md">
+        <div className="mt-2 p-5 bg-fuchsia-50 border border-fuchsia-500 w-64 rounded-lg drop-shadow-lg">
+          
           <fieldset>
-            <legend className="font-bold mb-2">Autosave</legend>
-            <input type="radio"
-              id="autosave-radio-on"
-              name="autosave"
-              className="m-1"
-              value="ON"
-              checked={autoSave === true}
-              onChange={() => setAutoSave(true)}
-            />
-            <label htmlFor="autosave-radio-on">Påslagen</label>
-            <input type="radio"
-              id="autosave-radio-off"
-              name="autosave"
-              className="m-1"
-              value="BRAILLE"
-              checked={autoSave === false}
-              onChange={() => setAutoSave(false)}
-            />
-            <label htmlFor="autosave-radio-off">Avslagen</label>
+            <legend className="font-bold mb-3 m-1">Autosave</legend>
+            <div className="flex justify-start items-center">
+              <input type="radio"
+                id="autosave-radio-on"
+                name="autosave"
+                className="m-1"
+                checked={autoSave === true}
+                onChange={() => setAutoSave(true)}
+              />
+              <label htmlFor="autosave-radio-on">Autosave påslagen</label>
+            </div>
+
+            <div className="flex justify-start items-center">
+              <input type="radio"
+                id="autosave-radio-off"
+                name="autosave"
+                className="m-1"
+                checked={autoSave === false}
+                onChange={() => setAutoSave(false)}
+              />
+              <label htmlFor="autosave-radio-off">Autosave avslagen</label>
+            </div>
           </fieldset>
         </div>
       )}
 
-      <div className="flex flex-col justify-start items-center mt-20">
-        <h2 className="ml-8 text-2xl font-bold">Titel: {pefObject.metaData.titel}</h2>
-        <p>Författare: {pefObject.metaData.skapare}</p>
+<div className="flex flex-col justify-start items-center mt-20">
+        <h2 className="ml-8 text-2xl font-bold" tabIndex={0}>Titel: {pefObject.metaData.titel}</h2>
+        <p className="mb-5">Författare: {pefObject.metaData.skapare}</p>
 
         {!autoSave && cookiePermission === CookieEnum.ALLOWED &&
           <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
-            <span className="block sm:inline">
+            <span className="block sm:inline" tabIndex={0}>
               Om du aktiverar radioknappen för autosave, kommer din position att sparas varje gång du scrollar ner förbi en sida.
             </span>
           </div>
@@ -213,7 +217,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
         {cookiePermission === CookieEnum.DENIED &&
           <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
-            <span className="block sm:inline">
+            <span className="block sm:inline" tabIndex={0}>
               Autosave funktionen är inte tillgänglig eftersom cookies är inaktiverade.
             </span>
           </div>
@@ -249,35 +253,32 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
             <div className="flex flex-row justify-center align-center">
               <input type="radio"
                 id="braille-view"
-                name="view"
                 className="m-1"
-                value="BRAILLE"
                 checked={bookView === FormatModeEnum.BRAILLE_VIEW}
                 onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
               />
-              <label htmlFor="braille-vy">Punktskrift</label>
+              <label htmlFor="braille-view">Punktskriftvy</label>
             </div>
             <div className="flex flex-row justify-center align-center">
               <input type="radio"
-                id="braille-view"
-                name="view"
+                id="normal-view"
                 className="m-1"
-                value="BRAILLE"
                 checked={bookView === FormatModeEnum.NORMAL_VIEW}
                 onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
               />
-              <label htmlFor="braille-vy">Svartskrift</label>
+              <label htmlFor="normal-view">Svartskriftvy</label>
             </div>
           </fieldset>
         </div>
 
         <div className="flex flex-col bg-slate-200 rounded-lg mt-20 p-10 w-full border">
-          <p className="font-bold"><strong>Bokens metadata:</strong></p>
+          <h3 className="font-bold text-lg my-2" tabIndex={0}>Grundläggande bibliografisk information</h3>
           {pefObject.metaData &&
             Object.entries(pefObject.metaData)
-              .map(([key, value]) => value != null && <label key={key}><strong>{key}:</strong> {value}</label>)
+              .map(([key, value]) => value != null && <label key={key}><strong>{key.toLocaleUpperCase()}:</strong> {value}</label>)
           }
         </div>
+
       </div>
     </div>
   )

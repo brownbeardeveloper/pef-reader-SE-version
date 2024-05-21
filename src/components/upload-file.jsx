@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 import { fileReader, checkIfPefFileType } from "../functions/fileReader"
 import { UnitModeEnum, FileLoadStatusEnum } from "../data/enums.js"
-import { TabIndex } from "../data/tab-index.js"
 import brailleIcon from '../media/braille-icon.png';
 
 export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
@@ -61,17 +60,18 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
 
     return (
         <div className="flex flex-col p-20 w-full">
-            <div className="flex flex-col justify-center items-center">
-                <div className="flex flex-row justify-center items-center">
-                    <div className='h-20 w-20'>
-                        <img src={brailleIcon} className="w-full h-full" alt="Punktskriftsikon" />
+
+            <div className="flex flex-col justify-center items-center p-4 md:p-8 lg:p-12">
+                <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
+                    <div className="h-24 w-24 md:h-20 md:w-20 flex-shrink-0">
+                    <img src={brailleIcon} className="w-full h-full" alt="Punktskriftsikon" />
                     </div>
-                    <div>
-                        <h2 id="MainContentArea" className="ml-8 text-2xl font-bold">Från punktskrift till svartskrift på några sekunder</h2>
+                    <div className="text-center md:text-left">
+                        <h2 id="MainContentArea" className="text-xl md:text-2xl lg:text-3xl font-bold mt-4 md:mt-0">Från punktskrift till svartskrift på några sekunder</h2>
                     </div>
                 </div>
-                <div className="m-5">
-                    <p className="text-xl">När du har laddat ner en punktskriftsbok från Legimus kan du läsa den här med din punktdisplay.</p>
+                <div className="mt-4 md:mt-6 lg:mt-8 px-4 md:px-8 lg:px-12 text-center md:text-left">
+                    <p className="text-lg md:text-xl lg:text-2xl">När du har laddat ner en punktskriftsbok från Legimus kan du läsa den här med din punktdisplay.</p>
                 </div>
             </div>
 
@@ -87,11 +87,10 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
                             accept=".pef"
                             className="hidden"
                             onChange={handleAddFile}
-                            tabIndex={TabIndex.UPLOAD_FILE}
                         />
                         <label
                             htmlFor="file-selector"
-                            tabIndex={TabIndex.UPLOAD_FILE}
+                            tabIndex={0}
                             className={
                                 fileLoadStatus === FileLoadStatusEnum.LOADING
                                     ? "cursor-not-allowed button"
@@ -128,7 +127,6 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
                         name="howToRead"
                         value="ONE_FLOW"
                         className="m-1"
-                        tabIndex={TabIndex.RADIO_FLOW_TEXT}
                         checked={howToRead === UnitModeEnum.ONE_FLOW}
                         onChange={() => setHowToRead(UnitModeEnum.ONE_FLOW)}
                     />
@@ -142,7 +140,6 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
                         name="howToRead"
                         value="PAGE_BY_PAGE"
                         className="m-1"
-                        tabIndex={TabIndex.RADIO_BY_PAGE_TEXT}
                         checked={howToRead === UnitModeEnum.PAGE_BY_PAGE}
                         onChange={() => setHowToRead(UnitModeEnum.PAGE_BY_PAGE)}
                     />

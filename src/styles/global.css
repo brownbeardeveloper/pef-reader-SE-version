@@ -7,11 +7,64 @@
     font-style: normal;
 }
 
-body, html {
+body,
+html {
     margin: 0;
     padding: 0;
     background-image: url('../media/bg_body.jpg');
     background-size: cover;
-    background-repeat: no-repeat; 
-    background-position: center; 
+    background-repeat: no-repeat;
+    background-position: center;
+    font-size: 16px;
+    /* Default font size */
+}
+
+/* Font size adjustments for different screen sizes */
+
+/* Increase font size for smaller phones (min-width: 200px) */
+@media (min-width: 200px) {
+    body,
+    html {
+        font-size: 7px;
+    }
+}
+
+/* Increase font size for phones (min-width: 300px) */
+@media (min-width: 300px) {
+    body,
+    html {
+        font-size: 10px;
+    }
+}
+
+/* Increase font size for bigger phones (min-width: 400px) */
+@media (min-width: 400px) {
+    body,
+    html {
+        font-size: 12px;
+    }
+}
+
+/* Increase font size for tablets (min-width: 640px) */
+@media (min-width: 640px) {
+    body,
+    html {
+        font-size: 14px;
+    }
+}
+
+/* Increase font size for medium screens (min-width: 768px) */
+@media (min-width: 768px) {
+    body,
+    html {
+        font-size: 16px;
+    }
+}
+
+/* Increase font size for large screens (min-width: 1080px) */
+@media (min-width: 1080px) {
+    body,
+    html {
+        font-size: 18px;
+    }
 }

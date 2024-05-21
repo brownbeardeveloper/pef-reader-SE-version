@@ -1,8 +1,8 @@
 export default function Footer() {
   return (
-    <footer className="bg-slate-50 text-center lg:text-left py-10 border-t-4 border-fuchsia-700">
-      <div className="container mx-auto px-10 flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-between">
-        <div className="text-neutral-700 flex flex-col items-center lg:items-start">
+    <footer className="bg-slate-50 text-center py-10 border-t-4 border-fuchsia-700">
+      <div className="container mx-auto px-10 flex flex-col items-center justify-center">
+        <div className="text-neutral-700 flex flex-col items-center">
           <span className="text-2xl m-3">&copy; 2024 MYNDIGHETEN FÖR TILLGÄNGLIGA MEDIER</span>
           <nav className="mt-2">
             <a

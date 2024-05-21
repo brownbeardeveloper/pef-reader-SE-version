@@ -22,7 +22,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
   }, [pefObject, bookView]);
 
   useEffect(() => {
-    if(currentPageIndex === null && savedPageIndex) {
+    if (currentPageIndex === null && savedPageIndex) {
       setCurrentPageIndex(savedPageIndex)
     } else if (autoSave && currentPageIndex) {
       setSavedPageIndex(currentPageIndex)
@@ -31,7 +31,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
   function handleNextPageBtn() {
     if (currentPageIndex < maxPageIndex) {
-      setCurrentPageIndex(currentPageIndex +1);
+      setCurrentPageIndex(currentPageIndex + 1);
     } else {
       alert("Fel: Det finns inga fler sidor i boken.");
     }
@@ -39,7 +39,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
   function handlePreviousPageBtn() {
     if (currentPageIndex > firstPageIndex) {
-      setCurrentPageIndex(currentPageIndex -1);
+      setCurrentPageIndex(currentPageIndex - 1);
     } else {
       alert("Fel: Du kan inte gå längre bakåt i den här boken.");
     }
@@ -94,8 +94,10 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
               // Generate JSX element for page content
               const pageElement = page && page.rows && (
-                <div key={`${i}-${j}-${k}`} onClick={() => null}>
-                  <h3 id={`page-${thisPageIndex}`} className="font-black">
+                <div key={`${i}-${j}-${k}`}>
+                  <h3 id={`page-${thisPageIndex}`}
+                    className="font-black"
+                    tabIndex={0}>
                     Sida {thisPageIndex}
                   </h3>
 
@@ -150,45 +152,49 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
       </button>
 
       {cookiePermission === CookieEnum.ALLOWED && (
-        <div className="mt-2 p-8 bg-slate-200 w-64 rounded-lg drop-shadow-md">
-        <fieldset>
-          <legend className="font-bold mb-2">Autosave</legend>
-          <input type="radio"
-            id="autosave-radio-on"
-            name="autosave"
-            className="m-1"
-            value="ON"
-            checked={autoSave === true}
-            onChange={() => setAutoSave(true)}
-          />
-          <label htmlFor="autosave-radio-on">Påslagen</label>
-          <input type="radio"
-            id="autosave-radio-off"
-            name="autosave"
-            className="m-1"
-            value="BRAILLE"
-            checked={autoSave === false}
-            onChange={() => setAutoSave(false)}
-          />
-          <label htmlFor="autosave-radio-off">Avslagen</label>
-        </fieldset>
+        <div className="mt-2 p-5 bg-fuchsia-50 border border-fuchsia-500 w-64 rounded-lg drop-shadow-lg">
+
+          <fieldset>
+            <legend className="font-bold mb-3 m-1">Autosave</legend>
+            <div className="flex justify-start items-center">
+              <input type="radio"
+                id="autosave-radio-on"
+                name="autosave"
+                className="m-1"
+                checked={autoSave === true}
+                onChange={() => setAutoSave(true)}
+              />
+              <label htmlFor="autosave-radio-on">Autosave påslagen</label>
+            </div>
+
+            <div className="flex justify-start items-center">
+              <input type="radio"
+                id="autosave-radio-off"
+                name="autosave"
+                className="m-1"
+                checked={autoSave === false}
+                onChange={() => setAutoSave(false)}
+              />
+              <label htmlFor="autosave-radio-off">Autosave avslagen</label>
+            </div>
+          </fieldset>
         </div>
       )}
 
-      <div className="flex flex-col justify-start items-center h-screen mt-20">
-        <h2 className="ml-8 text-2xl font-bold">Titel: {pefObject.metaData.titel}</h2>
+      <div className="flex flex-col justify-start items-center mt-20">
+        <h2 className="ml-8 text-2xl font-bold" tabIndex={0}>Titel: {pefObject.metaData.titel}</h2>
         <p className="mb-5">Författare: {pefObject.metaData.skapare}</p>
 
         {!autoSave && cookiePermission === CookieEnum.ALLOWED &&
           <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
-            <span className="block sm:inline">Om du aktiverar radioknappen för autosave, kommer din position att sparas varje gång du byter sida.
+            <span className="block sm:inline" tabIndex={0}>Om du aktiverar radioknappen för autosave, kommer din position att sparas varje gång du byter sida.
             </span>
           </div>
         }
 
         {cookiePermission === CookieEnum.DENIED &&
           <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
-            <span className="block sm:inline">Autosave funktionen är inte tillgänglig eftersom cookies är inaktiverade.
+            <span className="block sm:inline" tabIndex={0}>Autosave funktionen är inte tillgänglig eftersom cookies är inaktiverade.
             </span>
           </div>
         }
@@ -200,7 +206,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
         </div>
 
         { /* navigator buttons */}
-        <div className="flex flex-row align-center justify-around border mt-1 py-5 px-20 rounded-lg bg-slate-100 w-full">
+        <div className="flex flex-row flex-wrap justify-center items-center border mt-1 rounded-lg bg-slate-100 w-full">
           <button onClick={() => handleNextPageBtn()} className="button">
             Nästa sida
           </button>
@@ -218,13 +224,13 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
             e.preventDefault();
             const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
             handleSetCurrentPage(pageNumber);
-          }}>
-            <label htmlFor="goToPage">Ange ett sidnummer: </label>
+          }} className="flex items-center"> 
+            <label htmlFor="goToPage" className="">Ange ett sidnummer: </label>
             <input className="border rounded" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
             <button type="submit" className="button">Gå till</button>
           </form>
 
-          <fieldset>
+          <fieldset className="m-2">
             <legend>Växla vy</legend>
             <div className="flex flex-row justify-center align-center">
               <input type="radio"
@@ -235,22 +241,30 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                 checked={bookView === FormatModeEnum.BRAILLE_VIEW}
                 onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
               />
-              <label htmlFor="braille-vy">Punktskrift</label>
+              <label htmlFor="braille-view">Punktskrift</label>
             </div>
             <div className="flex flex-row justify-center align-center">
               <input type="radio"
-                id="braille-view"
+                id="normal-view"
                 name="view"
                 className="m-1"
                 value="BRAILLE"
                 checked={bookView === FormatModeEnum.NORMAL_VIEW}
                 onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
               />
-              <label htmlFor="braille-vy">Svartskrift</label>
+              <label htmlFor="normal-view">Svartskrift</label>
             </div>
           </fieldset>
-
         </div>
+
+        <div className="flex flex-col bg-slate-200 rounded-lg mt-20 p-10 w-full border">
+          <h3 className="font-bold text-lg my-2" tabIndex={0}>Grundläggande bibliografisk information</h3>
+          {pefObject.metaData &&
+            Object.entries(pefObject.metaData)
+              .map(([key, value]) => value != null && <label key={key}><strong>{key.toLocaleUpperCase()}:</strong> {value}</label>)
+          }
+        </div>
+
       </div>
     </div>
   );

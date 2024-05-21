@@ -47,6 +47,13 @@ export default function InstructionPage({ cookiePermission, setCookiePermission 
       </div>
 
       <div className="mb-8">
+        <h4 className="text-lg font-bold mb-2">6. Bokens grundläggande bibliografiska information:</h4>
+        <p>
+          Nedanför navigationsknapparna finns en ruta som visar bokens grundläggande bibliografiska information som standard. När du laddar upp en bok, uppdateras informationen automatiskt och inkluderar bland annat beskrivning, utgivare, och datum.
+        </p>
+      </div>
+
+      <div className="mb-8">
         <p>Vid anmärkningar om sidans tillgänglighet, gå till sidfoten och klicka på "Kakor och Tillgänglighet" för att komma till en sida där du kan lämna feedback och få kontaktuppgifter.</p>
       </div>
 
@@ -56,10 +63,10 @@ export default function InstructionPage({ cookiePermission, setCookiePermission 
             Ta mig till applikationen
           </button>
           :
-          <button className="button" onClick={() => { 
-            setCookiePermission(CookieEnum.ALLOWED); 
+          <button className="button" onClick={() => {
+            setCookiePermission(CookieEnum.ALLOWED);
             navigate('/');
-            }}>
+          }}>
             Godkänn kakor och ta mig till applikationen
           </button>
         }
