@@ -36,7 +36,7 @@ export default function Main({ cookiePermission }) {
   }, [cookiePermission, savedPageIndex, pefObject]);
 
   return (
-    <main id="MainContentArea" className="flex flex-col justify-start items-start mx-auto">
+    <main id="MainContentArea" className="mx-auto">
       {!viewMode ? (
         <UploadFile
           cookiePermission={cookiePermission}

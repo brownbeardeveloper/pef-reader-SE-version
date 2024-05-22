@@ -5,7 +5,7 @@ export default function CookieAndAccessibilityPage({ cookiePermission, setCookie
   const navigate = useNavigate();
 
   return (
-    <main className="max-w-3xl mx-auto px-10 pt-10 pb-20">
+    <main className="mx-auto px-20 pt-10 pb-20">
       <h2 className="text-2xl font-bold mb-4" id="MainContentArea">Kakor och Tillgänglighet</h2>
       <p className="mb-6">
         Syftet med denna policy är att ge dig som användare av Digital punktläsare webbplats

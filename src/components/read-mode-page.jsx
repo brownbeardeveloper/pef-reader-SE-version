@@ -152,10 +152,10 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
       </button>
 
       {cookiePermission === CookieEnum.ALLOWED && (
-        <div className="mt-2 p-5 bg-fuchsia-50 border border-fuchsia-500 w-64 rounded-lg drop-shadow-lg">
+        <div className="mt-3 p-5 bg-orange-50 border border-yellow-500 w-64 rounded-lg drop-shadow-lg">
 
           <fieldset>
-            <legend className="font-bold mb-3 m-1">Autosave</legend>
+            <legend className="font-bold my-2">Automatisk sparning</legend>
             <div className="flex justify-start items-center">
               <input type="radio"
                 id="autosave-radio-on"
@@ -164,7 +164,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                 checked={autoSave === true}
                 onChange={() => setAutoSave(true)}
               />
-              <label htmlFor="autosave-radio-on">Autosave påslagen</label>
+              <label htmlFor="autosave-radio-on">Aktiverad sparning</label>
             </div>
 
             <div className="flex justify-start items-center">
@@ -175,7 +175,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                 checked={autoSave === false}
                 onChange={() => setAutoSave(false)}
               />
-              <label htmlFor="autosave-radio-off">Autosave avslagen</label>
+              <label htmlFor="autosave-radio-off">inaktiverad sparning</label>
             </div>
           </fieldset>
         </div>
@@ -206,7 +206,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
         </div>
 
         { /* navigator buttons */}
-        <div className="flex flex-row flex-wrap justify-center items-center border mt-1 rounded-lg bg-slate-100 w-full">
+        <div className="flex flex-row flex-wrap justify-center items-center mt-1 w-full">
           <button onClick={() => handleNextPageBtn()} className="button">
             Nästa sida
           </button>
@@ -224,40 +224,46 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
             e.preventDefault();
             const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
             handleSetCurrentPage(pageNumber);
-          }} className="flex items-center"> 
-            <label htmlFor="goToPage" className="">Ange ett sidnummer: </label>
-            <input className="border rounded" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
+          }}
+            className="p-1 border bg-slate-50 shadow-md rounded-lg flex flex-row"
+          >
+            <div className="flex flex-col">
+              <label htmlFor="goToPage" className="">Ange ett sidnummer: </label>
+              <input className="border rounded" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
+            </div>
             <button type="submit" className="button">Gå till</button>
           </form>
 
-          <fieldset className="m-2">
-            <legend>Växla vy</legend>
-            <div className="flex flex-row justify-center align-center">
-              <input type="radio"
-                id="braille-view"
-                name="view"
-                className="m-1"
-                value="BRAILLE"
-                checked={bookView === FormatModeEnum.BRAILLE_VIEW}
-                onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
-              />
-              <label htmlFor="braille-view">Punktskrift</label>
-            </div>
-            <div className="flex flex-row justify-center align-center">
-              <input type="radio"
-                id="normal-view"
-                name="view"
-                className="m-1"
-                value="BRAILLE"
-                checked={bookView === FormatModeEnum.NORMAL_VIEW}
-                onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
-              />
-              <label htmlFor="normal-view">Svartskrift</label>
-            </div>
-          </fieldset>
+          <div className="p-1 px-5 flex flex-col justify-center align-center border bg-slate-50 shadow-md rounded-lg">
+            <fieldset className="m-2">
+              <legend className="font-semibold">Växla vy</legend>
+              <div className="flex flex-row justify-center align-center">
+                <input type="radio"
+                  id="braille-view"
+                  name="view"
+                  className="m-1"
+                  value="BRAILLE"
+                  checked={bookView === FormatModeEnum.BRAILLE_VIEW}
+                  onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
+                />
+                <label htmlFor="braille-view">Punktskrift</label>
+              </div>
+              <div className="flex flex-row justify-center align-center">
+                <input type="radio"
+                  id="normal-view"
+                  name="view"
+                  className="m-1"
+                  value="BRAILLE"
+                  checked={bookView === FormatModeEnum.NORMAL_VIEW}
+                  onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
+                />
+                <label htmlFor="normal-view">Svartskrift</label>
+              </div>
+            </fieldset>
+          </div>
         </div>
 
-        <div className="flex flex-col bg-slate-200 rounded-lg mt-20 p-10 w-full border">
+        <div className="flex flex-col bg-slate-200 rounded-lg my-20 p-10 w-full border">
           <h3 className="font-bold text-lg my-2" tabIndex={0}>Grundläggande bibliografisk information</h3>
           {pefObject.metaData &&
             Object.entries(pefObject.metaData)
@@ -269,17 +275,3 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
     </div>
   );
 }
-
-/*
-  const element = document.getElementById(pageId);
-
-  if (element) {
-    element.scrollIntoView({ behavior: "smooth" })
-    if (document.activeElement !== element) {
-      element.focus();
-      PositionSavedVoice()
-    }
-  } else {
-    console.error('Error: Unable to find the specified element.')
-  }
-*/

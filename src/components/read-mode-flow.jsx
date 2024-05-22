@@ -174,10 +174,10 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
       </button>
 
       {cookiePermission === CookieEnum.ALLOWED && (
-        <div className="mt-2 p-5 bg-fuchsia-50 border border-fuchsia-500 w-64 rounded-lg drop-shadow-lg">
-          
+        <div className="mt-3 p-5 bg-orange-50 border border-yellow-500 w-64 rounded-lg drop-shadow-lg">
+
           <fieldset>
-            <legend className="font-bold mb-3 m-1">Autosave</legend>
+            <legend className="font-bold my-2">Automatisk sparning</legend>
             <div className="flex justify-start items-center">
               <input type="radio"
                 id="autosave-radio-on"
@@ -186,7 +186,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
                 checked={autoSave === true}
                 onChange={() => setAutoSave(true)}
               />
-              <label htmlFor="autosave-radio-on">Autosave påslagen</label>
+              <label htmlFor="autosave-radio-on">Aktiverad sparning</label>
             </div>
 
             <div className="flex justify-start items-center">
@@ -197,13 +197,13 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
                 checked={autoSave === false}
                 onChange={() => setAutoSave(false)}
               />
-              <label htmlFor="autosave-radio-off">Autosave avslagen</label>
+              <label htmlFor="autosave-radio-off">inaktiverad sparning</label>
             </div>
           </fieldset>
         </div>
       )}
 
-<div className="flex flex-col justify-start items-center mt-20">
+      <div className="flex flex-col justify-start items-center mt-20">
         <h2 className="ml-8 text-2xl font-bold" tabIndex={0}>Titel: {pefObject.metaData.titel}</h2>
         <p className="mb-5">Författare: {pefObject.metaData.skapare}</p>
 
@@ -225,13 +225,13 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
 
         <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
-          <div id="pages-scrollable-element" className="w-full overflow-y-auto h-96">
+          <div id="pages-scrollable-element" className="w-auto overflow-y-auto h-96">
             {renderPages()}
           </div>
         </div>
 
         { /* navigator buttons */}
-        <div className="flex flex-row align-center justify-around border mt-1 py-5 px-20 rounded-lg bg-slate-100 w-full">
+        <div className="flex flex-row flex-wrap align-center justify-around w-full">
           <button onClick={() => {
             handleScrollToPageIndex(startPageIndex)
           }} className="button">
@@ -242,36 +242,43 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
             e.preventDefault();
             const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
             handleScrollToPageIndex(pageNumber);
-          }}>
-            <label htmlFor="goToPage">Ange ett sidnummer: </label>
-            <input className="border rounded" id="goToPage" type="number" min={startPageIndex} max={maxPageIndex} required />
+          }}
+            className="p-1 border bg-slate-50 shadow-md rounded-lg flex flex-row"
+          >
+            <div className="flex flex-col">
+              <label htmlFor="goToPage">Ange ett sidnummer: </label>
+              <input className="border rounded" id="goToPage" type="number" min={startPageIndex} max={maxPageIndex} required />
+            </div>
             <button type="submit" className="button">Gå till</button>
           </form>
 
-          <fieldset>
-            <legend>Växla vy</legend>
-            <div className="flex flex-row justify-center align-center">
-              <input type="radio"
-                id="braille-view"
-                className="m-1"
-                checked={bookView === FormatModeEnum.BRAILLE_VIEW}
-                onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
-              />
-              <label htmlFor="braille-view">Punktskriftvy</label>
-            </div>
-            <div className="flex flex-row justify-center align-center">
-              <input type="radio"
-                id="normal-view"
-                className="m-1"
-                checked={bookView === FormatModeEnum.NORMAL_VIEW}
-                onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
-              />
-              <label htmlFor="normal-view">Svartskriftvy</label>
-            </div>
-          </fieldset>
+          <div className="p-1 px-5 flex flex-col justify-center align-center border bg-slate-50 shadow-md rounded-lg">
+            <fieldset className="">
+              <legend className="font-semibold">Växla vy</legend>
+              <div className="flex flex-row justify-start align-center">
+                <input type="radio"
+                  id="braille-view"
+                  className="m-1"
+                  checked={bookView === FormatModeEnum.BRAILLE_VIEW}
+                  onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
+                />
+                <label htmlFor="braille-view">Punktskriftvy</label>
+              </div>
+              <div className="flex flex-row justify-start align-center">
+                <input type="radio"
+                  id="normal-view"
+                  className="m-1"
+                  checked={bookView === FormatModeEnum.NORMAL_VIEW}
+                  onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
+                />
+                <label htmlFor="normal-view">Svartskriftvy</label>
+              </div>
+            </fieldset>
+          </div>
+
         </div>
 
-        <div className="flex flex-col bg-slate-200 rounded-lg mt-20 p-10 w-full border">
+        <div className="flex flex-col bg-slate-200 rounded-lg my-20 p-10 w-full border">
           <h3 className="font-bold text-lg my-2" tabIndex={0}>Grundläggande bibliografisk information</h3>
           {pefObject.metaData &&
             Object.entries(pefObject.metaData)
