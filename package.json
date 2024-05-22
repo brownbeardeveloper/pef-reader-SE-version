@@ -1,13 +1,8 @@
 {
   "name": "pef-reader",
   "version": "2.0.0",
-  "homepage": "https://brownbeardeveloper.github.io/pef-reader-SE-version",
   "private": true,
   "dependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@babel/plugin-transform-private-property-in-object": "^7.24.1",
-    "@babel/preset-env": "^7.24.4",  
-
     "js-cookie": "^3.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -42,6 +37,9 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/plugin-transform-private-property-in-object": "^7.24.1",
+    "@babel/preset-env": "^7.24.4",  
     "gh-pages": "^6.1.1",
     "tailwindcss": "^3.4.3"
   }
