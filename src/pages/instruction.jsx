@@ -38,7 +38,7 @@ export default function InstructionPage({ cookiePermission, setCookiePermission 
 
       <div className="mb-8">
         <h4 className="text-lg font-bold mb-2">4. Spara senaste läspositionen:</h4>
-        <p>För att spara den senaste läspositionen behöver du tillåta kakor och sedan ha autosave-knappen påslagen. Den senaste läspositionen sparas automatiskt i kakor så fort sidan scrollas och visas automatiskt när du laddar upp samma bok igen.</p>
+        <p>För att spara den senaste läspositionen behöver du tillåta kakor och sedan ha automatisk sparning aktiverad. Den senaste läspositionen sparas automatiskt i kakor så fort sidan scrollas och visas automatiskt när du laddar upp samma bok igen.</p>
       </div>
 
       <div className="mb-8">
@@ -60,14 +60,14 @@ export default function InstructionPage({ cookiePermission, setCookiePermission 
       <div className="w-full flex justify-center">
         {cookiePermission ?
           <button className="button" onClick={() => { navigate('/') }}>
-            Ta mig till applikationen
+            Ta mig till startsidan
           </button>
           :
           <button className="button" onClick={() => {
             setCookiePermission(CookieEnum.ALLOWED);
             navigate('/');
           }}>
-            Godkänn kakor och ta mig till applikationen
+            Godkänn kakor och ta mig till startsidan
           </button>
         }
       </div>

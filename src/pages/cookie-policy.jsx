@@ -85,14 +85,14 @@ export default function CookieAndAccessibilityPage({ cookiePermission, setCookie
       <div className="w-full flex justify-center">
         {cookiePermission ?
           <button className="button" onClick={() => { navigate('/') }}>
-            Ta mig till applikationen
+            Ta mig till startsidan
           </button>
           :
           <button className="button" onClick={() => {
             setCookiePermission(CookieEnum.ALLOWED);
             navigate('/');
           }}>
-            Godkänn kakor och ta mig till applikationen
+            Godkänn kakor och ta mig till startsidan
           </button>
         }
       </div>
