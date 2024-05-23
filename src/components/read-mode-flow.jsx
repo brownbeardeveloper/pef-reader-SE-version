@@ -4,7 +4,7 @@ import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 import { FormatModeEnum, CookieEnum } from "../data/enums.js";
-import { metadataVariableTranslation, bibliographicInformationTranslator } from "../data/metadata-translator.js";
+import { metadataVariableTranslation } from "../data/metadata-translator.js";
 // import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
 
 export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSavedPageIndex, setReadmode, pefObject }) {
@@ -16,26 +16,21 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
   useDocumentTitle(pefObject.metaData.titel)
 
   useEffect(() => {
-    // Rerender the pages when it changes
-    renderPages()
-
-    if (savedPageIndex) {
-      const pageId = `page-${savedPageIndex}`
+    if (savedPageIndex !== null && savedPageIndex !== undefined) {
+      const pageId = `page-${savedPageIndex}`;
       const element = document.getElementById(pageId);
-
+  
       if (element) {
-        element.scrollIntoView({ behavior: "smooth" })
-        element.focus()
-
+        element.scrollIntoView({ behavior: "smooth" });
+        element.focus();
       } else {
-        console.error('Error: Unable to find the specified element.')
+        console.error(`Error: Unable to find the specified element with id ${pageId}.`);
       }
     } else {
-      console.error('There is no cookie.')
+      console.error('Error: There is no saved page index or cookie.');
     }
-
-  }, [pefObject, bookView]);
-
+  }, [savedPageIndex, pefObject, bookView]);
+  
   useEffect(() => {
     if (autoSave) {
       // Get the scrollable element by its ID
@@ -70,7 +65,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
         scrollableElement.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [autoSave]);
+  }, [autoSave, setSavedPageIndex]);
 
   function handleScrollToPageIndex(index) {
     const pageId = `page-${index}`
