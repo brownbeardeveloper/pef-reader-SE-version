@@ -5,7 +5,6 @@ import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 import { FormatModeEnum, CookieEnum } from "../data/enums.js";
 import { metadataVariableTranslation } from "../data/metadata-translator.js";
-// import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
 
 export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSavedPageIndex, setReadmode, pefObject }) {
   const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
@@ -29,7 +28,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
     } else {
       console.error('Error: There is no saved page index or cookie.');
     }
-  }, [savedPageIndex, pefObject, bookView]);
+  }, [pefObject, bookView]);
   
   useEffect(() => {
     if (autoSave) {
@@ -182,7 +181,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
                 checked={autoSave === true}
                 onChange={() => setAutoSave(true)}
               />
-              <label htmlFor="autosave-radio-on">Aktiverad sparning</label>
+              <label htmlFor="autosave-radio-on">Aktivera sparning</label>
             </div>
 
             <div className="flex justify-start items-center">
@@ -193,7 +192,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
                 checked={autoSave === false}
                 onChange={() => setAutoSave(false)}
               />
-              <label htmlFor="autosave-radio-off">inaktiverad sparning</label>
+              <label htmlFor="autosave-radio-off">Inaktivera sparning</label>
             </div>
           </fieldset>
         </div>

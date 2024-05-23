@@ -146,7 +146,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                 checked={autoSave === true}
                 onChange={() => setAutoSave(true)}
               />
-              <label htmlFor="autosave-radio-on">Aktiverad sparning</label>
+              <label htmlFor="autosave-radio-on">Aktivera sparning</label>
             </div>
 
             <div className="flex justify-start items-center">
@@ -157,7 +157,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                 checked={autoSave === false}
                 onChange={() => setAutoSave(false)}
               />
-              <label htmlFor="autosave-radio-off">inaktiverad sparning</label>
+              <label htmlFor="autosave-radio-off">Inaktivera sparning</label>
             </div>
           </fieldset>
         </div>
