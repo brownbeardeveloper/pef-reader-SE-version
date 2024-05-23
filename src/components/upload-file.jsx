@@ -24,7 +24,7 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
                 reader.addEventListener("load", () => { // Executes when the file is successfully loaded
                     const fileObject = fileReader(reader.result) // This object contains both metadata and body data
                     fileObject.then(resolvedObject => {
-                        if (resolvedObject.metaData.språk === 'sv') { // Move this function to the "Braille Translator" button later!
+                        if (resolvedObject.metaData.language === 'Svenska') { // Move this function to the "Braille Translator" button later!
                             setSavedPageIndex(null) // Resets the saved page index
                             setPefObject(resolvedObject); // Saves the file's contents as pefObject
                             setFileLoadStatus(FileLoadStatusEnum.SUCCESSFUL)

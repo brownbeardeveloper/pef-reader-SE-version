@@ -4,6 +4,7 @@ import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 import { FormatModeEnum, CookieEnum } from "../data/enums.js";
+import { metadataVariableTranslation, bibliographicInformationTranslator } from "../data/metadata-translator.js";
 // import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
 
 export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSavedPageIndex, setReadmode, pefObject }) {
@@ -204,8 +205,8 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
       )}
 
       <div className="flex flex-col justify-start items-center mt-20">
-        <h2 className="ml-8 text-2xl font-bold" tabIndex={0}>Titel: {pefObject.metaData.titel}</h2>
-        <p className="mb-5">Författare: {pefObject.metaData.skapare}</p>
+        <h2 className="ml-8 text-2xl font-bold" tabIndex={0}>Titel: {pefObject.metaData.title}</h2>
+        <p className="mb-5">Författare: {pefObject.metaData.creator}</p>
 
         {!autoSave && cookiePermission === CookieEnum.ALLOWED &&
           <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
@@ -280,9 +281,24 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
         <div className="flex flex-col bg-slate-200 rounded-lg my-20 p-10 w-full border">
           <h3 className="font-bold text-lg my-2" tabIndex={0}>Grundläggande bibliografisk information</h3>
-          {pefObject.metaData &&
+
+          {/* Render metadata labels */}
+          {pefObject.metaData && pefObject.metaData.language && 
             Object.entries(pefObject.metaData)
-              .map(([key, value]) => value != null && <label key={key}><strong>{key.toLocaleUpperCase()}:</strong> {value}</label>)
+              .map(([key, value]) => {
+                return value && pefObject.metaData.language && metadataVariableTranslation(key, pefObject.metaData.language) && (
+                  <label key={key}>
+                    <strong>{metadataVariableTranslation(key, pefObject.metaData.language)}:</strong> {value}
+                  </label>
+                );
+              })
+          }
+
+          {/* Render number of pages in the application */}
+          {maxPageIndex && 
+            <label>
+              <strong>Antal sidor i applikationen:</strong> {maxPageIndex}
+            </label>
           }
         </div>
 

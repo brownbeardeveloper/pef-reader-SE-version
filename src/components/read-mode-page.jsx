@@ -4,7 +4,7 @@ import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 import { FormatModeEnum, CookieEnum } from '../data/enums.js'
-// import { PositionSavedVoice, CountineReadingVoice } from "../functions/play-voice.js";
+import { metadataVariableTranslation } from '../data/metadata-translator.js'
 
 export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, cookiePermission, setReadmode, pefObject }) {
   const [pages, setPages] = useState([]);
@@ -265,13 +265,28 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
         <div className="flex flex-col bg-slate-200 rounded-lg my-20 p-10 w-full border">
           <h3 className="font-bold text-lg my-2" tabIndex={0}>Grundläggande bibliografisk information</h3>
-          {pefObject.metaData &&
+
+          {/* Render metadata labels */}
+          {pefObject.metaData && pefObject.metaData.language &&
             Object.entries(pefObject.metaData)
-              .map(([key, value]) => value != null && <label key={key}><strong>{key.toLocaleUpperCase()}:</strong> {value}</label>)
+              .map(([key, value]) => {
+                return value && metadataVariableTranslation(key, pefObject.metaData.language) && (
+                  <label key={key}>
+                    <strong>{metadataVariableTranslation(key, pefObject.metaData.language)}:</strong> {value}
+                  </label>
+                );
+              })
+          }
+
+          {/* Render number of pages in the application */}
+          {maxPageIndex &&
+            <label>
+              <strong>Antal sidor i applikationen:</strong> {maxPageIndex}
+            </label>
           }
         </div>
-
       </div>
+
     </div>
   );
 }

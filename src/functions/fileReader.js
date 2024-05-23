@@ -1,3 +1,5 @@
+import { languageCodeTranslator, bibliographicInformationTranslator } from "../data/metadata-translator";
+
 const KNOWN_PEF_FILE_TYPES = ['image/PEF', 'image/x-pentax-pef', 'application/x-pef+xml'];
 
 export function checkIfPefFileType(fileType) {
@@ -21,51 +23,42 @@ export function getMetaData(xmlDoc) {
 
     if (meta) {
 
-        /* Programmers, forgive me for those swedish variables */
-
         // Saves important information in meta otherwise returns null
         const identifier = meta.querySelector("identifier")?.textContent || null;
-        const titel = meta.querySelector("title")?.textContent || null;
-        const datum = meta.querySelector("date")?.textContent || null;
-        const språk = meta.querySelector("language")?.textContent || null;
-        const utgivare = meta.querySelector("publisher")?.textContent || null;
-        const skapare = meta.querySelector("creator")?.textContent || null;
-        const beskrivning = meta.querySelector("description")?.textContent || null;
+        const title = meta.querySelector("title")?.textContent || null;
+        const date = meta.querySelector("date")?.textContent || null;
+        const language = meta.querySelector("language")?.textContent || null;
+        const publisher = meta.querySelector("publisher")?.textContent || null;
+        const creator = meta.querySelector("creator")?.textContent || null;
+        const description = meta.querySelector("description")?.textContent || null;
         const format = meta.querySelector("format")?.textContent || null;
-        const bidragsgivare = meta.querySelector("contributor")?.textContent || null;
-        const källa = meta.querySelector("source")?.textContent || null;
-        const ämne = meta.querySelector("subject")?.textContent || null;
-        const typ = meta.querySelector("type")?.textContent || null;
-        const relation = meta.querySelector("relation")?.textContent || null;
-        const täckning = meta.querySelector("coverage")?.textContent || null;
-        const rättigheter = meta.querySelector("rights")?.textContent || null;
-        const ark = meta.querySelector("sheets")?.textContent || null;
-        const volymer = meta.querySelector("volumes")?.textContent || null;
-        const antalKiloTecken = meta.querySelector("kiloChars")?.textContent || null;
+        const contributor = meta.querySelector("contributor")?.textContent || null;
+        const source = meta.querySelector("source")?.textContent || null;
+        const subject = meta.querySelector("subject")?.textContent || null;
+        const type = meta.querySelector("type")?.textContent || null;
+        const rights = meta.querySelector("rights")?.textContent || null;
+        const volumes = meta.querySelector("volumes")?.textContent || null;
 
-        // Create a new MetaData object (SE version)
-        const metaDataSE = {
-            format,
+        const bookFormat = checkIfPefFileType(format) ? "Braille book" : "Unknown"
+
+        // Create a new MetaData object
+        const metaData = {
+            format: bibliographicInformationTranslator(bookFormat),
             identifier,
-            titel,
-            skapare,
-            ämne,
-            beskrivning,
-            utgivare,
-            bidragsgivare,
-            datum,
-            typ,
-            källa,
-            språk,
-            relation,
-            täckning,
-            rättigheter,
-            ark,
-            volymer,
-            "antal tecken i tusental": antalKiloTecken
+            title,
+            creator,
+            subject,
+            description,
+            publisher,
+            contributor,
+            date,
+            type,
+            source: source ? source.replace("urn:isbn:", "") : null,
+            language: languageCodeTranslator(language),
+            rights,
+            volumes,
         };
-
-        return metaDataSE
+        return metaData
 
     } else {
         console.log("No meta element found in the XML.");
