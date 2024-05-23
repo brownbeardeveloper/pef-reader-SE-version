@@ -28,7 +28,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
     } else {
       console.error('Error: There is no saved page index or cookie.');
     }
-  }, [pefObject, bookView]);
+  }, [pefObject, bookView, savedPageIndex]); // remove savedPageIndex and use callback 
   
   useEffect(() => {
     if (autoSave) {
