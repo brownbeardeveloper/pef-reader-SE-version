@@ -59,12 +59,12 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
     }
 
     return (
-        <div className="flex flex-col p-20 w-full">
+        <div className="flex flex-col pt-10 px-20 w-full">
 
             <div className="flex flex-col justify-center items-center p-4 md:p-8 lg:p-12">
                 <div className="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
                     <div className="h-24 w-24 md:h-20 md:w-20 flex-shrink-0">
-                    <img src={brailleIcon} className="w-full h-full" alt="Punktskriftsikon" />
+                        <img src={brailleIcon} className="w-full h-full" alt="Punktskriftsikon" />
                     </div>
                     <div className="text-center md:text-left">
                         <h2 id="MainContentArea" className="text-xl md:text-2xl lg:text-3xl font-bold mt-4 md:mt-0">Från punktskrift till svartskrift på några sekunder</h2>
@@ -156,8 +156,8 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
 
                 {fileLoadStatus === FileLoadStatusEnum.FAILED && (
                     <div className="flex flex-row items-center bg-red-100 text-red-700 rounded-lg pl-5 p-3 shadow-md max-w-md">
-                        <span className="font-semibold text-sm">
-                            Uppladdningen misslyckades. Försök igen eller kontakta kundtjänst.
+                        <span className="font-semibold text-sm" tabIndex={0}>
+                            Uppladdningen misslyckades. Uppdatera sidan och försök igen innan du kontaktar kundtjänsten <a href="https://www.legimus.se/kontakt/kontakta-mtm/" class="underline">här</a>.
                         </span>
                     </div>
                 )}

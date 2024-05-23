@@ -34,6 +34,14 @@ export default function Footer() {
             >
               Kakor och tillgänglighet
             </a>
+            |
+            <a
+              className="text-md font-semibold text-sky-600 underline hover:text-blue-900 mx-2"
+              href="/kontakt"
+            >
+              Kontakta oss
+            </a>
+
           </nav>
 
           <div className='mt-10 mb-5 w-56'>

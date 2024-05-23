@@ -77,7 +77,7 @@ export default function CookieAndAccessibilityPage({ cookiePermission, setCookie
         </ul>
 
         <p className="my-10">
-          Webbplatsen lanserades den 20 maj 2024.
+          Webbplatsen lanserades den 24 maj 2024.
         </p>
       </section>
 
