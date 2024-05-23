@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import useDocumentTitle from "../functions/useDocumentTile.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
@@ -16,18 +16,76 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
   useDocumentTitle(pefObject.metaData.titel);
 
-  useEffect(() => {
-    // Resave the pages array when it changes
-    renderPagesFromPefObject();
-  }, [pefObject, bookView]);
+  const renderPagesFromPefObject = useCallback(() => {
+    const pagesFromPefObject = [];
+    let firstPageIndex;
+    let pageIndex = 1;
+
+    const volumes = pefObject.bodyData.volumes;
+    for (let i = 0; i < volumes.length; i++) {
+      const volume = volumes[i];
+      if (volume.sections) {
+        const sections = volume.sections;
+        for (let j = 0; j < sections.length; j++) {
+          const section = sections[j];
+          if (section.pages) {
+            const sectionPages = section.pages;
+            for (let k = 0; k < sectionPages.length; k++) {
+              k = manipulatePageIndexToRemoveUnnecessaryPages(sectionPages, k);
+              const page = sectionPages[k];
+              const thisPageIndex = pageIndex;
+              pageIndex++;
+
+              const pageElement = page && page.rows && (
+                <div key={`${i}-${j}-${k}`}>
+                  <h3 id={`page-${thisPageIndex}`} className="font-black" tabIndex={0}>
+                    Sida {thisPageIndex}
+                  </h3>
+                  {page.rows.map((row, l) => (
+                    <div key={`${i}-${j}-${k}-${l}`}>
+                      <span>
+                        {bookView === FormatModeEnum.NORMAL_VIEW
+                          ? brailleTranslator(filterUnnecessarySentence(row))
+                          : filterUnnecessarySentence(row)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              );
+
+              if (!firstPageIndex && pageElement) {
+                firstPageIndex = thisPageIndex;
+                pagesFromPefObject[thisPageIndex] = pageElement;
+              } else if (pageElement) {
+                pagesFromPefObject[thisPageIndex] = pageElement;
+              } else {
+                pageIndex--;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    setPages(pagesFromPefObject);
+    setFirstPageIndex(firstPageIndex);
+    setMaxPageIndex(pageIndex - 1);
+    if (savedPageIndex == null) setCurrentPageIndex(firstPageIndex);
+  }, [pefObject, bookView, savedPageIndex]);
 
   useEffect(() => {
-    if (currentPageIndex === null && savedPageIndex) {
-      setCurrentPageIndex(savedPageIndex)
-    } else if (autoSave && currentPageIndex) {
-      setSavedPageIndex(currentPageIndex)
+    renderPagesFromPefObject();
+  }, [renderPagesFromPefObject]);
+
+  useEffect(() => {
+    if (currentPageIndex === null && savedPageIndex !== null) {
+      setCurrentPageIndex(savedPageIndex);
+    } else if (autoSave && currentPageIndex !== null) {
+      setSavedPageIndex(currentPageIndex);
     }
-  }, [autoSave, currentPageIndex, savedPageIndex]);
+  }, [autoSave, currentPageIndex, savedPageIndex, setSavedPageIndex]);
+
+
 
   function handleNextPageBtn() {
     if (currentPageIndex < maxPageIndex) {
@@ -67,82 +125,6 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
     }
   }
 
-  function renderPagesFromPefObject() {
-    // Array to store pages
-    const pagesFromPefObject = [];
-    // Variable to store index of the first page
-    let firstPageIndex;
-    // Variable to track current page index
-    let pageIndex = 1;
-
-    const volumes = pefObject.bodyData.volumes;
-    for (let i = 0; i < volumes.length; i++) {
-      const volume = volumes[i];
-      if (volume.sections) {
-        const sections = volume.sections;
-        for (let j = 0; j < sections.length; j++) {
-          const section = sections[j];
-          if (section.pages) {
-            const sectionPages = section.pages;
-            for (let k = 0; k < sectionPages.length; k++) {
-
-              // Apply manipulation to page index if necessary
-              k = manipulatePageIndexToRemoveUnnecessaryPages(sectionPages, k);
-              const page = sectionPages[k]
-              const thisPageIndex = pageIndex
-              pageIndex++;
-
-              // Generate JSX element for page content
-              const pageElement = page && page.rows && (
-                <div key={`${i}-${j}-${k}`}>
-                  <h3 id={`page-${thisPageIndex}`}
-                    className="font-black"
-                    tabIndex={0}>
-                    Sida {thisPageIndex}
-                  </h3>
-
-                  {page.rows.map((row, l) => (
-                    <div key={`${i}-${j}-${k}-${l}`}>
-                      <span>
-                        {bookView === FormatModeEnum.NORMAL_VIEW
-                          ? brailleTranslator(filterUnnecessarySentence(row))
-                          : filterUnnecessarySentence(row)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              );
-
-              // Save the page element if it's the first page index and there's a page element
-              if (!firstPageIndex && pageElement) {
-                firstPageIndex = thisPageIndex;
-                pagesFromPefObject[thisPageIndex] = pageElement;
-              }
-              // Save the page element if there's a page element
-              else if (pageElement) {
-                pagesFromPefObject[thisPageIndex] = pageElement;
-              }
-              // Move the page index back one page if the page element is empty
-              else {
-                // Use the following line for debugging to log which page index is missing
-                // console.error("Page index undefined:", thisPageIndex, "Page element:", pageElement);
-                pageIndex--;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    // Save the pages object into the pages array
-    setPages(pagesFromPefObject);
-    // Set the start page index
-    setFirstPageIndex(firstPageIndex);
-    // Set the maximum page index
-    setMaxPageIndex(pageIndex - 1);
-    // Set the first page as the current page if there's no saved page index    
-    if (savedPageIndex == null) setCurrentPageIndex(firstPageIndex);
-  };
 
 
   return (
