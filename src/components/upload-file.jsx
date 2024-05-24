@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { fileReader, checkIfPefFileType } from "../functions/fileReader"
+import { fileReader, checkIfPefFileType } from "../utils/fileReader"
 import { UnitModeEnum, FileLoadStatusEnum } from "../data/enums.js"
 import brailleIcon from '../media/braille-icon.png';
 

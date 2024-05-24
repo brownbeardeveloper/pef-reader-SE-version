@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import updateBrowserTabText from "../functions/updateBrowserTabText.js";
-import brailleTranslator from "../functions/translator/brailleTranslator.js";
-import { filterUnnecessarySentence } from "../functions/filterSetences.js"
-import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
+import updateBrowserTabText from "../utils/updateBrowserTabText.js";
+import brailleTranslator from "../utils/translator/brailleTranslator.js";
+import { filterUnnecessarySentence } from "../utils/filterSetences.js"
+import { manipulatePageIndexToRemoveUnnecessaryPages } from "../utils/filterPages.js";
 import { FormatModeEnum, CookieEnum } from "../data/enums.js";
 import { metadataVariableTranslation } from "../data/metadataTranslator.js";
 

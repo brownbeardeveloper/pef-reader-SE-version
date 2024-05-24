@@ -31,3 +31,25 @@ This application is designed to make it easier for users, with or without visual
   - Adjust the GUI for a browser window zoomed to 200%.
   - Send this application to the external testers.
   - Add voice when pressing the 'next page' button in the read-mode.
+
+
+## How to Navigate the Code
+
+### Pages
+This application contains the following pages:
+
+- **Main page**: Includes an upload-file component, read-mode with either a "flow" component or a "page by page" component
+- **Instruction page**
+- **Cookie and Accessibility page**
+- **Contact page**
+- **404 page**
+
+### Key Functions
+- **File reader**: Handles everything related to uploading files
+- **Folder translator**: Manages the conversion from Braille to text
+- **Filter sentence**: Filters out unnecessary sentences by returning null if the text consists only of specific Braille characters to skip, unless it contains certain Braille symbols to not skip
+- **Filter page**: Adjusts the page index to skip unnecessary pages such as those with less than a quarter of text, publisher information, or back cover text
+- **Cookie manager**: Handles everything related to cookies
+
+
+

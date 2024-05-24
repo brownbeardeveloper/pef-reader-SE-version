@@ -1,4 +1,4 @@
-export default function NotFound() {
+export default function NotFoundPage() {
     return (
       <main className="mx-auto px-20 pt-10 pb-20">
     <h2 className="mb-6 text-4xl font-bold text-slate-600 tracking-tight" tabIndex={0}>

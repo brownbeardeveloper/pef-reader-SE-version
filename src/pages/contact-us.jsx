@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import { useState } from 'react';
 
-export default function ContactUs() {
+export default function ContactUsPage() {
     const [isCopied, setIsCopied] = useState(false);
 
     const copyPhoneNumber = () => {

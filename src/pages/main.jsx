@@ -4,9 +4,9 @@ import ReadModeFlow from "../components/read-mode-flow.jsx";
 import ReadModePage from "../components/read-mode-page.jsx";
 import { UnitModeEnum, CookieEnum } from "../data/enums.js";
 import { useNavigate } from "react-router-dom";
-import { setLatestPageIndexToCookie, getLatestPageIndexFromCookieInt } from "../functions/cookieManager.js";
+import { setLatestPageIndexToCookie, getLatestPageIndexFromCookieInt } from "../services/cookieManager.js";
 
-export default function Main({ cookiePermission }) {
+export default function MainPage({ cookiePermission }) {
   const [pefObject, setPefObject] = useState(null);
   const [fileName, setFileName] = useState('ingen fil vald');
   const [viewMode, setViewMode] = useState(false);

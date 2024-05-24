@@ -1,12 +1,12 @@
 import Navbar from './components/navbar.jsx'
 import Footer from './components/footer.jsx'
-import Main from './pages/main.jsx'
+import MainPage from './pages/main.jsx'
 import InstructionPage from './pages/instruction.jsx';
-import CookieAndAccessibilityPage from './pages/cookie-policy.jsx';
-import NotFound from './pages/not-found.jsx';
-import ContactUs from './pages/contact-us.jsx';
+import CookieAndAccessibilityPage from './pages/cookie-and-accessibility.jsx';
+import NotFoundPage from './pages/not-found.jsx';
+import ContactUsPage from './pages/contact-us.jsx';
 import { BrowserRouter as Router, Routes, Route  } from "react-router-dom";
-import { getAllowCookie, setAllowCookie } from './functions/cookieManager.js';
+import { getAllowCookie, setAllowCookie } from './services/cookieManager.js';
 import { useState, useEffect } from 'react';
 import { CookieEnum } from './data/enums.js';
 
@@ -32,9 +32,9 @@ export default function App() {
       <Routes>
         <Route path="/instruktion" element={<InstructionPage cookiePermission={cookiePermission} setCookiePermission={setCookiePermission} />} />
         <Route path='/om-kakor-och-tillganglighet' element={<CookieAndAccessibilityPage cookiePermission={cookiePermission} setCookiePermission={setCookiePermission} />} />
-        <Route path="/kontakt" element={<ContactUs />} />
-        <Route path="/" element={<Main cookiePermission={cookiePermission} />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/kontakt" element={<ContactUsPage />} />
+        <Route path="/" element={<MainPage cookiePermission={cookiePermission} />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
     </Router>
