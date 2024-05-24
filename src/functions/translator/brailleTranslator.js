@@ -28,22 +28,17 @@ export default function brailleTranslator(braillePhrase) {
             continue
         }
 
-        if ((newChar = brailleCharToLetter(currentBrailleChar))) {
-            newPhrase += newChar
-            continue
-        }
-
-        if (i + 1 < braillePhrase.length) { // If longer than the current phrase's length
+        if (i +1 <= braillePhrase.length) { // If equals or longer than the current phrase's length
 
             //Check for next character
-            let nextChar = braillePhrase.charAt(i + 1)
+            let nextChar = braillePhrase.charAt(i +1)
 
             // add current and next symbols together
             const doubleSymbols = currentBrailleChar + nextChar
 
             if (isIgnoreSymbol(doubleSymbols)) {
                 newPhrase += doubleSymbols
-                i++ // should this be +2 ? 
+                i += 2 
                 continue
             }
 
@@ -52,9 +47,14 @@ export default function brailleTranslator(braillePhrase) {
 
             if (newChar) {
                 newPhrase += newChar
-                i++ // should this be +2 ? 
+                i += 2  
                 continue
             }
+        }
+
+        if ((newChar = brailleCharToLetter(currentBrailleChar))) {
+            newPhrase += newChar
+            continue
         }
 
         if ((newChar = brailleCharToPunctuation(currentBrailleChar))) {

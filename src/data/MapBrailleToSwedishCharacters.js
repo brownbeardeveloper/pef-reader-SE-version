@@ -4,9 +4,12 @@ export const upperCaseSign = '⠠'
 export const stopSign = "⠱"
 export const blankSign = "⠀"
 export const ignoreBrailleCharacters = [ // Remove and correct later if needed
-    "⠨","⠱","⠬","⠣", // single character
-    "⠠⠄","⠠⠤","⠨⠔","⠱⠔","⠨⠨","⠨⠶","⠱⠶","⠨⠤", "⠱⠤","⠨⠢","⠱⠢","⠱⠂","⠨⠖","⠱⠖" // double characters
+    "⠨", "⠱", "⠬", "⠣", // single character
+    "⠠⠄", "⠠⠤", "⠨⠔", "⠱⠔", "⠨⠨", "⠨⠶", "⠱⠶", "⠨⠤", "⠱⠤", "⠨⠢", "⠱⠢", "⠱⠂", "⠨⠖", "⠱⠖" // double characters
 ]
+
+/* Scandinavian Braille */
+// Reference: https://www.pharmabraille.com/wp-content/uploads/2015/01/Svenska_skrivregler_for_punktskrift.pdf by Punktskriftsnämnden
 
 export const mapBrailleToAlpha = {
     '⠁': 'a',
@@ -14,6 +17,7 @@ export const mapBrailleToAlpha = {
     '⠉': 'c',
     '⠙': 'd',
     '⠑': 'e',
+    '⠿': 'é',
     '⠋': 'f',
     '⠛': 'g',
     '⠓': 'h',
@@ -30,6 +34,7 @@ export const mapBrailleToAlpha = {
     '⠎': 's',
     '⠞': 't',
     '⠥': 'u',
+    '⠳': 'ü',
     '⠧': 'v',
     '⠺': 'w',
     '⠭': 'x',
@@ -37,10 +42,9 @@ export const mapBrailleToAlpha = {
     '⠵': 'z',
     '⠜': 'ä',
     '⠡': 'å',
-    '⠷': 'á', // remove?
     '⠪': 'ö',
-    '⠳': 'ü', // remove?
-    '⠿': 'é', // remove?
+
+    // '⠷': 'á', corresponds to '[' in braille
 }
 
 export const mapBrailleToNumber = {
@@ -58,7 +62,7 @@ export const mapBrailleToNumber = {
 
 export const mapBrailleToPunctuation = {
 
-    /* simple braille to punctuation */
+    /* translating one-letter Braille sequences into punctuation */
     "⠦": "(",
     "⠴": ")",
     "⠷": "[",
@@ -77,11 +81,12 @@ export const mapBrailleToPunctuation = {
     "⠌": "/",
     "⠐": "'",
     "⠤": "-",
+    "⠹": "%",
 
-    /* double brailles to punctuation */
-    "⠘⠉": "¢", 
-    "⠘⠎": "$", 
-    "⠘⠑": "€", 
+    /* translating two-letter Braille sequences into punctuation */
+    "⠘⠉": "¢",
+    "⠘⠎": "$",
+    "⠘⠑": "€",
     "⠘⠇": "£",
     "⠘⠽": "¥",
     "⠠⠷": "{",
@@ -92,19 +97,24 @@ export const mapBrailleToPunctuation = {
     "⠘⠼": "#",
     "⠘⠲": "†",
     "⠘⠒": "~",
-    "⠤⠤": "–"
+    "⠤⠤": "–",
+    "⠹⠹": "‰",
+    "⠼⠪" : "<",
+    "⠼⠕" : ">",
 
-    /* triple brailles to punctuation */
-    // add more characters
+    /* translating three-letter Braille sequences into punctuation (not yet tested and requires adjustments in the brailleTranslator code) */
+    "⠦⠉⠴": "©",
+    "⠦⠗⠴": "®",
+
+    /* translating four-letter Braille sequences into punctuation (not yet tested and requires adjustments in the brailleTranslator code) */ 
+    "⠦⠞⠍⠴": "™",
 };
 
 
 /*
 
 missing:
-
-single: %,
-
-double: ‰, <, >, 
+single: "•" 
+double: 
 
 */
