@@ -45,7 +45,7 @@ export function getMetaData(xmlDoc) {
             format: bibliographicInformationTranslator(bookFormat),
             identifier,
             title,
-            creator,
+            author: creator,
             subject,
             description,
             publisher,

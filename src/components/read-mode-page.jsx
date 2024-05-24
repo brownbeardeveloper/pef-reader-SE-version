@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
-import useDocumentTitle from "../functions/useDocumentTile.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 import { FormatModeEnum, CookieEnum } from '../data/enums.js'
 import { metadataVariableTranslation } from '../data/metadata-translator.js'
+import updateBrowserTabText from "../functions/updateBrowserTabText.js";
 
 export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, cookiePermission, setReadmode, pefObject }) {
   const [pages, setPages] = useState([]);
@@ -14,7 +14,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
   const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
   const [autoSave, setAutoSave] = useState(true)
 
-  useDocumentTitle(pefObject.metaData.titel);
+  updateBrowserTabText(pefObject.metaData.title);
 
   const renderPagesFromPefObject = useCallback(() => {
     const pagesFromPefObject = [];
@@ -164,8 +164,8 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
       )}
 
       <div className="flex flex-col justify-start items-center mt-20">
-        <h2 className="ml-8 text-2xl font-bold" tabIndex={0}>Titel: {pefObject.metaData.titel}</h2>
-        <p className="mb-5">Författare: {pefObject.metaData.skapare}</p>
+      {pefObject.metaData.title && <h2 className="ml-8 text-2xl font-bold" tabIndex={0}>Titel: {pefObject.metaData.title}</h2>}
+        {pefObject.metaData.author && <p className="mb-5">Författare: {pefObject.metaData.author}</p>}
 
         {!autoSave && cookiePermission === CookieEnum.ALLOWED &&
           <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">

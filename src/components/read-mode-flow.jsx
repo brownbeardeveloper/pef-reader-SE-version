@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import useDocumentTitle from "../functions/useDocumentTile.js";
+import updateBrowserTabText from "../functions/updateBrowserTabText.js";
 import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
@@ -12,7 +12,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
   let maxPageIndex
   let startPageIndex
 
-  useDocumentTitle(pefObject.metaData.titel)
+  updateBrowserTabText(pefObject.metaData.title)
 
   useEffect(() => {
     if (savedPageIndex !== null && savedPageIndex !== undefined) {
@@ -199,8 +199,8 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
       )}
 
       <div className="flex flex-col justify-start items-center mt-20">
-        <h2 className="ml-8 text-2xl font-bold" tabIndex={0}>Titel: {pefObject.metaData.title}</h2>
-        <p className="mb-5">Författare: {pefObject.metaData.creator}</p>
+        {pefObject.metaData.title && <h2 className="ml-8 text-2xl font-bold" tabIndex={0}>Titel: {pefObject.metaData.title}</h2>}
+        {pefObject.metaData.author && <p className="mb-5">Författare: {pefObject.metaData.author}</p>}
 
         {!autoSave && cookiePermission === CookieEnum.ALLOWED &&
           <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">

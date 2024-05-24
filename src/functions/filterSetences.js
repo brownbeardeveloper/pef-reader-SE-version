@@ -22,6 +22,5 @@ export function filterUnnecessarySentence(txt) {
     }
 
     // If whole sentence doesnt contains important information then returns null
-    // console.log(txt)
     return null;
 }
