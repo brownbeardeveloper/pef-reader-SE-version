@@ -12,7 +12,6 @@ This application is designed to make it easier for users, with or without visual
 ## Versions
 
 ### 2.0.1 (Latest Version)
-  - Added voices.
   - Changed from saving the row position by clicking on it to automatically saving the page position.
 
 ### 2.0.0
@@ -27,7 +26,6 @@ This application is designed to make it easier for users, with or without visual
   - Project created using pure JavaScript, HTML, and CSS.
 
 ## To-Do 
-  - Set focus on the page index (<h3>) when changing the page index.
   - Remove hyphenation as the last character in flow read-mode.
   - Add cursive formatting (<em>) to the text.
   - Adjust the GUI for a browser window zoomed to 200%.
