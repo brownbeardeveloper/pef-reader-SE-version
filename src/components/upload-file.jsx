@@ -149,7 +149,7 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
                 </div>
             </fieldset>
 
-            <div>
+            <div className="mb-60">
                 {(fileLoadStatus === FileLoadStatusEnum.INITIAL || fileLoadStatus === FileLoadStatusEnum.SUCCESSFUL) && (
                     <button onClick={HandleSwapToReadMode} className="button" >Läs boken</button>
                 )}
