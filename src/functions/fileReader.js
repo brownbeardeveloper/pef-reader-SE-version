@@ -26,7 +26,6 @@ export function getMetaData(xmlDoc) {
         // Saves important information in meta otherwise returns null
         const identifier = meta.querySelector("identifier")?.textContent || null;
         const title = meta.querySelector("title")?.textContent || null;
-        const date = meta.querySelector("date")?.textContent || null;
         const language = meta.querySelector("language")?.textContent || null;
         const publisher = meta.querySelector("publisher")?.textContent || null;
         const creator = meta.querySelector("creator")?.textContent || null;
@@ -51,7 +50,6 @@ export function getMetaData(xmlDoc) {
             description,
             publisher,
             contributor,
-            date,
             type,
             source: source ? source.replace("urn:isbn:", "") : null,
             language: languageCodeTranslator(language),
