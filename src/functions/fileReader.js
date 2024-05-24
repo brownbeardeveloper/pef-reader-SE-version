@@ -1,4 +1,4 @@
-import { languageCodeTranslator, bibliographicInformationTranslator } from "../data/metadata-translator";
+import { languageCodeTranslator, bibliographicInformationTranslator } from "../data/metadataTranslator";
 
 const KNOWN_PEF_FILE_TYPES = ['image/PEF', 'image/x-pentax-pef', 'application/x-pef+xml'];
 

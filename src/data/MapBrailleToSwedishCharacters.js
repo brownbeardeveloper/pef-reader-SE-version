@@ -112,9 +112,9 @@ export const mapBrailleToPunctuation = {
 
 
 /*
-
 missing:
-single: "•" 
-double: 
-
+one-letter: "•" 
+two-letter: 
+three-letter:
+four-letter:
 */

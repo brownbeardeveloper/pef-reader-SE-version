@@ -4,7 +4,7 @@ import brailleTranslator from "../functions/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../functions/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../functions/filterPages.js";
 import { FormatModeEnum, CookieEnum } from "../data/enums.js";
-import { metadataVariableTranslation } from "../data/metadata-translator.js";
+import { metadataVariableTranslation } from "../data/metadataTranslator.js";
 
 export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSavedPageIndex, setReadmode, pefObject }) {
   const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
