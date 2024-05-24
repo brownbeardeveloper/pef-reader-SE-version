@@ -30,3 +30,4 @@ This application is designed to make it easier for users, with or without visual
   - Add cursive formatting (<em>) to the text.
   - Adjust the GUI for a browser window zoomed to 200%.
   - Send this application to the external testers.
+  - Add voice when pressing the 'next page' button in the read-mode.
