@@ -8,28 +8,28 @@ export default function Footer() {
         <div className="text-neutral-700 flex flex-col items-center">
           <nav className="mt-2">
             <a
-              className="text-md font-semibold text-sky-600 underline hover:text-blue-900 mx-2"
+              className="text-md font-semibold text-blue-500 hover:text-blue-700 underline mx-2"
               href="https://www.mtm.se/"
             >
               Myndigheten för Tillgängliga Medier
             </a>
             |
             <a
-              className="text-md font-semibold text-sky-600 underline hover:text-blue-900 mx-2"
+              className="text-md font-semibold text-blue-500 hover:text-blue-700 underline mx-2"
               href="https://www.legimus.se/"
             >
               Legimus
             </a>
             |
             <a
-              className="text-md font-semibold text-sky-600 underline hover:text-blue-900 mx-2"
+              className="text-md font-semibold text-blue-500 hover:text-blue-700 underline mx-2"
               href="/instruktion"
             >
               Användarinstruktioner
             </a>
             |
             <a
-              className="text-md font-semibold text-sky-600 underline hover:text-blue-900 mx-2"
+              className="text-md font-semibold text-blue-500 hover:text-blue-700 underline mx-2"
               href="/om-kakor-och-tillganglighet"
             >
               Kakor och tillgänglighet

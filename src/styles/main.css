@@ -8,7 +8,6 @@ main {
 }
 
 main .button {
-    margin: 10px;
     background: #A54399;
     color: #fff;
     cursor: pointer;

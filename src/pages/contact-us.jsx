@@ -54,7 +54,7 @@ export default function ContactUsPage() {
                 </p>
                 <button 
                 onClick={copyPhoneNumber} 
-                className={`mt-1 px-2 border rounded-lg border ${isCopied ? "border-green-600 bg-green-300" : "border-slate-400 bg-slate-100 hover:bg-slate-300"}`}>
+                className={`mt-1 px-2 py-1 border rounded border shadow ${isCopied ? "text-white bg-emerald-500 border-emerald-600" : "bg-slate-100 border-slate-200 hover:bg-slate-200 hover:border-slate-300"}`}>
                         <FontAwesomeIcon icon={faCopy} className="mx-1" />
                         {isCopied ? "Telefonnumret har kopierats!" : "Kopiera telefonnumret"}
                     </button>

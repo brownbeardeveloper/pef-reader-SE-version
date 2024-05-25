@@ -129,15 +129,16 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
   return (
     <div className="flex flex-col pt-5 px-10 w-full">
-      <button onClick={() => setReadmode(false)} className="button">
+      <button onClick={() => setReadmode(false)} className="button mb-5">
         Tillbaka till startsida
       </button>
 
       {cookiePermission === CookieEnum.ALLOWED && (
-        <div className="mt-3 p-5 bg-orange-50 border border-yellow-500 w-64 rounded-lg drop-shadow-lg">
+        <div className={`mt-3 px-5 py-3 border w-64 rounded shadow duration-500 text-white border 
+        ${autoSave ? "bg-emerald-500 border-emerald-600" : "bg-red-500 border-red-600"}`}>
 
           <fieldset>
-            <legend className="font-bold my-2">Automatisk sparning</legend>
+            <legend className="font-bold mb-1">Automatisk sparning</legend>
             <div className="flex justify-start items-center">
               <input type="radio"
                 id="autosave-radio-on"
@@ -164,88 +165,91 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
       )}
 
       <div className="flex flex-col justify-start items-center mt-20">
-      {pefObject.metaData.title && <h2 className="ml-8 text-2xl font-bold" tabIndex={0}>Titel: {pefObject.metaData.title}</h2>}
+        {pefObject.metaData.title && <h2 className="ml-8 text-2xl font-bold" tabIndex={0}>Titel: {pefObject.metaData.title}</h2>}
         {pefObject.metaData.author && <p className="mb-5">Författare: {pefObject.metaData.author}</p>}
 
         {!autoSave && cookiePermission === CookieEnum.ALLOWED &&
           <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
-            <span className="block sm:inline" tabIndex={0}>Om du aktiverar radioknappen för autosave, kommer din position att sparas varje gång du byter sida.
+            <span className="block sm:inline" tabIndex={0}>Om du aktiverar automatisk sparning, kommer din position att sparas varje gång du byter sida.
             </span>
           </div>
         }
 
         {cookiePermission === CookieEnum.DENIED &&
           <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
-            <span className="block sm:inline" tabIndex={0}>Autosave funktionen är inte tillgänglig eftersom cookies är inaktiverade.
+            <span className="block sm:inline" tabIndex={0}>Automatisk sparning är inte tillgänglig eftersom kakor är inaktiverade.
             </span>
           </div>
         }
 
-        <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
-          <div className="w-96">
+        <div className="flex flex-col flex-nowrap justify-center align-center border border-gray-500 rounded w-full">
+          <div className="w-full pt-5 pb-10 px-10 bg-red-100">
             {showCurrentPage(currentPageIndex)}
           </div>
-        </div>
 
-        { /* navigator buttons */}
-        <div className="flex flex-row flex-wrap justify-center items-center mt-1 w-full">
-          <button onClick={() => handleNextPageBtn()} className="button">
-            Nästa sida
-          </button>
-          <button onClick={() => handlePreviousPageBtn()} className="button">
-            Föregående sida
-          </button>
+          { /* navigator buttons */}
+          <div className="flex flex-row flex-wrap justify-center items-center w-full bg-slate-100">
+            <button onClick={() => handleNextPageBtn()} className="button">
+              Nästa sida
+            </button>
+            <button onClick={() => handlePreviousPageBtn()} className="button">
+              Föregående sida
+            </button>
 
-          <button onClick={() => {
-            handleSetCurrentPage(firstPageIndex)
-          }} className="button">
-            Förstasidan
-          </button>
+            <button onClick={() => {
+              handleSetCurrentPage(firstPageIndex)
+            }} className="button">
+              Förstasidan
+            </button>
 
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
-            handleSetCurrentPage(pageNumber);
-          }}
-            className="p-1 border bg-slate-50 shadow-md rounded-lg flex flex-row"
-          >
-            <div className="flex flex-col">
-              <label htmlFor="goToPage" className="">Ange ett sidnummer: </label>
-              <input className="border rounded" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
+              handleSetCurrentPage(pageNumber);
+            }}
+              className="p-1 border bg-slate-50 shadow rounded flex flex-row"
+            >
+              <div className="flex flex-col">
+                <label htmlFor="goToPage" className="">Ange ett sidnummer: </label>
+                <input className="border rounded" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
+              </div>
+              <button type="submit" className="button">Gå till</button>
+            </form>
+
+            <div className="p-1 px-5 flex flex-col justify-center align-center border bg-slate-50 shadow rounded">
+              <fieldset className="m-2">
+                <legend className="font-semibold">Växla vy</legend>
+                <div className="flex flex-row justify-center align-center">
+                  <input type="radio"
+                    id="braille-view"
+                    name="view"
+                    className="m-1"
+                    value="BRAILLE"
+                    checked={bookView === FormatModeEnum.BRAILLE_VIEW}
+                    onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
+                  />
+                  <label htmlFor="braille-view">Punktskrift</label>
+                </div>
+                <div className="flex flex-row justify-center align-center">
+                  <input type="radio"
+                    id="normal-view"
+                    name="view"
+                    className="m-1"
+                    value="BRAILLE"
+                    checked={bookView === FormatModeEnum.NORMAL_VIEW}
+                    onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
+                  />
+                  <label htmlFor="normal-view">Svartskrift</label>
+                </div>
+              </fieldset>
             </div>
-            <button type="submit" className="button">Gå till</button>
-          </form>
-
-          <div className="p-1 px-5 flex flex-col justify-center align-center border bg-slate-50 shadow-md rounded-lg">
-            <fieldset className="m-2">
-              <legend className="font-semibold">Växla vy</legend>
-              <div className="flex flex-row justify-center align-center">
-                <input type="radio"
-                  id="braille-view"
-                  name="view"
-                  className="m-1"
-                  value="BRAILLE"
-                  checked={bookView === FormatModeEnum.BRAILLE_VIEW}
-                  onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
-                />
-                <label htmlFor="braille-view">Punktskrift</label>
-              </div>
-              <div className="flex flex-row justify-center align-center">
-                <input type="radio"
-                  id="normal-view"
-                  name="view"
-                  className="m-1"
-                  value="BRAILLE"
-                  checked={bookView === FormatModeEnum.NORMAL_VIEW}
-                  onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
-                />
-                <label htmlFor="normal-view">Svartskrift</label>
-              </div>
-            </fieldset>
           </div>
+          
         </div>
 
-        <div className="flex flex-col bg-slate-200 rounded-lg my-20 p-10 w-full border">
+
+
+        <div className="flex flex-col bg-slate-200 rounded my-20 p-10 w-full border shadow">
           <h3 className="font-bold text-lg my-2" tabIndex={0}>Grundläggande bibliografisk information</h3>
 
           {/* Render metadata labels */}
