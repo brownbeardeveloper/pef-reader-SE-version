@@ -1,9 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 export default function ContactUsPage() {
     const [isCopied, setIsCopied] = useState(false);
+    const navigate = useNavigate();
 
     const copyPhoneNumber = () => {
         const phoneNumber = '0406532700';
@@ -52,12 +54,12 @@ export default function ContactUsPage() {
                 <p className="flex items-center">
                     <span>040-653 27 00 <em>(växel)</em></span>
                 </p>
-                <button 
-                onClick={copyPhoneNumber} 
-                className={`mt-1 px-2 py-1 border rounded border shadow ${isCopied ? "text-white bg-emerald-500 border-emerald-600" : "bg-slate-100 border-slate-200 hover:bg-slate-200 hover:border-slate-300"}`}>
-                        <FontAwesomeIcon icon={faCopy} className="mx-1" />
-                        {isCopied ? "Telefonnumret har kopierats!" : "Kopiera telefonnumret"}
-                    </button>
+                <button
+                    onClick={copyPhoneNumber}
+                    className={`mt-1 px-2 py-1 border rounded border shadow ${isCopied ? "text-white bg-emerald-500 border-emerald-600" : "bg-slate-100 border-slate-200 hover:bg-slate-200 hover:border-slate-300"}`}>
+                    <FontAwesomeIcon icon={faCopy} className="mx-1" />
+                    {isCopied ? "Telefonnumret har kopierats!" : "Kopiera telefonnumret"}
+                </button>
             </div>
 
             <div className="mb-4">
@@ -69,6 +71,13 @@ export default function ContactUsPage() {
                 <h3 className="font-semibold">Mer information</h3>
                 <p>Hittar du på <a href="https://www.mtm.se" className='font-semibold text-blue-500 hover:text-blue-700 underline'>mtm.se</a></p>
             </div>
+
+            <div className="w-full flex justify-center">
+                <button className="button" onClick={() => { navigate('/') }}>
+                    Ta mig till startsidan
+                </button>
+            </div>
+
         </main>
     );
 }

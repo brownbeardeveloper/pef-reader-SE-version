@@ -63,13 +63,13 @@ export default function CookieAndAccessibilityPage({ cookiePermission, setCookie
         <h3 className="text-lg font-semibold mb-2">Vårt åtagande för tillgänglighet</h3>
 
         <p>
-          Vi arbetar kontinuerligt för att förbättra tillgängligheten på vår webbplats. 
+          Vi arbetar kontinuerligt för att förbättra tillgängligheten på vår webbplats.
           Om du stöter på hinder eller upplever att vi inte uppfyller lagens krav,
-          vänligen <a 
-          href="https://www.legimus.se/anvaenda-legimus/tillgaenglighetsredogoerelser/tillgaenglighetsredogoerelse-foer-legimusse/" 
-          class="text-blue-500 hover:text-blue-700 underline" target="_blank" rel="noopener noreferrer">
+          vänligen <a
+            href="https://www.legimus.se/anvaenda-legimus/tillgaenglighetsredogoerelser/tillgaenglighetsredogoerelse-foer-legimusse/"
+            class="text-blue-500 hover:text-blue-700 underline" target="_blank" rel="noopener noreferrer">
             besök vår tillgänglighetsredogörelse</a>
-            . Din feedback är ovärderlig för oss och hjälper oss att skapa en bättre upplevelse för alla användare.
+          . Din feedback är ovärderlig för oss och hjälper oss att skapa en bättre upplevelse för alla användare.
         </p>
 
         <p className="mt-4 font-bold">Du kan även nå oss på följande sätt:</p>
@@ -83,7 +83,7 @@ export default function CookieAndAccessibilityPage({ cookiePermission, setCookie
         </ul>
 
         <p className="my-10">
-          Webbplatsen lanserades den 24 maj 2024.
+          Webbplatsen uppdaterades senast den 25 maj 2024.
         </p>
       </section>
 
