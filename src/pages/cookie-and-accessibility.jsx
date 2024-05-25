@@ -63,13 +63,19 @@ export default function CookieAndAccessibilityPage({ cookiePermission, setCookie
         <h3 className="text-lg font-semibold mb-2">Vårt åtagande för tillgänglighet</h3>
 
         <p>
-          Vi arbetar kontinuerligt för att förbättra tillgängligheten på vår webbplats. Om du stöter på hinder eller upplever att vi inte uppfyller lagens krav, vänligen <a href="https://www.legimus.se/anvaenda-legimus/tillgaenglighetsredogoerelser/tillgaenglighetsredogoerelse-foer-legimusse/" class="text-blue-400" target="_blank" rel="noopener noreferrer">besök vår tillgänglighetsredogörelse</a>. Din feedback är ovärderlig för oss och hjälper oss att skapa en bättre upplevelse för alla användare.
+          Vi arbetar kontinuerligt för att förbättra tillgängligheten på vår webbplats. 
+          Om du stöter på hinder eller upplever att vi inte uppfyller lagens krav,
+          vänligen <a 
+          href="https://www.legimus.se/anvaenda-legimus/tillgaenglighetsredogoerelser/tillgaenglighetsredogoerelse-foer-legimusse/" 
+          class="text-blue-500 hover:text-blue-700 underline" target="_blank" rel="noopener noreferrer">
+            besök vår tillgänglighetsredogörelse</a>
+            . Din feedback är ovärderlig för oss och hjälper oss att skapa en bättre upplevelse för alla användare.
         </p>
 
         <p className="mt-4 font-bold">Du kan även nå oss på följande sätt:</p>
         <ul className="list-disc list-inside">
           <li className="m-2">
-            Skicka e-post till <a href="mailto:info@mtm.se" className="text-blue-500">info@mtm.se</a>
+            Skicka e-post till <a href="mailto:info@mtm.se" className="text-blue-500 hover:text-blue-700">info@mtm.se</a>
           </li>
           <li className="m-2">
             Ring oss på <span className="text-blue-500">040-6532710</span>

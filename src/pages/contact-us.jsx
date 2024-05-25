@@ -9,8 +9,9 @@ export default function ContactUsPage() {
         const phoneNumber = '0406532700';
         navigator.clipboard.writeText(phoneNumber)
             .then(() => {
+                // play voice here when the phone number is copied
                 setIsCopied(true); // Set state to true to show feedback
-                setTimeout(() => setIsCopied(false), 3000); // Reset state after 3 seconds
+                setTimeout(() => setIsCopied(false), 10000); // Reset state after 10 seconds
             })
             .catch((error) => {
                 console.error('Failed to copy phone number: ', error);
@@ -50,27 +51,23 @@ export default function ContactUsPage() {
                 <h3 className="font-semibold">Telefon</h3>
                 <p className="flex items-center">
                     <span>040-653 27 00 <em>(växel)</em></span>
-                    <button onClick={copyPhoneNumber} aria-label="Klicka för att kopiera telefonnumret" className="mx-2 px-1 border rounded-lg bg-slate-100 hover:bg-slate-300">
-                        <FontAwesomeIcon icon={faCopy} className="mx-1" />
-                    </button>
                 </p>
-                {/* Feedback message */}
-                {isCopied && (
-                    <div className="bg-green-200 text-green-700 border border-green-700 my-2 px-4 py-2 rounded-md mb-5">
-                        Telefonnumret har kopierats!
-                    </div>
-                )}
-
+                <button 
+                onClick={copyPhoneNumber} 
+                className={`mt-1 px-2 border rounded-lg border ${isCopied ? "border-green-600 bg-green-300" : "border-slate-400 bg-slate-100 hover:bg-slate-300"}`}>
+                        <FontAwesomeIcon icon={faCopy} className="mx-1" />
+                        {isCopied ? "Telefonnumret har kopierats!" : "Kopiera telefonnumret"}
+                    </button>
             </div>
 
             <div className="mb-4">
                 <h3 className="font-semibold">E-post</h3>
-                <p><a href="mailto:info@mtm.se" className='font-semibold text-sky-600 underline hover:text-blue-900'>info@mtm.se</a></p>
+                <p><a href="mailto:info@mtm.se" className='font-semibold text-blue-500 hover:text-blue-700 underline'>info@mtm.se</a></p>
             </div>
 
             <div className="mb-20">
                 <h3 className="font-semibold">Mer information</h3>
-                <p>Hittar du på <a href="https://www.mtm.se" className='font-semibold text-sky-600 underline hover:text-blue-900'>mtm.se</a></p>
+                <p>Hittar du på <a href="https://www.mtm.se" className='font-semibold text-blue-500 hover:text-blue-700 underline'>mtm.se</a></p>
             </div>
         </main>
     );
