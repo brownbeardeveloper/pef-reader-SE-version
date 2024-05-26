@@ -183,71 +183,70 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
         }
 
         <div className="flex flex-col flex-nowrap justify-center align-center border border-gray-500 rounded w-full">
-          <div className="w-full pt-5 pb-10 px-10 bg-red-100">
+          <div className="w-full pt-5 pb-10 px-10">
             {showCurrentPage(currentPageIndex)}
           </div>
 
           { /* navigator buttons */}
-          <div className="flex flex-row flex-wrap justify-center items-center w-full bg-slate-100">
-            <button onClick={() => handleNextPageBtn()} className="button">
-              Nästa sida
-            </button>
-            <button onClick={() => handlePreviousPageBtn()} className="button">
-              Föregående sida
-            </button>
+          <div className="h-24 bg-red-500 rounded-b">
+            <div className="flex flex-row flex-nowrap items-center h-full w-full 
+              rounded-b border-t-2 border-slate-400 overflow-hidden">
+              <button onClick={() => handleNextPageBtn()} className="h-full px-2 bg-slate-200 rounded-bl flex-shrink-0">
+                Nästa sida
+              </button>
+              <button onClick={() => handlePreviousPageBtn()} className="h-full px-2 bg-slate-300 flex-shrink-0">
+                Föregående sida
+              </button>
+              <button onClick={() => handleSetCurrentPage(firstPageIndex)} className="h-full px-2 bg-slate-200 flex-shrink-0">
+                Förstasidan
+              </button>
 
-            <button onClick={() => {
-              handleSetCurrentPage(firstPageIndex)
-            }} className="button">
-              Förstasidan
-            </button>
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
+                handleSetCurrentPage(pageNumber);
+              }}
+                className="flex flex-row h-full items-center flex-grow px-2 bg-slate-300 overflow-hidden"
+              >
+                <div className="flex flex-col min-w-0">
+                  <label htmlFor="goToPage" className="text-xs">Ange ett sidnummer: </label>
+                  <input className="border rounded text-xs" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
+                </div>
+                <button type="submit" className="ml-2 px-2 bg-slate-400 text-xs">Gå till</button>
+              </form>
 
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
-              handleSetCurrentPage(pageNumber);
-            }}
-              className="p-1 border bg-slate-50 shadow rounded flex flex-row"
-            >
-              <div className="flex flex-col">
-                <label htmlFor="goToPage" className="">Ange ett sidnummer: </label>
-                <input className="border rounded" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
+              <div className="p-1 flex flex-col justify-center items-center h-full 
+                rounded-br bg-slate-200 flex-shrink-0">
+                <fieldset className="m-1">
+                  <legend className="font-semibold text-xs">Växla vy</legend>
+                  <div className="flex flex-row justify-center items-center">
+                    <input type="radio"
+                      id="braille-view"
+                      name="view"
+                      className="m-1"
+                      value="BRAILLE"
+                      checked={bookView === FormatModeEnum.BRAILLE_VIEW}
+                      onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
+                    />
+                    <label htmlFor="braille-view" className="text-xs">Punktskrift</label>
+                  </div>
+                  <div className="flex flex-row justify-center items-center">
+                    <input type="radio"
+                      id="normal-view"
+                      name="view"
+                      className="m-1"
+                      value="BRAILLE"
+                      checked={bookView === FormatModeEnum.NORMAL_VIEW}
+                      onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
+                    />
+                    <label htmlFor="normal-view" className="text-xs">Svartskrift</label>
+                  </div>
+                </fieldset>
               </div>
-              <button type="submit" className="button">Gå till</button>
-            </form>
-
-            <div className="p-1 px-5 flex flex-col justify-center align-center border bg-slate-50 shadow rounded">
-              <fieldset className="m-2">
-                <legend className="font-semibold">Växla vy</legend>
-                <div className="flex flex-row justify-center align-center">
-                  <input type="radio"
-                    id="braille-view"
-                    name="view"
-                    className="m-1"
-                    value="BRAILLE"
-                    checked={bookView === FormatModeEnum.BRAILLE_VIEW}
-                    onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
-                  />
-                  <label htmlFor="braille-view">Punktskrift</label>
-                </div>
-                <div className="flex flex-row justify-center align-center">
-                  <input type="radio"
-                    id="normal-view"
-                    name="view"
-                    className="m-1"
-                    value="BRAILLE"
-                    checked={bookView === FormatModeEnum.NORMAL_VIEW}
-                    onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
-                  />
-                  <label htmlFor="normal-view">Svartskrift</label>
-                </div>
-              </fieldset>
             </div>
           </div>
-          
+
         </div>
-
-
 
         <div className="flex flex-col bg-slate-200 rounded my-20 p-10 w-full border shadow">
           <h3 className="font-bold text-lg my-2" tabIndex={0}>Grundläggande bibliografisk information</h3>
