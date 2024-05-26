@@ -190,14 +190,14 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
           { /* navigator buttons */}
           <div className="h-24 bg-red-500 rounded-b">
             <div className="flex flex-row flex-nowrap items-center h-full w-full 
-              rounded-b border-t-2 border-slate-400 overflow-hidden">
-              <button onClick={() => handleNextPageBtn()} className="h-full px-2 bg-slate-200 rounded-bl flex-shrink-0">
+              rounded-b border-t-2 border-slate-400 overflow-hidden text-xs">
+              <button onClick={() => handleNextPageBtn()} className="h-full w-32 px-2 bg-slate-200 rounded-bl hover:bg-green-400 duration-100">
                 Nästa sida
               </button>
-              <button onClick={() => handlePreviousPageBtn()} className="h-full px-2 bg-slate-300 flex-shrink-0">
+              <button onClick={() => handlePreviousPageBtn()} className="h-full w-32 px-2 bg-slate-300">
                 Föregående sida
               </button>
-              <button onClick={() => handleSetCurrentPage(firstPageIndex)} className="h-full px-2 bg-slate-200 flex-shrink-0">
+              <button onClick={() => handleSetCurrentPage(firstPageIndex)} className="h-full w-32 px-2 bg-slate-200">
                 Förstasidan
               </button>
 
@@ -206,19 +206,19 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                 const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
                 handleSetCurrentPage(pageNumber);
               }}
-                className="flex flex-row h-full items-center flex-grow px-2 bg-slate-300 overflow-hidden"
+                className="flex flex-row h-full items-center justify-center px-2 flex-grow bg-green-300"
               >
-                <div className="flex flex-col min-w-0">
-                  <label htmlFor="goToPage" className="text-xs">Ange ett sidnummer: </label>
-                  <input className="border rounded text-xs" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
+                <div className="flex flex-col items-center justify-center">
+                  <label htmlFor="goToPage" className="w-full font-semibold">Ange ett sidnummer</label>
+                  <input className="border rounded" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
+                  <button type="submit" className="px-2 w-full bg-slate-400">Gå till</button>
                 </div>
-                <button type="submit" className="ml-2 px-2 bg-slate-400 text-xs">Gå till</button>
               </form>
 
-              <div className="p-1 flex flex-col justify-center items-center h-full 
-                rounded-br bg-slate-200 flex-shrink-0">
+              <div className="p-1 flex flex-col justify-center items-center h-full
+                rounded-br bg-slate-200 flex-grow">
                 <fieldset className="m-1">
-                  <legend className="font-semibold text-xs">Växla vy</legend>
+                  <legend className="font-semibold">Växla vy</legend>
                   <div className="flex flex-row justify-center items-center">
                     <input type="radio"
                       id="braille-view"
@@ -228,7 +228,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                       checked={bookView === FormatModeEnum.BRAILLE_VIEW}
                       onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
                     />
-                    <label htmlFor="braille-view" className="text-xs">Punktskrift</label>
+                    <label htmlFor="braille-view">Punktskrift</label>
                   </div>
                   <div className="flex flex-row justify-center items-center">
                     <input type="radio"
@@ -239,7 +239,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                       checked={bookView === FormatModeEnum.NORMAL_VIEW}
                       onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
                     />
-                    <label htmlFor="normal-view" className="text-xs">Svartskrift</label>
+                    <label htmlFor="normal-view">Svartskrift</label>
                   </div>
                 </fieldset>
               </div>
@@ -248,8 +248,8 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
         </div>
 
-        <div className="flex flex-col bg-slate-200 rounded my-20 p-10 w-full border shadow">
-          <h3 className="font-bold text-lg my-2" tabIndex={0}>Grundläggande bibliografisk information</h3>
+        <div className="flex flex-col bg-slate-50 rounded my-20 py-5 px-10 w-full border shadow">
+          <h3 className="font-bold text-lg mb-3" tabIndex={0}>Grundläggande bibliografisk information</h3>
 
           {/* Render metadata labels */}
           {pefObject.metaData && pefObject.metaData.language &&
