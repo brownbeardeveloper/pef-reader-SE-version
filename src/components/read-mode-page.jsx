@@ -183,29 +183,29 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
           </div>
         }
 
-        <div className="flex flex-col flex-nowrap justify-center align-center border border-gray-500 rounded w-full">
-          <div className="w-full pt-5 pb-10 px-10">
+        <div className="flex flex-col flex-nowrap justify-center align-center border border-neutral-500 rounded w-full">
+          <div className="w-auto p-10 flex justify-center">
             {showCurrentPage(currentPageIndex)}
           </div>
 
           { /* navigator buttons */}
-          <div className="h-auto bg-red-500 rounded-b border-t-2 border-slate-400 text-md">
+          <div className="h-auto bg-red-500 rounded-b border-t-2 border-neutral-400 text-md">
 
-            <div className="flex flex-row flex-nowrap items-center h-20 overflow-hidden border-b border-slate-400">
+            <div className="flex flex-row flex-nowrap items-center h-20 overflow-hidden border-b border-neutral-400">
               <button onClick={() => handleNextPageBtn()} className="h-full w-full px-2
-              bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200 
+              bg-gradient-to-b from-neutral-200 via-neutral-100 to-neutral-200 
               hover:from-emerald-400 hover:to-emerald-700 hover:text-white
               focus:from-emerald-400 focus:to-emerald-700 focus:text-white">
                 Nästa sida
               </button>
               <button onClick={() => handlePreviousPageBtn()} className="h-full w-full px-2
-              bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200 border-x-2  
+              bg-gradient-to-b from-neutral-200 via-neutral-100 to-neutral-200 border-x-2  
               hover:from-emerald-400 hover:to-emerald-700 hover:text-white
               focus:from-emerald-400 focus:to-emerald-700 focus:text-white">
                 Föregående sida
               </button>
               <button onClick={() => handleSetCurrentPage(firstPageIndex)} className="h-full w-full px-2
-              bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200  
+              bg-gradient-to-b from-neutral-200 via-neutral-100 to-neutral-200  
               hover:from-emerald-400 hover:to-emerald-700 hover:text-white
               focus:from-emerald-400 focus:to-emerald-700 focus:text-white">
                 Förstasidan
@@ -221,16 +221,16 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                   handleSetCurrentPage(pageNumber);
                 }}
                 className="flex flex-row h-full w-full items-center justify-center flex-grow 
-                bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200 border-r-2 border-slate-200"
+                bg-gradient-to-b from-neutral-200 via-neutral-100 to-neutral-200 border-r-2 border-neutral-200"
               >
                 <div className="flex flex-col items-center justify-center h-full w-full mx-4">
                   <label htmlFor="goToPage" className="w-full font-medium mb-1">Ange ett sidnummer:</label>
                   <div className="flex flex-row w-full">
-                    <input className="border-y border-l border-slate-400 w-full max-w-56" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
+                    <input className="border-y border border-neutral-400 w-full max-w-56" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
                     <button
                       type="submit"
-                      className="px-2 h-full w-1/3 min-w-16 max-w-32 border border-slate-400 
-                      bg-gradient-to-b from-slate-300 via-slate-200 to-slate-300 
+                      className="px-2 mx-1 h-full w-1/3 min-w-16 max-w-32 border border-gray-400 
+                      bg-gradient-to-b from-gray-300 via-gray-200 to-gray-300 
                       hover:from-emerald-400 hover:to-emerald-700 hover:text-white 
                       focus:from-emerald-400 focus:to-emerald-700 focus:text-white"
                     >
@@ -240,7 +240,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                 </div>
               </form>
 
-              <div className="p-1 flex flex-col justify-center items-center h-full w-60 bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200">
+              <div className="p-1 flex flex-col justify-center items-center h-full w-60 bg-gradient-to-b from-neutral-200 via-neutral-100 to-neutral-200">
                 <fieldset>
                   <legend className="font-medium mb-px">Växla vy:</legend>
                   <div className="flex flex-row justify-center items-center">
@@ -275,7 +275,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
         </div>
 
-        <div className="flex flex-col bg-slate-50 rounded my-20 pt-5 pb-20 px-10 w-full border shadow">
+        <div className="flex flex-col bg-neutral-50 rounded my-20 pt-5 pb-20 px-10 w-full border shadow">
           <h3 className="font-bold text-lg mb-3" tabIndex={0}>Grundläggande bibliografisk information</h3>
 
           {/* Render metadata labels */}
