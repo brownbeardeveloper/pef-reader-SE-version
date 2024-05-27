@@ -134,8 +134,9 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
       </button>
 
       {cookiePermission === CookieEnum.ALLOWED && (
-        <div className={`mt-3 px-5 py-3 border w-64 rounded shadow duration-500 text-white border 
-        ${autoSave ? "bg-emerald-500 border-emerald-600" : "bg-red-500 border-red-600"}`}>
+        <div className={`mt-3 px-5 py-3 border w-64 rounded shadow text-white border	
+        ${autoSave ? "bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-500 border-emerald-600"
+            : "bg-gradient-to-br from-red-500 via-red-600 to-red-500 border-red-600"}`}>
 
           <fieldset>
             <legend className="font-bold mb-1">Automatisk sparning</legend>
@@ -169,14 +170,14 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
         {pefObject.metaData.author && <p className="mb-5">Författare: {pefObject.metaData.author}</p>}
 
         {!autoSave && cookiePermission === CookieEnum.ALLOWED &&
-          <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
+          <div className="bg-blue-200 border border-blue-300 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
             <span className="block sm:inline" tabIndex={0}>Om du aktiverar automatisk sparning, kommer din position att sparas varje gång du byter sida.
             </span>
           </div>
         }
 
         {cookiePermission === CookieEnum.DENIED &&
-          <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
+          <div className="bg-yellow-200 border border-yellow-300 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
             <span className="block sm:inline" tabIndex={0}>Automatisk sparning är inte tillgänglig eftersom kakor är inaktiverade.
             </span>
           </div>
@@ -188,39 +189,63 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
           </div>
 
           { /* navigator buttons */}
-          <div className="h-24 bg-red-500 rounded-b">
-            <div className="flex flex-row flex-nowrap items-center h-full w-full 
-              rounded-b border-t-2 border-slate-400 overflow-hidden text-xs">
-              <button onClick={() => handleNextPageBtn()} className="h-full w-32 px-2 bg-slate-200 rounded-bl hover:bg-green-400 duration-100">
+          <div className="h-auto bg-red-500 rounded-b border-t-2 border-slate-400 text-md">
+
+            <div className="flex flex-row flex-nowrap items-center h-20 overflow-hidden border-b border-slate-400">
+              <button onClick={() => handleNextPageBtn()} className="h-full w-full px-2
+              bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200 
+              hover:from-emerald-400 hover:to-emerald-700 hover:text-white
+              focus:from-emerald-400 focus:to-emerald-700 focus:text-white">
                 Nästa sida
               </button>
-              <button onClick={() => handlePreviousPageBtn()} className="h-full w-32 px-2 bg-slate-300">
+              <button onClick={() => handlePreviousPageBtn()} className="h-full w-full px-2
+              bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200 border-x-2  
+              hover:from-emerald-400 hover:to-emerald-700 hover:text-white
+              focus:from-emerald-400 focus:to-emerald-700 focus:text-white">
                 Föregående sida
               </button>
-              <button onClick={() => handleSetCurrentPage(firstPageIndex)} className="h-full w-32 px-2 bg-slate-200">
+              <button onClick={() => handleSetCurrentPage(firstPageIndex)} className="h-full w-full px-2
+              bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200  
+              hover:from-emerald-400 hover:to-emerald-700 hover:text-white
+              focus:from-emerald-400 focus:to-emerald-700 focus:text-white">
                 Förstasidan
               </button>
 
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
-                handleSetCurrentPage(pageNumber);
-              }}
-                className="flex flex-row h-full items-center justify-center px-2 flex-grow bg-green-300"
+            </div>
+
+            <div className="flex flex-row flex-nowrap items-center w-full h-32 overflow-hidden rounded-b">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
+                  handleSetCurrentPage(pageNumber);
+                }}
+                className="flex flex-row h-full w-full items-center justify-center flex-grow 
+                bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200 border-r-2 border-slate-200"
               >
-                <div className="flex flex-col items-center justify-center">
-                  <label htmlFor="goToPage" className="w-full font-semibold">Ange ett sidnummer</label>
-                  <input className="border rounded" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
-                  <button type="submit" className="px-2 w-full bg-slate-400">Gå till</button>
+                <div className="flex flex-col items-center justify-center h-full w-full mx-4">
+                  <label htmlFor="goToPage" className="w-full font-medium mb-1">Ange ett sidnummer:</label>
+                  <div className="flex flex-row w-full">
+                    <input className="border-y border-l border-slate-400 w-full max-w-56" id="goToPage" type="number" min={firstPageIndex} max={maxPageIndex} required />
+                    <button
+                      type="submit"
+                      className="px-2 h-full w-1/3 min-w-16 max-w-32 border border-slate-400 
+                      bg-gradient-to-b from-slate-300 via-slate-200 to-slate-300 
+                      hover:from-emerald-400 hover:to-emerald-700 hover:text-white 
+                      focus:from-emerald-400 focus:to-emerald-700 focus:text-white"
+                    >
+                      Gå till
+                    </button>
+                  </div>
                 </div>
               </form>
 
-              <div className="p-1 flex flex-col justify-center items-center h-full
-                rounded-br bg-slate-200 flex-grow">
-                <fieldset className="m-1">
-                  <legend className="font-semibold">Växla vy</legend>
+              <div className="p-1 flex flex-col justify-center items-center h-full w-60 bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200">
+                <fieldset>
+                  <legend className="font-medium mb-px">Växla vy:</legend>
                   <div className="flex flex-row justify-center items-center">
-                    <input type="radio"
+                    <input
+                      type="radio"
                       id="braille-view"
                       name="view"
                       className="m-1"
@@ -231,7 +256,8 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                     <label htmlFor="braille-view">Punktskrift</label>
                   </div>
                   <div className="flex flex-row justify-center items-center">
-                    <input type="radio"
+                    <input
+                      type="radio"
                       id="normal-view"
                       name="view"
                       className="m-1"
@@ -244,11 +270,12 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                 </fieldset>
               </div>
             </div>
+
           </div>
 
         </div>
 
-        <div className="flex flex-col bg-slate-50 rounded my-20 py-5 px-10 w-full border shadow">
+        <div className="flex flex-col bg-slate-50 rounded my-20 pt-5 pb-20 px-10 w-full border shadow">
           <h3 className="font-bold text-lg mb-3" tabIndex={0}>Grundläggande bibliografisk information</h3>
 
           {/* Render metadata labels */}
@@ -272,6 +299,6 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
         </div>
       </div>
 
-    </div>
+    </div >
   );
 }

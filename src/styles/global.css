@@ -1,9 +1,8 @@
-@import url('variables.css');
 @import url('main.css');
 @import url(tailwind.css);
 
 * {
-    font-family: "Roboto";
+    font-family: 'Roboto', sans-serif;
     font-style: normal;
 }
 

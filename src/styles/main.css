@@ -1,5 +1,3 @@
-@import url('variables.css');
-
 main {
     background-color: #fff;
     min-height: 100vh;
@@ -8,7 +6,7 @@ main {
 }
 
 main .button {
-    background: #A54399;
+    background: linear-gradient(200deg, #A54399, #7a196f);
     color: #fff;
     cursor: pointer;
     border: 1px solid #A54399;
@@ -16,11 +14,11 @@ main .button {
     border-radius: 4px; 
     font-weight: bold;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); 
-    transition: all 200ms ease; 
     max-width: fit-content; 
 }
 
-main .button:hover {
-    background: #7a196f;
+main .button:hover, main .button:focus {
+    background: linear-gradient(200deg, #5a0f53, #4a0d46);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 1); 
 }
+
