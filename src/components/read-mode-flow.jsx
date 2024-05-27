@@ -18,7 +18,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
     if (savedPageIndex !== null && savedPageIndex !== undefined) {
       const pageId = `page-${savedPageIndex}`;
       const element = document.getElementById(pageId);
-  
+
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
         element.focus();
@@ -29,7 +29,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
       console.error('Error: There is no saved page index or cookie.');
     }
   }, [pefObject, bookView, savedPageIndex]); // remove savedPageIndex and use callback 
-  
+
   useEffect(() => {
     if (autoSave) {
       // Get the scrollable element by its ID
@@ -164,15 +164,17 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
   return (
     <div className="flex flex-col pt-5 px-10 w-full">
-      <button onClick={() => setReadmode(false)} className="button">
+      <button onClick={() => setReadmode(false)} className="button mb-5">
         Tillbaka till startsida
       </button>
 
       {cookiePermission === CookieEnum.ALLOWED && (
-        <div className="mt-3 p-5 bg-orange-50 border border-yellow-500 w-64 rounded-lg drop-shadow-lg">
+        <div className={`mt-3 px-5 py-3 border w-64 rounded shadow text-white border	
+        ${autoSave ? "bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-500 border-emerald-600"
+            : "bg-gradient-to-br from-red-500 via-red-600 to-red-500 border-red-600"}`}>
 
           <fieldset>
-            <legend className="font-bold my-2">Automatisk sparning</legend>
+            <legend className="font-bold mb-1">Automatisk sparning</legend>
             <div className="flex justify-start items-center">
               <input type="radio"
                 id="autosave-radio-on"
@@ -203,84 +205,105 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
         {pefObject.metaData.author && <p className="mb-5">Författare: {pefObject.metaData.author}</p>}
 
         {!autoSave && cookiePermission === CookieEnum.ALLOWED &&
-          <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
-            <span className="block sm:inline" tabIndex={0}>
-              Om du aktiverar radioknappen för autosave, kommer din position att sparas varje gång du scrollar ner förbi en sida.
+          <div className="bg-blue-200 border border-blue-300 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
+            <span tabIndex={0}>
+              Om du aktiverar automatisk sparning, kommer din position att sparas varje gång du scrollar förbi en sida.
             </span>
           </div>
         }
 
         {cookiePermission === CookieEnum.DENIED &&
-          <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
-            <span className="block sm:inline" tabIndex={0}>
-              Autosave funktionen är inte tillgänglig eftersom cookies är inaktiverade.
+          <div className="bg-yellow-200 border border-yellow-300 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
+            <span tabIndex={0}>
+              Automatisk sparning är inte tillgänglig eftersom kakor är inaktiverade.
             </span>
           </div>
         }
 
-
-        <div className="p-4 flex justify-center align-center sm:p-8 border border-gray-500 rounded-md w-full">
-          <div id="pages-scrollable-element" className="w-auto overflow-y-auto h-96">
+        <div className="flex flex-col flex-nowrap justify-center align-center border border-neutral-500 rounded w-full">
+          <div id="pages-scrollable-element" className="w-100 m-auto overflow-y-auto h-96 p-10">
             {renderPages()}
           </div>
-        </div>
 
-        { /* navigator buttons */}
-        <div className="flex flex-row flex-wrap align-center justify-around w-full">
-          <button onClick={() => {
-            handleScrollToPageIndex(startPageIndex)
-          }} className="button">
-            Förstasidan
-          </button>
+          { /* navigator buttons */}
+          <div className="h-auto rounded-b border-t-2 border-neutral-400 text-md">
 
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
-            handleScrollToPageIndex(pageNumber);
-          }}
-            className="p-1 border bg-slate-50 shadow-md rounded-lg flex flex-row"
-          >
-            <div className="flex flex-col">
-              <label htmlFor="goToPage">Ange ett sidnummer: </label>
-              <input className="border rounded" id="goToPage" type="number" min={startPageIndex} max={maxPageIndex} required />
+            <div className="flex flex-col sm:flex-row items-center h-full sm:h-20 w-full overflow-hidden rounded-b">
+              <div className="h-10 sm:h-full w-full sm:w-1/3 border-b border-black sm:border-none">
+                <button onClick={() => {
+                  handleScrollToPageIndex(startPageIndex)
+                }} className="h-full w-full px-2
+              bg-gradient-to-b from-neutral-200 via-neutral-100 to-neutral-200  
+              hover:from-emerald-400 hover:to-emerald-700 hover:text-white
+              focus:from-emerald-400 focus:to-emerald-700 focus:text-white">
+                  Förstasidan
+                </button>
+              </div>
+
+              <div className="flex flex-row flex-nowrap items-center h-32 sm:h-full w-full  overflow-hidden rounded-b sm:rounded-none">
+                <form onSubmit={(e) => {
+                  e.preventDefault();
+                  const pageNumber = parseInt(e.target.elements.goToPage.value, 10);
+                  handleScrollToPageIndex(pageNumber);
+                }}
+                  className="flex flex-row h-full w-full items-center justify-center flex-grow 
+                bg-gradient-to-b from-neutral-200 via-neutral-100 to-neutral-200 border-x-2 border-neutral-200"
+                >
+                  <div className="flex flex-col">
+                    <label htmlFor="goToPage" className="w-full font-medium mb-1">Ange ett sidnummer: </label>
+                    <div className="flex flex-row w-full">
+
+                      <input className="border-y border border-neutral-400 w-full max-w-56" id="goToPage" type="number" min={startPageIndex} max={maxPageIndex} required />
+                      <button type="submit" className="px-2 mx-1 h-full w-1/3 min-w-16 max-w-32 border border-gray-400 
+                      bg-gradient-to-b from-gray-300 via-gray-200 to-gray-300 
+                      hover:from-emerald-400 hover:to-emerald-700 hover:text-white 
+                      focus:from-emerald-400 focus:to-emerald-700 focus:text-white">
+                        Gå till
+                      </button>
+                    </div>
+                  </div>
+                </form>
+
+                <div className="p-1 flex flex-col justify-center items-center h-full w-60 
+                bg-gradient-to-b from-neutral-200 via-neutral-100 to-neutral-200">
+                  <fieldset>
+                    <legend className="font-medium mb-px">Växla vy</legend>
+                    <div className="flex flex-row justify-start align-center">
+                      <input type="radio"
+                        id="braille-view"
+                        className="m-1"
+                        checked={bookView === FormatModeEnum.BRAILLE_VIEW}
+                        onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
+                      />
+                      <label htmlFor="braille-view">Punktskriftvy</label>
+                    </div>
+                    <div className="flex flex-row justify-start align-center">
+                      <input type="radio"
+                        id="normal-view"
+                        className="m-1"
+                        checked={bookView === FormatModeEnum.NORMAL_VIEW}
+                        onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
+                      />
+                      <label htmlFor="normal-view">Svartskriftvy</label>
+                    </div>
+                  </fieldset>
+                </div>
+              </div>
             </div>
-            <button type="submit" className="button">Gå till</button>
-          </form>
 
-          <div className="p-1 px-5 flex flex-col justify-center align-center border bg-slate-50 shadow-md rounded-lg">
-            <fieldset className="">
-              <legend className="font-semibold">Växla vy</legend>
-              <div className="flex flex-row justify-start align-center">
-                <input type="radio"
-                  id="braille-view"
-                  className="m-1"
-                  checked={bookView === FormatModeEnum.BRAILLE_VIEW}
-                  onChange={() => setBookView(FormatModeEnum.BRAILLE_VIEW)}
-                />
-                <label htmlFor="braille-view">Punktskriftvy</label>
-              </div>
-              <div className="flex flex-row justify-start align-center">
-                <input type="radio"
-                  id="normal-view"
-                  className="m-1"
-                  checked={bookView === FormatModeEnum.NORMAL_VIEW}
-                  onChange={() => setBookView(FormatModeEnum.NORMAL_VIEW)}
-                />
-                <label htmlFor="normal-view">Svartskriftvy</label>
-              </div>
-            </fieldset>
           </div>
 
+
         </div>
 
-        <div className="flex flex-col bg-slate-200 rounded-lg my-20 p-10 w-full border">
-          <h3 className="font-bold text-lg my-2" tabIndex={0}>Grundläggande bibliografisk information</h3>
+        <div className="flex flex-col bg-neutral-50 rounded my-20 pt-5 pb-20 px-10 w-full border shadow">
+          <h3 className="font-bold text-lg mb-3" tabIndex={0}>Grundläggande bibliografisk information</h3>
 
           {/* Render metadata labels */}
-          {pefObject.metaData && pefObject.metaData.language && 
+          {pefObject.metaData && pefObject.metaData.language &&
             Object.entries(pefObject.metaData)
               .map(([key, value]) => {
-                return value && pefObject.metaData.language && metadataVariableTranslation(key, pefObject.metaData.language) && (
+                return value && metadataVariableTranslation(key, pefObject.metaData.language) && (
                   <label key={key}>
                     <strong>{metadataVariableTranslation(key, pefObject.metaData.language)}:</strong> {value}
                   </label>
@@ -289,13 +312,12 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
           }
 
           {/* Render number of pages in the application */}
-          {maxPageIndex && 
+          {maxPageIndex &&
             <label>
               <strong>Antal sidor i applikationen:</strong> {maxPageIndex}
             </label>
           }
         </div>
-
       </div>
     </div>
   )
