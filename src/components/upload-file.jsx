@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { fileReader, checkIfPefFileType } from "../utils/fileReader"
 import { UnitModeEnum, FileLoadStatusEnum } from "../data/enums.js"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFile } from '@fortawesome/free-regular-svg-icons';
 import brailleIcon from '../media/braille-icon.png';
 
 export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
@@ -115,7 +117,9 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
 
             <div className="flex flex-row items-center">
                 <label className="mr-2 text-xl font-bold">Vald fil: </label>
-                <span>{fileName}</span>
+                <span>
+                    {fileName !== 'ingen fil vald' && <FontAwesomeIcon icon={faFile} className="mr-1"/>}
+                    {fileName}</span>
             </div>
 
             <fieldset className="mt-10">
