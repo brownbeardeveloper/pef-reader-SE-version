@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import brailleTranslator from "../utils/translator/brailleTranslator.js";
 import { filterUnnecessarySentence } from "../utils/filterSetences.js"
 import { manipulatePageIndexToRemoveUnnecessaryPages } from "../utils/filterPages.js";
@@ -13,6 +13,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
   const [currentPageIndex, setCurrentPageIndex] = useState(null)
   const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
   const [autoSave, setAutoSave] = useState(true)
+  const headingRefs = useRef({}); // Store references to the page headings
 
   updateBrowserTabText(pefObject.metaData.title);
 
@@ -38,7 +39,10 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
               const pageElement = page && page.rows && (
                 <div key={`${i}-${j}-${k}`}>
-                  <h3 id={`page-${thisPageIndex}`} className="font-black" tabIndex={0}>
+                  <h3 id={`page-${thisPageIndex}`} 
+                  className="font-black" 
+                  tabIndex={0}
+                  ref={el => headingRefs.current[thisPageIndex] = el}>
                     Sida {thisPageIndex}
                   </h3>
                   {page.rows.map((row, l) => (
@@ -82,6 +86,11 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
       setCurrentPageIndex(savedPageIndex);
     } else if (autoSave && currentPageIndex !== null) {
       setSavedPageIndex(currentPageIndex);
+    }
+
+    // Focus the heading of the current page
+    if (currentPageIndex !== null && headingRefs.current[currentPageIndex]) {
+      headingRefs.current[currentPageIndex].focus();
     }
   }, [autoSave, currentPageIndex, savedPageIndex, setSavedPageIndex]);
 
@@ -192,9 +201,8 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
 
           { /* navigator buttons */}
           <div className="h-auto rounded-b border-t-2 border-neutral-400 text-md">
-
             <div className="flex flex-row flex-nowrap items-center h-20 overflow-hidden border-b border-neutral-400">
-              <button onClick={() => handleNextPageBtn()} className="h-full w-full px-2
+              <button id={`page-${currentPageIndex +1}`} onClick={() => handleNextPageBtn()} className="h-full w-full px-2
               bg-gradient-to-b from-neutral-200 via-neutral-100 to-neutral-200 
               hover:from-emerald-400 hover:to-emerald-700 hover:text-white
               focus:from-emerald-400 focus:to-emerald-700 focus:text-white">
@@ -212,7 +220,6 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
               focus:from-emerald-400 focus:to-emerald-700 focus:text-white">
                 Förstasidan
               </button>
-
             </div>
 
             <div className="flex flex-row flex-nowrap items-center w-full h-32 overflow-hidden rounded-b">
@@ -272,9 +279,7 @@ export default function ReadModePageByPage({ savedPageIndex, setSavedPageIndex, 
                 </fieldset>
               </div>
             </div>
-
           </div>
-
         </div>
 
         <div className="flex flex-col bg-neutral-50 rounded my-20 pt-5 pb-20 px-10 w-full border shadow">
