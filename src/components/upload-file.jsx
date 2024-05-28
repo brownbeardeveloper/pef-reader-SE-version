@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { fileReader, checkIfPefFileType } from "../utils/fileReader"
 import { UnitModeEnum, FileLoadStatusEnum } from "../data/enums.js"
+import { useDropzone } from 'react-dropzone'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFile } from '@fortawesome/free-regular-svg-icons';
 import brailleIcon from '../media/braille-icon.png';
@@ -8,6 +9,17 @@ import brailleIcon from '../media/braille-icon.png';
 export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, setPefObject, fileName, setFileName, howToRead, setHowToRead }) {
     const [fileLoadStatus, setFileLoadStatus] = useState(FileLoadStatusEnum.INITIAL);
     const [showDots, setShowDots] = useState(true);
+
+    // Setup dropzone
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        multiple: false,
+        accept: {
+            'image/x-pef': ['.pef'],
+            'application/x-pef+xml': ['.pef'],
+            'application/x-pentax-pef': ['.pef']
+        },
+        onDrop: handleAddFile,
+    });
 
     useEffect(() => {
         // Shows the third dot every second during the loading state
@@ -17,10 +29,10 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
         return () => clearInterval(interval);
     }, []);
 
-    function handleAddFile(event) {
-        if (event.target.files[0]) {
-            if (checkIfPefFileType(event.target.files[0].type)) {
-                setFileName(event.target.files[0].name);
+    function handleAddFile(acceptedFiles) {
+        if (acceptedFiles) {
+            if (checkIfPefFileType(acceptedFiles[0].type)) {
+                setFileName(acceptedFiles[0].name);
                 const reader = new FileReader() // Initializes a new FileReader object
 
                 reader.addEventListener("load", () => { // Executes when the file is successfully loaded
@@ -41,9 +53,10 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
                 });
 
                 setFileLoadStatus(FileLoadStatusEnum.LOADING)
-                reader.readAsText(event.target.files[0]) // Starts reading the file
+                reader.readAsText(acceptedFiles[0]) // Starts reading the file
+
             } else {
-                alert(`Fel: Filtypen ${event.target.files[0].type} som du försöker ladda är inte en PEF-fil.`);
+                alert(`Fel: Filtypen ${acceptedFiles[0].type} som du försöker ladda är inte en PEF-fil.`);
                 setFileLoadStatus(FileLoadStatusEnum.FAILED)
                 setFileName('filen kunde inte laddas upp.')
             }
@@ -82,28 +95,30 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
                 <h3 className="text-4xl font-bold my-5">Ladda upp filen</h3>
 
                 {/* Disable the file-selector button while the file is being converted */}
-                {fileLoadStatus !== FileLoadStatusEnum.LOADING && (
-                    <>
-                        <input
-                            id="file-selector"
-                            type="file"
-                            accept=".pef"
-                            className="hidden"
-                            onChange={handleAddFile}
-                        />
-                        <label
-                            htmlFor="file-selector"
-                            tabIndex={0}
-                            className={
-                                fileLoadStatus === FileLoadStatusEnum.LOADING
-                                    ? "cursor-not-allowed button"
-                                    : "button"
-                            }
-                        >
-                            Välj fil (.pef)
-                        </label>
-                    </>
-                )}
+                {fileLoadStatus !== FileLoadStatusEnum.LOADING &&
+                    <div {...getRootProps()}
+                        className={`dropzone-container border-2 border-dashed border-purple-400 p-10 my-4 text-center 
+                            w-full cursor-pointer hover:bg-purple-50 ${isDragActive && "bg-purple-100"}`}>
+                        <input {...getInputProps()} id="file-input" tabIndex={0} />
+                        {isDragActive ? (
+                            <label htmlFor="file-input">
+                                Släpp filen här...
+                            </label>
+                        ) : (
+                            <>
+                                {fileName !== 'ingen fil vald' ? (
+                                    <label htmlFor="file-input">
+                                        Filen {fileName} har laddats upp. Klicka här för att byta fil (.pef)
+                                    </label>
+                                ) : (
+                                    <label htmlFor="file-input">
+                                        Klicka här för att välja fil (.pef)
+                                    </label>
+                                )}
+                            </>
+                        )}
+                    </div>
+                }
 
                 {fileLoadStatus === FileLoadStatusEnum.LOADING && (
                     <div className="flex flex-row items-center">
@@ -119,7 +134,7 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
             <div className="flex flex-row items-center">
                 <label className="mr-2 text-xl font-bold">Vald fil: </label>
                 <span>
-                    {fileName !== 'ingen fil vald' && <FontAwesomeIcon icon={faFile} className="mr-1"/>}
+                    {fileName !== 'ingen fil vald' && <FontAwesomeIcon icon={faFile} className="mr-1" />}
                     {fileName}</span>
             </div>
 
@@ -154,7 +169,7 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
                 </div>
             </fieldset>
 
-            <div className="mb-60">
+            <div className="mt-8 mb-60">
                 {(fileLoadStatus === FileLoadStatusEnum.INITIAL || fileLoadStatus === FileLoadStatusEnum.SUCCESSFUL) && (
                     <button onClick={HandleSwapToReadMode} className="button" >Läs boken</button>
                 )}
