@@ -28,10 +28,11 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
     } else {
       console.error('Error: There is no saved page index or cookie.');
     }
-  }, [pefObject, bookView, savedPageIndex]); // remove savedPageIndex and use callback 
+  }, [pefObject, bookView]); // remove savedPageIndex and use callback 
 
   useEffect(() => {
     if (autoSave) {
+
       // Get the scrollable element by its ID
       const scrollableElement = document.getElementById("pages-scrollable-element");
       if (!scrollableElement) return;
@@ -40,12 +41,14 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
         const pages = scrollableElement.querySelectorAll("[id^='page-']");
         let lastVisiblePageIndex = null;
 
+        // Get the top position of the scrollable element
+        const scrollableElementTop = scrollableElement.getBoundingClientRect().top;
+
         // Loop through each page to determine which one is currently visible
         pages.forEach(page => {
           const rect = page.getBoundingClientRect();
-          // Check if the top of the page is within the viewport of the scrollable element
-          // and if the bottom of the page is below the top of the scrollable element
-          if (rect.top >= 0 && rect.bottom <= scrollableElement.clientHeight) {
+          // Check if the bottom of the H3 page-id is above or equal to the top of the viewport of the scrollable element          
+          if (rect.top <= scrollableElementTop) {
             lastVisiblePageIndex = parseInt(page.id.replace("page-", ""), 10);
           }
         });
@@ -211,6 +214,10 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
             </span>
           </div>
         }
+
+        <div className="bg-red-500">
+          debug savedPageIndex: {savedPageIndex}
+        </div>
 
         {cookiePermission === CookieEnum.DENIED &&
           <div className="bg-yellow-200 border border-yellow-300 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">

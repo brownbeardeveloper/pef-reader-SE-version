@@ -45,6 +45,7 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
             } else {
                 alert(`Fel: Filtypen ${event.target.files[0].type} som du försöker ladda är inte en PEF-fil.`);
                 setFileLoadStatus(FileLoadStatusEnum.FAILED)
+                setFileName('filen kunde inte laddas upp.')
             }
         } else {
             setFileName('ingen fil vald');
@@ -159,9 +160,9 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
                 )}
 
                 {fileLoadStatus === FileLoadStatusEnum.FAILED && (
-                    <div className="flex flex-row items-center bg-red-100 text-red-700 rounded-lg pl-5 p-3 shadow-md max-w-md">
+                    <div className="flex flex-row items-center bg-red-100 text-red-700 rounded pl-5 p-3 shadow-md max-w-md">
                         <span className="font-semibold text-sm" tabIndex={0}>
-                            Uppladdningen misslyckades. Uppdatera sidan och försök igen innan du kontaktar kundtjänsten <a href="https://www.legimus.se/kontakt/kontakta-mtm/" class="underline">här</a>.
+                            Uppladdningen misslyckades. Uppdatera sidan och försök igen innan du kontaktar kundtjänsten <a href="/kontakt" class="underline">här</a>.
                         </span>
                     </div>
                 )}
