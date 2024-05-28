@@ -10,6 +10,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
   const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
   const [hasScrolled, setHasScrolled] = useState(false)
   const [autoSave, setAutoSave] = useState(true)
+  const [isOnFocus, setIsOnFocus] = useState(false) // State to track when the h3 element is in focus
   let maxPageIndex
   let startPageIndex
 
@@ -38,7 +39,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
   }, [savedPageIndex, hasScrolled]);
 
   useEffect(() => {
-    if (autoSave) {
+    if (autoSave && !isOnFocus) {
 
       // Get the scrollable element by its ID
       const scrollableElement = document.getElementById("pages-scrollable-element");
@@ -74,7 +75,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
         scrollableElement.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [autoSave, setSavedPageIndex]);
+  }, [autoSave, setSavedPageIndex, isOnFocus]);
 
   function handleScrollToPageIndex(index) {
     const pageId = `page-${index}`
@@ -117,28 +118,51 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
               const thisPageIndex = pageIndex
               pageIndex++;
 
-              // Generate JSX element for page content
+              let pageRows = '';
+
+              // Accumulate the processed text from each row into pageRows
+              if (page && page.rows) {
+                page.rows.forEach((row, index) => {
+                  if (row != null) { // Check if row is not null or undefined
+                    const processedRow = bookView === FormatModeEnum.NORMAL_VIEW
+                      ? brailleTranslator(filterUnnecessarySentence(row))
+                      : filterUnnecessarySentence(row);
+
+                    if (processedRow != null) { // Check if processedRow is not null or undefined
+                      // Check if it's the first row and if it contains 75% or more blank characters
+                      if (index === 0 && isRowMostlyBlank(processedRow)) {
+                        // Skip the first row
+                        return;
+                      }
+
+                      // Check if the last character of the processedRow is not ⠤
+                      const lastChar = processedRow.charAt(processedRow.length - 1);
+
+                      if (lastChar !== '-' && lastChar !== '⠤') {
+                        // Append the processedRow to pageRows
+                        pageRows += processedRow;
+                      } else {
+                        // If the last character is ⠤, remove it
+                        pageRows += processedRow.slice(0, -1);
+                      }
+                    }
+                  }
+                });
+              }
+
+              // Create the page element, incorporating the accumulated text in pageRows
               const pageElement = page && page.rows && (
                 <div key={`${i}-${j}-${k}`}>
-                  <h3 id={`page-${thisPageIndex}`}
+                  <h3
+                    id={`page-${thisPageIndex}`}
                     className="font-black"
-                    tabIndex={(thisPageIndex === savedPageIndex) ? 0 : null}
+                    tabIndex={thisPageIndex === savedPageIndex ? 0 : null}
+                    onFocus={() => setIsOnFocus(true)}
+                    onBlur={() => setIsOnFocus(false)}
                   >
                     Sida {thisPageIndex}
                   </h3>
-
-                  {page.rows.map((row, l) => (
-                    <div key={`${i}-${j}-${k}-${l}`}>
-                      <span>
-                        {bookView === FormatModeEnum.NORMAL_VIEW
-                          ? brailleTranslator(filterUnnecessarySentence(row))
-                          : filterUnnecessarySentence(row)}
-                      </span>
-
-                      {<span>&nbsp;</span> /* fix this issue later */}
-
-                    </div>
-                  ))}
+                  <div className="whitespace-pre-wrap break-words overflow-hidden w-100">{pageRows}</div>
                 </div>
               );
 
@@ -171,6 +195,12 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
     return pagesFromPefObject
   };
+
+  function isRowMostlyBlank(row) {
+    const blankCharCount = ((row.match(/⣿/g) || []).length) + ((row.match(/ /g) || []).length); // Count the occurrences of blank character
+    const percentageBlank = (blankCharCount / row.length) * 100;
+    return percentageBlank >= 50; // Return true if 50% or more of the row is blank
+  }
 
   return (
     <div className="flex flex-col pt-5 px-10 w-full">
@@ -222,12 +252,6 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
           </div>
         }
 
-        {/* only for debug */}
-        {/* savedPageIndex && 
-          <div className="bg-red-500 p-5">
-            debug savedPageIndex: {savedPageIndex}
-          </div> */}
-
         {cookiePermission === CookieEnum.DENIED &&
           <div className="bg-yellow-200 border border-yellow-300 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
             <span tabIndex={0}>
@@ -236,8 +260,15 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
           </div>
         }
 
+        {/* only for debug */ /*
+          <div className={`px-5 ${isOnFocus ? "bg-red-500" : "bg-yellow-500"}`}>
+            Debug mode: savedPageIndex = {savedPageIndex}
+          </div> */
+        }
+
         <div className="flex flex-col flex-nowrap justify-center align-center border border-neutral-500 rounded w-full">
-          <div id="pages-scrollable-element" className="w-100 m-auto overflow-y-auto h-96 p-10">
+          <div id="pages-scrollable-element"
+            className="w-full flex flex-col m-auto overflow-y-auto h-96 p-10 overflow-hidden">
             {renderPages()}
           </div>
 
