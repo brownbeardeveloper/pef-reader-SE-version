@@ -13,6 +13,10 @@ This application is designed to make it easier for users, with or without visual
 
 ### 2.0.1 (Latest Version)
   - Changed from saving the row position by clicking on it to automatically saving the page position.
+  - Improved GUI for better accessibility.
+  - Optimized for mobile view.
+  - Added a Contact Us page.
+  - Added a file dropzone element to the upload-file component.
 
 ### 2.0.0
   - Implemented as a React app.
@@ -26,11 +30,9 @@ This application is designed to make it easier for users, with or without visual
   - Project created using pure JavaScript, HTML, and CSS.
 
 ## To-Do 
-  - Remove hyphenation as the last character in flow read-mode.
   - Add cursive formatting (<em>) to the text.
-  - Adjust the GUI for a browser window zoomed to 200%.
+  - Play voice when pressing the 'next page' button in the page-by-page read mode (?)
   - Send this application to the external testers.
-  - Add voice when pressing the 'next page' button in the read-mode.
 
 
 ## How to Navigate the Code
