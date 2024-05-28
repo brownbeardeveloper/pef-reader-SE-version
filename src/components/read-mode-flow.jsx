@@ -8,6 +8,7 @@ import { metadataVariableTranslation } from "../data/metadataTranslator.js";
 
 export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSavedPageIndex, setReadmode, pefObject }) {
   const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
+  const [hasScrolled, setHasScrolled] = useState(false)
   const [autoSave, setAutoSave] = useState(true)
   let maxPageIndex
   let startPageIndex
@@ -15,20 +16,26 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
   updateBrowserTabText(pefObject.metaData.title)
 
   useEffect(() => {
-    if (savedPageIndex !== null && savedPageIndex !== undefined) {
-      const pageId = `page-${savedPageIndex}`;
-      const element = document.getElementById(pageId);
+    // Check if the scroll action has not been performed yet
+    if (!hasScrolled) {
+      if (savedPageIndex) {
+        const pageId = `page-${savedPageIndex}`;
+        const element = document.getElementById(pageId);
 
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-        element.focus();
+        if (element) {
+          // Scroll the element into view smoothly and set focus on it
+          element.scrollIntoView({ behavior: 'smooth' });
+          element.focus();
+          // Mark the scroll action as performed
+          setHasScrolled(true);
+        } else {
+          console.error(`Error: Unable to find the specified element with id ${pageId}.`);
+        }
       } else {
-        console.error(`Error: Unable to find the specified element with id ${pageId}.`);
+        console.error('Error: There is no saved page index or cookie.');
       }
-    } else {
-      console.error('Error: There is no saved page index or cookie.');
     }
-  }, [pefObject, bookView]); // remove savedPageIndex and use callback 
+  }, [savedPageIndex, hasScrolled]);
 
   useEffect(() => {
     if (autoSave) {
@@ -215,9 +222,11 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
           </div>
         }
 
-        <div className="bg-red-500">
-          debug savedPageIndex: {savedPageIndex}
-        </div>
+        {/* only for debug */}
+        {/* savedPageIndex && 
+          <div className="bg-red-500 p-5">
+            debug savedPageIndex: {savedPageIndex}
+          </div> */}
 
         {cookiePermission === CookieEnum.DENIED &&
           <div className="bg-yellow-200 border border-yellow-300 px-4 py-2 mt-5 mb-1 rounded relative w-full text-center" role="alert">
@@ -234,7 +243,6 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
           { /* navigator buttons */}
           <div className="h-auto rounded-b border-t-2 border-neutral-400 text-md">
-
             <div className="flex flex-col sm:flex-row items-center h-full sm:h-20 w-full overflow-hidden rounded-b">
               <div className="h-10 sm:h-full w-full sm:w-1/3 border-b border-black sm:border-none">
                 <button onClick={() => {
@@ -297,10 +305,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
                 </div>
               </div>
             </div>
-
           </div>
-
-
         </div>
 
         <div className="flex flex-col bg-neutral-50 rounded my-20 pt-5 pb-20 px-10 w-full border shadow">
