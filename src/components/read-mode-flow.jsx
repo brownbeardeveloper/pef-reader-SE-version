@@ -10,7 +10,6 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
   const [bookView, setBookView] = useState(FormatModeEnum.BRAILLE_VIEW)
   const [hasScrolled, setHasScrolled] = useState(false)
   const [autoSave, setAutoSave] = useState(true)
-  const [isOnFocus, setIsOnFocus] = useState(false) // State to track when the h3 element is in focus
   let maxPageIndex
   let startPageIndex
 
@@ -20,9 +19,9 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
     if (savedPageIndex === null && startPageIndex !== undefined) {
       setSavedPageIndex(startPageIndex);
     }
-  }, [savedPageIndex, startPageIndex]);
+  }, [savedPageIndex, startPageIndex, setSavedPageIndex]);
 
-  useEffect(() => {
+  useEffect(() => { // Runs just once
     if (!hasScrolled && savedPageIndex !== null) {
       const pageId = `page-${savedPageIndex}`;
       const element = document.getElementById(pageId);
@@ -33,16 +32,16 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
       } else {
         console.error(`Error: Unable to find the specified element with id ${pageId}.`);
       }
+    } else if (savedPageIndex !== null) {
+      setHasScrolled(true);
+
     }
   }, [savedPageIndex, hasScrolled]);
 
   useEffect(() => {
-    if (autoSave && !isOnFocus) {
+    const scrollableElement = document.getElementById("pages-scrollable-element");
 
-      // Get the scrollable element by its ID
-      const scrollableElement = document.getElementById("pages-scrollable-element");
-      if (!scrollableElement) return;
-
+if (autoSave && scrollableElement) {
       const handleScroll = () => {
         const pages = scrollableElement.querySelectorAll("[id^='page-']");
         let lastVisiblePageIndex = null;
@@ -73,19 +72,22 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
         scrollableElement.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [autoSave, setSavedPageIndex, isOnFocus]);
+  }, [autoSave, setSavedPageIndex]);
 
   function handleScrollToPageIndex(index) {
     const pageId = `page-${index}`
     const element = document.getElementById(pageId)
 
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      setSavedPageIndex(index)
 
       if (document.activeElement !== element) {
         element.tabIndex = 0
         element.focus();
       }
+
+      element.scrollIntoView({ behavior: "smooth" });
+
     } else {
       alert(`Sidan '${index}' kunde inte hittas.`);
     }
@@ -155,9 +157,13 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
                     id={`page-${thisPageIndex}`}
                     className="font-black"
                     tabIndex={thisPageIndex === savedPageIndex ? 0 : null}
-                    onFocus={() => setIsOnFocus(true)}
-                    onBlur={() => setIsOnFocus(false)}
-                  >
+                    onFocus={() => {
+                      // Scroll the h3 element into view
+                      const h3Element = document.getElementById(`page-${thisPageIndex}`);
+                      if (h3Element) {
+                        h3Element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }}}
+                    >
                     Sida {thisPageIndex}
                   </h3>
                   <div className="whitespace-pre-wrap break-words overflow-hidden w-100">{pageRows}</div>
@@ -236,7 +242,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
       )}
 
       <div className="flex flex-col justify-start items-center mt-20">
-        {pefObject.metaData.title && <h2 className="ml-8 text-2xl font-bold" tabIndex={0}>Titel: {pefObject.metaData.title}</h2>}
+        {pefObject.metaData.title && <h2 id="exit-from-scrollable-element" className="ml-8 text-2xl font-bold" tabIndex={0}>Titel: {pefObject.metaData.title}</h2>}
         {pefObject.metaData.author && <p className="mb-5">Författare: {pefObject.metaData.author}</p>}
 
         {!autoSave && cookiePermission === CookieEnum.ALLOWED &&
@@ -256,7 +262,7 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
         }
 
         {/* only for debug */ /*
-          <div className={`px-5 ${isOnFocus ? "bg-red-500" : "bg-yellow-500"}`}>
+          <div className={`px-5 bg-yellow-500`}>
             Debug mode: savedPageIndex = {savedPageIndex}
           </div> */
         }
