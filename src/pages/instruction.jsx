@@ -22,7 +22,7 @@ export default function InstructionPage({ cookiePermission, setCookiePermission 
         <h4 className="text-lg font-bold mb-2">2. Välj läsläge:</h4>
         <p>Du kan välja mellan två läslägen:</p>
         <ul className="list-disc pl-6">
-          <li className="m-2"><strong>"Löpande text":</strong> Texten visas löpande på webbsidan {/* med längre rader */} för en kontinuerlig läsupplevelse.</li>
+          <li className="m-2"><strong>"Löpande text":</strong> Texten visas löpande på webbsidan med längre rader för en kontinuerlig läsupplevelse.</li>
           <li className="m-2"><strong>"Sida för sida":</strong> Varje sida från boken visas som en separat sida på webbsidan med samma radlängd som i den ursprungliga boken.</li>
         </ul>
       </div>
@@ -49,11 +49,10 @@ export default function InstructionPage({ cookiePermission, setCookiePermission 
         </p>
         <ul className="list-disc pl-6">
           <li className="my-2">
-            I läget "Löpande text" behöver du navigera till bokens titel och sedan vidare till den senaste sparade positionen markerad med en h3-rubrik. Därefter navigerar du med piltangenterna tills du har läst klart boken.
+            I läget "Löpande text" behöver du navigera till bokens titel med tabb och sedan vidare till den senaste sparade positionen markerad med en h3-rubrik. Därefter navigerar du med piltangenterna tills du har läst klart boken.
           </li>
           <li className="my-2">
-            I läget "Sida för sida" navigerar du till bokens titel och sedan till h3-rubriken som markerar sidnumret. Fortsätt nedåt tills du når knappen för nästa sida och klicka på den. När du klickar på nästa sida spelas ett ljud upp, och då ska du trycka på tabbakåt för att komma till nästa sidas h3-rubrik.
-          </li>
+            I läget 'Sida för sida' navigerar du med tabb till bokens titel och sedan till h3-rubriken som markerar sidnumret. Fortsätt nedåt tills du når knappen för nästa sida och klicka på den. När du klickar på knappen för nästa sida kommer du automatiskt att förflyttas till nästa sidas h3-rubrik.          </li>
         </ul>
 
       </div>
@@ -68,9 +67,9 @@ export default function InstructionPage({ cookiePermission, setCookiePermission 
       <div className="mb-8">
         <p>
           <strong>
-          Vid anmärkningar om sidans tillgänglighet, gå till sidfoten och klicka på "Kakor och Tillgänglighet" för att komma till en sida där du kan lämna feedback och få kontaktuppgifter.
+            Vid anmärkningar om sidans tillgänglighet, gå till sidfoten och klicka på "Kakor och Tillgänglighet" för att komma till en sida där du kan lämna feedback och få kontaktuppgifter.
           </strong>
-          </p>
+        </p>
       </div>
 
       <div className="w-full flex justify-center">

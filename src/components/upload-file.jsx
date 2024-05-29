@@ -30,6 +30,10 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
     }, []);
 
     function handleAddFile(acceptedFiles) {
+
+        {/* for debug */}
+        // console.log("acceptedFiles:", acceptedFiles)
+
         if (acceptedFiles) {
             if (checkIfPefFileType(acceptedFiles[0].type)) {
                 setFileName(acceptedFiles[0].name);
@@ -106,7 +110,7 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
                             </label>
                         ) : (
                             <>
-                                {fileName !== 'ingen fil vald' ? (
+                                {(fileName !== 'ingen fil vald'  && fileName !== 'filen kunde inte laddas upp.') ? (
                                     <label htmlFor="file-input">
                                         Filen {fileName} har laddats upp. Klicka här för att byta fil (.pef)
                                     </label>

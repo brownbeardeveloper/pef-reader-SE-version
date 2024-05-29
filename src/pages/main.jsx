@@ -29,7 +29,7 @@ export default function MainPage({ cookiePermission }) {
     }
     // If the user has allowed cookies, savedPageIndex isn't null, and a pef file is uploaded, 
     // save the current position to the cookie when state changes
-    else if (cookiePermission === CookieEnum.ALLOWED && savedPageIndex && pefObject) {
+    else if (cookiePermission === CookieEnum.ALLOWED && savedPageIndex !== null && pefObject) {
       setLatestPageIndexToCookie(pefObject.metaData.identifier, savedPageIndex);
     }
     // IMPORTANT: Otherwise, set the savedPageIndex to the index of the first page in the read-mode components

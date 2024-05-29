@@ -17,23 +17,21 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
   updateBrowserTabText(pefObject.metaData.title)
 
   useEffect(() => {
-    // Check if the scroll action has not been performed yet
-    if (!hasScrolled) {
-      if (savedPageIndex) {
-        const pageId = `page-${savedPageIndex}`;
-        const element = document.getElementById(pageId);
+    if (savedPageIndex === null && startPageIndex !== undefined) {
+      setSavedPageIndex(startPageIndex);
+    }
+  }, [savedPageIndex, startPageIndex]);
 
-        if (element) {
-          // Scroll the element into view smoothly and set focus on it
-          element.scrollIntoView({ behavior: 'smooth' });
-          element.focus();
-          // Mark the scroll action as performed
-          setHasScrolled(true);
-        } else {
-          console.error(`Error: Unable to find the specified element with id ${pageId}.`);
-        }
+  useEffect(() => {
+    if (!hasScrolled && savedPageIndex !== null) {
+      const pageId = `page-${savedPageIndex}`;
+      const element = document.getElementById(pageId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        element.focus();
+        setHasScrolled(true);
       } else {
-        console.error('Error: There is no saved page index or cookie.');
+        console.error(`Error: Unable to find the specified element with id ${pageId}.`);
       }
     }
   }, [savedPageIndex, hasScrolled]);
@@ -189,9 +187,6 @@ export default function ReadModeFlow({ cookiePermission, savedPageIndex, setSave
 
     startPageIndex = firstPageIndex
     maxPageIndex = pageIndex - 1
-
-    // Set the first page as the current page if there's no saved page index    
-    if (savedPageIndex === null) setSavedPageIndex(firstPageIndex);
 
     return pagesFromPefObject
   };
