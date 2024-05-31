@@ -1,6 +1,8 @@
 import { CookieEnum } from "../data/enums";
+import { useNavigate } from "react-router-dom";
 
 export default function CookieBanner({ setCookiePermission }) {
+    const navigate = useNavigate();
 
     return (
         <div className="flex flex-col p-10
@@ -10,7 +12,12 @@ export default function CookieBanner({ setCookiePermission }) {
             </strong>
             <span className="text-lg">
                 Denna webbplats använder kakor för att förbättra din användarupplevelse och spara din läsposition i boken.
-                <a className="m-1 underline text-blue-500 hover:text-blue-700 transition duration-200 ease-in-out" href="/om-kakor-och-tillganglighet">Läs mer om kakor.</a>
+                <button
+                    className="m-1 underline text-blue-500 hover:text-blue-700 transition duration-200 ease-in-out bg-transparent border-0 cursor-pointer p-0"
+                    onClick={() => navigate('/om-kakor-och-tillganglighet')}
+                >
+                    Läs mer om kakor.
+                </button>
             </span>
 
 
