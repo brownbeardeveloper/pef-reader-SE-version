@@ -48,14 +48,14 @@ This application contains the following pages:
 - **404 page**
 
 ### Key Functions
-- **File reader**: Handles everything related to uploading files
-- **Folder translator**: Manages the conversion from Braille to text
-- **Filter sentence**: Filters out unnecessary sentences by returning null if the text consists only of specific Braille characters to skip, unless it contains certain Braille symbols to not skip
-- **Filter page**: Adjusts the page index to skip unnecessary pages such as those with less than a quarter of text, publisher information, or back cover text
+- File reader**: Handles everything related to uploading files
+- Folder translator**: Manages the conversion from Braille to text
+- Filter sentence**: Filters out unnecessary sentences by returning null if the text consists only of specific Braille characters to skip, unless it contains certain Braille symbols to not skip
+- Filter page**: Adjusts the page index to skip unnecessary pages such as those with less than a quarter of text, publisher information, or back cover text
 - **Cookie manager**: Handles everything related to cookies
 
 ## Known errors
 
-- ** ~~ Router didn't work properly in the Static Web App ~~ (resolved with useNavigate).
-- ** ~~<a> tags in the header could not be tabbed ~~ (resolved by using buttons instead of <a> tags).
-- ** ~~ It couldn't upload files in Chrome ~~ (resolved by setting "useFsAccessApi: false" in dropzone settings).
+- ** <strike>Router didn't work properly in the Static Web App</strike> (resolved with useNavigate).
+- ** <strike>a tags in the header could not be tabbed </strike> (resolved by using buttons instead of a tags).
+- ** <strike>It couldn't upload files in Chrome</strike> (resolved by setting "useFsAccessApi: false" in dropzone settings).
