@@ -17,6 +17,7 @@ This application is designed to make it easier for users, with or without visual
   - Optimized for mobile view.
   - Added a Contact Us page.
   - Added a file dropzone element to the upload-file component.
+  - Resolved some known issues.
 
 ### 2.0.0
   - Implemented as a React app.
