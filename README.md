@@ -48,10 +48,10 @@ This application contains the following pages:
 - **404 page**
 
 ### Key Functions
-- File reader**: Handles everything related to uploading files
-- Folder translator**: Manages the conversion from Braille to text
-- Filter sentence**: Filters out unnecessary sentences by returning null if the text consists only of specific Braille characters to skip, unless it contains certain Braille symbols to not skip
-- Filter page**: Adjusts the page index to skip unnecessary pages such as those with less than a quarter of text, publisher information, or back cover text
+- **File reader**: Handles everything related to uploading files
+- **Folder translator**: Manages the conversion from Braille to text
+- **Filter sentence**: Filters out unnecessary sentences by returning null if the text consists only of specific Braille characters to skip, unless it contains certain Braille symbols to not skip
+- **Filter page**: Adjusts the page index to skip unnecessary pages such as those with less than a quarter of text, publisher information, or back cover text
 - **Cookie manager**: Handles everything related to cookies
 
 ## Known errors
