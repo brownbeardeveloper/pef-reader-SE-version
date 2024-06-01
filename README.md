@@ -60,6 +60,4 @@ This application contains the following pages:
 
 ## Known errors
 
-- ** ~~Router didn't work properly in the Static Web App~~ (resolved with useNavigate).
-- ** ~~<a> tags in the header could not be tabbed~~ (resolved by using buttons instead of <a> tags).
-- ** ~~File upload didn't work in Chrome~~ (resolved by setting "useFsAccessApi: false" in dropzone settings).
+- ?
