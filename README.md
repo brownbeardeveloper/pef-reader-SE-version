@@ -56,6 +56,6 @@ This application contains the following pages:
 
 ## Known errors
 
-- <strike>Router didn't work properly in the Static Web App</strike> (resolved with useNavigate).
-- <strike>a tags in the header could not be tabbed </strike> (resolved by using buttons instead of a tags).
-- <strike>It couldn't upload files in Chrome</strike> (resolved by setting "useFsAccessApi: false" in dropzone settings).
+- <strike>Router didn't work properly in the Static Web App.</strike> (resolved with useNavigate).
+- <strike>"a" tags in the header could not be tabbed.</strike> (resolved by using buttons instead of "a" tags).
+- <strike>Unable to upload files in Chrome browser due to dropzone issue.</strike> (resolved by setting "useFsAccessApi: false" in dropzone settings).
