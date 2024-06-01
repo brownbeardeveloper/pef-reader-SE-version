@@ -19,6 +19,7 @@ export default function UploadFile({ setSavedPageIndex, setReadmode, pefObject, 
             'application/x-pentax-pef': ['.pef']
         },
         onDrop: handleAddFile,
+        useFsAccessApi: false,
     });
 
     useEffect(() => {
