@@ -31,7 +31,7 @@ This application is designed to make it easier for users, with or without visual
   - Project created using pure JavaScript, HTML, and CSS.
 
 ## To-Do 
-  - Add cursive formatting (<em>) to the text.
+  - Add cursive formatting to the text using the "em" tag.
   - Play voice when pressing the 'next page' button in the page-by-page read mode (?)
   - Send this application to the external testers.
 
